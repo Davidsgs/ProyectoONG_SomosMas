@@ -40,15 +40,13 @@ public class User {
     private String photo;
 
     @ManyToOne(targetEntity = Role.class)
-    @JoinColumn(name = "user_role")
+    @JoinColumn(name = "role_id")
     private Role role;
 
-    @CreationTimestamp
-    private Date created_at;
-
-    @UpdateTimestamp
-    private Date updated_at;
-
     private Boolean deleted = false;
+
+    private Long createdAt;
+
+    private Long updatedAt;
 
 }
