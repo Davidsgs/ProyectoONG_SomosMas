@@ -1,4 +1,4 @@
-package com.restteam.ong.controllers.dto;
+package com.restteam.ong.controllers;
 
 public class ActivityController {
 }
