@@ -64,6 +64,8 @@ public class UserService {
         if (user.getRole() != null){
             userToUpdate.setRole(user.getRole());
         }
+        //Se agrega la ultima vez que fue actualizado.
+        userToUpdate.setUpdatedAt(System.currentTimeMillis() / 1000);
         return userToUpdate;
     }
 
