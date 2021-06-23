@@ -26,9 +26,7 @@ public class Role {
 
     private String description;
 
-    @CreationTimestamp
-    private Date created_at;
+    private Long createdAt;
 
-    @UpdateTimestamp
-    private Date updated_at;
+    private Long updatedAt;
 }
