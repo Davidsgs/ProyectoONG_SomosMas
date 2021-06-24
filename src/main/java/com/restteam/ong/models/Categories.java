@@ -34,6 +34,7 @@ public class Categories {
     private String image;
 
     @CreationTimestamp
+    @Column(name = "regDate", updatable=false)
     private Timestamp regDate;
 
     @UpdateTimestamp
