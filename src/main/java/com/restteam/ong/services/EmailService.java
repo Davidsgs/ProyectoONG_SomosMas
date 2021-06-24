@@ -11,6 +11,7 @@ import com.sendgrid.helpers.mail.objects.Email;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -22,13 +23,15 @@ import java.io.IOException;
 public class EmailService {
     private static final Logger logger = LoggerFactory.getLogger(EmailService.class);
 
+    private final Environment env;
+
     public Response sendTextEmail(EmailRequest emailRequest) {
         Email from = new Email("somosfundacionmas@gmail.com");
         String subject = emailRequest.getSubject();
         Email to = new Email(emailRequest.getTo());
         Content content = new Content("text/plain", emailRequest.getBody());
         Mail mail = new Mail(from, subject, to, content);
-        SendGrid sg = new SendGrid("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");
+        SendGrid sg = new SendGrid(env.getProperty("spring.sendgrid.api-key"));
         Request request = new Request();
         try {
             request.setMethod(Method.POST);
