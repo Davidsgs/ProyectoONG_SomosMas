@@ -59,5 +59,10 @@
             <artifactId>springdoc-openapi-webmvc-core</artifactId>
             <version>1.5.9</version>
         </dependency>
+        <dependency>
+            <groupId>com.sendgrid</groupId>
+            <artifactId>sendgrid-java</artifactId>
+            <version>4.7.1</version>
+        </dependency>
     </dependencies>
 </project>
