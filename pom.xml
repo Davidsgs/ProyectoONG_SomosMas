@@ -59,5 +59,10 @@
             <artifactId>springdoc-openapi-webmvc-core</artifactId>
             <version>1.5.9</version>
         </dependency>
+        <dependency>
+            <groupId>org.modelmapper</groupId>
+            <artifactId>modelmapper</artifactId>
+            <version>2.4.2</version>
+        </dependency>
     </dependencies>
 </project>
