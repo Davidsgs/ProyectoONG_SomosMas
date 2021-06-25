@@ -32,18 +32,7 @@ public class ActivityService {
     public ArrayList<Activity> getActivities(){
         return (ArrayList<Activity>)this.activityRepository.findAll();
     }
-/*
-    public Optional<ActivityDTO> getActivityById(Long id) {
-        Optional<Activity> activity = activityRepository.findById(id);
 
-        if (activity != null) {
-            ActivityDTO activityDTO = new ActivityDTO();
-            modelMapper.map(activity, activityDTO);
-            return Optional.of(activityDTO);
-        } else {
-            return null;
-        }
-    }*/
 
     public Optional<Activity> getActivityById(Long id){
       return this.activityRepository.findById(id); //SI NO EXISTE DEVUELVE NULL
@@ -69,20 +58,10 @@ public class ActivityService {
 
 
 
-    public Activity postActivity(Activity activity) {
+    public Activity saveActivity(Activity activity) {
         return this.activityRepository.save(activity);
     }
 
-    public Optional<Activity> updateActivity(Activity activity, Long id) {
-        Optional<Activity> myActivity = activityRepository.findById(id);
-
-        if (myActivity != null) {
-            Activity activitySaved = this.activityRepository.save(activity);
-            return Optional.of(activitySaved);
-        } else {
-            return null;
-        }
-    }
 
     public String deleteActivity(Long id) {
         try {
