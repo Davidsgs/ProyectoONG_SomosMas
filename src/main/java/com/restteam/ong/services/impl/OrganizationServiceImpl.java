@@ -21,10 +21,10 @@ public class OrganizationServiceImpl implements OrganizationService {
     public Long create(Organization organization) {
         try {
             if (Objects.isNull(organization.getId())) {
-                Organization newOrganization = repository.save(organization);
                 long timestamp = System.currentTimeMillis() / 1000;
                 organization.setCreatedAt(timestamp);
-                //organization.setUpdatedAt(timestamp);
+                organization.setUpdatedAt(timestamp);
+                Organization newOrganization = repository.save(organization);
                 return newOrganization.getId();
             }
             throw new IllegalStateException("The Organization can't be no Null");
@@ -59,8 +59,8 @@ public class OrganizationServiceImpl implements OrganizationService {
     @Override
     public Boolean delete(Long id) {
         try {
-            Optional<Organization> organization1 = repository.findById(id);
-            if (organization1.isPresent()) {
+            Optional<Organization> organization = repository.findById(id);
+            if (organization.isPresent()) {
                 repository.deleteById(id);
                 return Boolean.TRUE;
             }

@@ -9,7 +9,7 @@ import javax.persistence.*;
 
 @Table
 @Entity
-@SQLDelete(sql = "UPDATE post SET deleted=true WHERE id = ?")
+@SQLDelete(sql = "UPDATE organization SET deleted=true WHERE id = ?")
 @Where(clause = "deleted = false")
 @Data
 public class Organization {
