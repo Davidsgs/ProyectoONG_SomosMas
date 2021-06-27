@@ -26,23 +26,23 @@ public class Categories {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true,nullable = false)
     private Long id;
-
+    @Column(name = "name",nullable = false)
     private String name;
-
+    @Column(name = "description",nullable = false)
     private String description;
-
+    @Column(name = "image",nullable = false)
     private String image;
 
     @CreationTimestamp
     @Column(name = "regDate", updatable=false)
     private Timestamp regDate;
-
+    @Column(name = "upDateDate",nullable = false)
     @UpdateTimestamp
     private Timestamp upDateDate;
 
     @Column(columnDefinition = "boolean default false")
     private Boolean deleted = Boolean.FALSE;
-
+    @Column(name = "news",nullable = false)
     @OneToMany(mappedBy = "categories")
     private Set<News> news;
 }
