@@ -23,20 +23,20 @@ public class News {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true,nullable = false)
     private Long id;
-    @Column(name = "name",nullable = false)
+    @NonNull
     private String name;
-    @Column(name = "content",nullable = false)
+    @NonNull
     private String content;
-    @Column(name = "image",nullable = false)
+    @NonNull
     private String image;
 
     @ManyToOne
     @JoinColumn(name = "categories_id",nullable = false)
     private Categories categories;
-    @Column(name = "regDate",nullable = false)
+
     @CreationTimestamp
     private Timestamp regDate;
-    @Column(name = "upDateDate",nullable = false)
+
     @UpdateTimestamp
     private Timestamp upDateDate;
 
