@@ -76,3 +76,5 @@ Thumbs.db
 *.flv
 *.mov
 *.wmv
+
+src/main/resources/application.properties
