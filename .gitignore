@@ -9,6 +9,7 @@ dist/
 
 # Compiled Java class files
 *.class
+/bin/
 
 # Compiled Python bytecode
 *.py[cod]
@@ -75,4 +76,3 @@ Thumbs.db
 *.flv
 *.mov
 *.wmv
-
