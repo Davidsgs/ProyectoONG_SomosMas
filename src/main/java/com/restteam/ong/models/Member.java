@@ -7,17 +7,21 @@ import org.hibernate.annotations.Where;
 import javax.persistence.*;
 
 @Entity
-@Table(name="testimonial")
-@SQLDelete(sql = "UPDATE testimonial SET deleted = true WHERE id=?")
-@Where(clause = "deleted=false")
-public class Testimonial {
+@Table(name = "member")
+@SQLDelete(sql = "UPDATE member SET deleted=true WHERE id = ?")
+@Where(clause = "deleted = true")
+public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private  Long id;
     @NotNull
     private String name;
+    private String facebookUrl;
+    private String instagramUrl;
+    private String linkedinUrl;
+    @NotNull
     private String image;
-    private String content;
+    private String description;
     private boolean deleted = Boolean.FALSE;
     private Long createdAt;
     private Long updatedAt;
@@ -30,20 +34,36 @@ public class Testimonial {
         this.id = id;
     }
 
-    public boolean isDeleted() {
-        return deleted;
-    }
-
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
-    }
-
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getFacebookUrl() {
+        return facebookUrl;
+    }
+
+    public void setFacebookUrl(String facebookUrl) {
+        this.facebookUrl = facebookUrl;
+    }
+
+    public String getInstagramUrl() {
+        return instagramUrl;
+    }
+
+    public void setInstagramUrl(String instagramUrl) {
+        this.instagramUrl = instagramUrl;
+    }
+
+    public String getLinkedinUrl() {
+        return linkedinUrl;
+    }
+
+    public void setLinkedinUrl(String linkedinUrl) {
+        this.linkedinUrl = linkedinUrl;
     }
 
     public String getImage() {
@@ -54,20 +74,20 @@ public class Testimonial {
         this.image = image;
     }
 
-    public String getContent() {
-        return content;
+    public String getDescription() {
+        return description;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public boolean isDelete() {
+    public boolean isDeleted() {
         return deleted;
     }
 
-    public void setDelete(boolean delete) {
-        this.deleted = delete;
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 
     public Long getCreatedAt() {
