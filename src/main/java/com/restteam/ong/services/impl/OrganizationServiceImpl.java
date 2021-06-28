@@ -1,15 +1,15 @@
 package com.restteam.ong.services.impl;
 
-import com.restteam.ong.models.Organization;
-import com.restteam.ong.repositories.OrganizationRepository;
-import com.restteam.ong.services.OrganizationService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+
+import com.restteam.ong.models.Organization;
+import com.restteam.ong.repositories.OrganizationRepository;
+import com.restteam.ong.services.OrganizationService;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class OrganizationServiceImpl implements OrganizationService {

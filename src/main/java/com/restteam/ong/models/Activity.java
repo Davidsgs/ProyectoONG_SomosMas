@@ -23,12 +23,12 @@ import lombok.Setter;
 @Entity
 @Table(name = "activity")
 @SQLDelete(sql = "UPDATE activity SET deleted=true WHERE id = ?")
-@Where(clause = "deleted = true")
+@Where(clause = "deleted = false")
 public class Activity {
 
     @Id
     @GeneratedValue(strategy =GenerationType.IDENTITY)
-    @Column(name = "activityId", nullable = false, unique = true)
+    @Column(name = "id", nullable = false, unique = true)
     private Long id;
 
     @Column(name = "name", nullable = false, length = 50)
