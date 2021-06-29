@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +40,9 @@ public class MemberServiceImpl implements MemberService {
             memberRepository.save(member);
         }
     }
+
     private boolean memberAlreadyExists(Member member){ return memberRepository.existsByName(member.getName()); }
+
     private boolean nameNotNull(Member member){ return !member.getName().isEmpty(); }
 
     @Override
@@ -58,6 +61,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<String> updateMember(Long memberId, String name, String facebook, String instagram, String linkedin, String image, String description) {
         try{
             Member member = memberRepository.findById(memberId).orElseThrow(() -> new IllegalStateException("..."));
@@ -67,7 +71,6 @@ public class MemberServiceImpl implements MemberService {
             if(linkedin != null){member.setLinkedinUrl(linkedin);}
             if(image != null){member.setImage(image);}
             if(description != null){member.setDescription(description);}
-            memberRepository.save(member);
             return new ResponseEntity<>("El miembro ha sido actualizado!", HttpStatus.OK);
         }
         catch(Exception e){
