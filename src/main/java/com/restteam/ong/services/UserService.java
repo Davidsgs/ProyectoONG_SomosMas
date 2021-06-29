@@ -3,6 +3,7 @@ package com.restteam.ong.services;
 import com.restteam.ong.models.User;
 import com.restteam.ong.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -14,13 +15,19 @@ public class UserService {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    private PasswordEncoder bcryptEncoder;
+
     /// --- Método de Creación (Create) ---
 
     public User createUser(User user) {
         //Verificamos de que no exista algún usuario ya registrado.
+
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
             throw new IllegalStateException(String.format("Already exist an user with email %s", user.getEmail()));
         }
+        //Encriptamos la contraseña.
+        user.setPassword(bcryptEncoder.encode(user.getPassword()));
         //Establecemos el TimeStamp de creación.
         user.setCreatedAt(System.currentTimeMillis() / 1000);
         return userRepository.save(user);
