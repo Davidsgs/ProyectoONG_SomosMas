@@ -48,11 +48,8 @@ public class ActivityController {
         return ResponseEntity.ok(activityOutput);
     }
 
-
-    
     @PutMapping(path = "/{id}")
     public ResponseEntity<?> updateActivity(@Valid @RequestBody ActivityRequest activity, @PathVariable Long id) {
-
 
         Optional<Activity> activityOptional = this.activityService.getActivityById(id);
 
@@ -71,15 +68,14 @@ public class ActivityController {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-@ExceptionHandler(MethodArgumentNotValidException.class)
-public Map<String, String> handleValidationExceptions(
-  MethodArgumentNotValidException ex) {
-    Map<String, String> errors = new HashMap<>();
-    ex.getBindingResult().getAllErrors().forEach((error) -> {
-        String fieldName = ((FieldError) error).getField();
-        String errorMessage = error.getDefaultMessage();
-        errors.put(fieldName, errorMessage);
-    });
-    return errors;
-}
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
+        });
+        return errors;
+    }
 }
