@@ -4,6 +4,7 @@ import com.restteam.ong.controllers.dto.AuthenticationRequest;
 import com.restteam.ong.controllers.dto.AuthenticationResponse;
 import com.restteam.ong.controllers.dto.UserDTO;
 import com.restteam.ong.models.User;
+import com.restteam.ong.models.impl.UserDetailsImpl;
 import com.restteam.ong.services.impl.UserDetailsServiceImpl;
 import com.restteam.ong.util.JwtUtil;
 import org.modelmapper.ModelMapper;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -65,6 +67,11 @@ public class AuthenticationController {
             response = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
         return response;
+    }
+
+    @GetMapping(path = "/me")
+    ResponseEntity<?> getUserInfo(@AuthenticationPrincipal UserDetailsImpl user){
+        return ResponseEntity.ok(user.getUser());
     }
 
 }
