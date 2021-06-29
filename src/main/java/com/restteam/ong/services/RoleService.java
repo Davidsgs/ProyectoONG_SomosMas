@@ -39,6 +39,12 @@ public class RoleService {
         );
     }
 
+    public Role findByName(String name){
+        return roleRepository.findByName(name).orElseThrow(
+                () -> new IllegalStateException(String.format("The role with name %s not found.", name))
+        );
+    }
+
     // --- Método de Actualizar (Update) ---
 
     @Transactional
