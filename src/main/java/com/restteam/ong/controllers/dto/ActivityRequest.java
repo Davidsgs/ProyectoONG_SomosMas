@@ -1,5 +1,6 @@
 package com.restteam.ong.controllers.dto;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
@@ -15,10 +16,10 @@ public class ActivityRequest {
 
     private Long id;
 
-    @NotNull(message = "Please provide name")
+    @NotBlank(message = "Please provide name")
     private String name;
 
-    @NotNull(message = "Please provide content")
+    @NotBlank(message = "Please provide content")
     private String content;
 
     private String image;
