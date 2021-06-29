@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/members/")
+@RequestMapping(path = "/members")
 @AllArgsConstructor
 public class MemberController {
 
@@ -27,7 +27,7 @@ public class MemberController {
         return memberService.getMembers();
     }
 
-    @PutMapping(path = ":{memberId}")
+    @PutMapping(path = "{memberId}")
     public ResponseEntity<String> updateMember(@PathVariable Long memberId,
                                        @RequestParam(required = false) String name,
                                        @RequestParam(required = false) String facebook,
@@ -38,7 +38,7 @@ public class MemberController {
         return memberService.updateMember(memberId,name,facebook,instagram,linkedin,image,description);
     }
 
-    @DeleteMapping(path = ":{memberId}")
+    @DeleteMapping(path = "{memberId}")
     public ResponseEntity<String> deleteMember(@PathVariable Long memberId){
         return memberService.deleteMember(memberId);
     }
