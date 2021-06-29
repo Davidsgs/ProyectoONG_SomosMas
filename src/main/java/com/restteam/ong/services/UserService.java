@@ -58,19 +58,19 @@ public class UserService {
     @Transactional
     public User updateUser(Long id, User user) {
         var userToUpdate = findById(id);
-        if (!user.getFirstName().isBlank()) {
+        if (!user.getFirstName().isBlank() && user.getFirstName() != null) {
             userToUpdate.setFirstName(user.getFirstName());
         }
-        if (!user.getLastName().isBlank()) {
+        if (!user.getLastName().isBlank() && user.getLastName() != null) {
             userToUpdate.setLastName(user.getLastName());
         }
-        if (!user.getEmail().isBlank()) {
+        if (!user.getEmail().isBlank() && user.getEmail() != null ) {
             userToUpdate.setEmail(user.getEmail());
         }
-        if (!user.getPassword().isBlank()) {
+        if (!user.getPassword().isBlank() && user.getPassword() != null) {
             userToUpdate.setPassword(user.getPassword());
         }
-        if (user.getPhoto() != null) {
+        if (!user.getPhoto().isBlank() && user.getPhoto() != null) {
             userToUpdate.setPhoto(user.getPhoto());
         }
         if (user.getRole() != null){
