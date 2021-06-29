@@ -5,6 +5,7 @@ import com.restteam.ong.repositories.CategoriesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
@@ -38,5 +39,9 @@ public class CategoriesService {
             return categories;
         }
         return null;
+    }
+
+    public ArrayList<Categories> getCategories(){
+        return (ArrayList<Categories>)this.categoriesRepository.findAll();
     }
 }

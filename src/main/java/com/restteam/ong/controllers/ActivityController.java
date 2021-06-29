@@ -35,13 +35,14 @@ public class ActivityController {
     ModelMapper modelMapper = new ModelMapper();
 
     @PostMapping
-    public ResponseEntity<?> postActivity(@Valid @RequestBody ActivityRequest activity) {
+    public ResponseEntity<?> createActivity(@Valid @RequestBody ActivityRequest activity) {
 
         Activity myActivity = new Activity();
         modelMapper.map(activity, myActivity);
 
         myActivity.setDeleted(false);
         myActivity.setCreatedAt(new Date().getTime());
+        myActivity.setUpdatedAt(new Date().getTime());
 
         Activity activityOutput = this.activityService.saveActivity(myActivity);
 
