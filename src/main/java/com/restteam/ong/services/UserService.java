@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 
 @Service
 public class UserService {
@@ -31,6 +32,10 @@ public class UserService {
         return userRepository.findById(id).orElseThrow(
                 () -> new IllegalStateException(String.format("User with id: %d not found", id))
         );
+    }
+
+    public ArrayList<User> findAll(){
+        return (ArrayList<User>) userRepository.findAll();
     }
 
 
