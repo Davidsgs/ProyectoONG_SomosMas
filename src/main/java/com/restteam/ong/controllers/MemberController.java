@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/members")
+@RequestMapping(path = "/members/")
 @AllArgsConstructor
 public class MemberController {
 
@@ -24,5 +24,16 @@ public class MemberController {
     @GetMapping()
     public List<MemberDTO> getMembers(){
         return memberService.getMembers();
+    }
+
+    @PutMapping(path = ":{memberId}")
+    public void updateMember(@PathVariable Long memberId,
+                                          @RequestParam(required = false) String name,
+                                          @RequestParam(required = false) String facebook,
+                                          @RequestParam(required = false) String instagram,
+                                          @RequestParam(required = false) String linkedin,
+                                          @RequestParam(required = false) String image,
+                                          @RequestParam(required = false) String description){
+        memberService.updateMember(memberId,name,facebook,instagram,linkedin,image,description);
     }
 }

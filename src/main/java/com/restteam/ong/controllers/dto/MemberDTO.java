@@ -8,7 +8,6 @@ import lombok.Data;
 public class MemberDTO {
     public MemberDTO() {
     }
-
     private String name;
     private String facebookUrl;
     private String instagramUrl;

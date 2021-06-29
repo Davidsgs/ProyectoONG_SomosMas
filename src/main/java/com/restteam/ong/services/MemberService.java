@@ -8,9 +8,9 @@ import java.util.List;
 
 
 public interface MemberService {
-    public ArrayList<Member> getMember();
-    public  void addMember(Member member);
-    public  String updateMember(Member memberUpdate);
-    public  String deleteSoftDelete(Long id);
+    ArrayList<Member> getMember();
+    void addMember(Member member);
+    String deleteSoftDelete(Long id);
     List<MemberDTO> getMembers();
+    void updateMember(Long memberId, String name, String facebook, String instagram, String linkedin, String image, String description);
 }
