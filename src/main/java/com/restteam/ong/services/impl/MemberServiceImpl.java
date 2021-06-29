@@ -29,10 +29,6 @@ public class MemberServiceImpl implements MemberService {
         return modelMapper.map(member,MemberDTO.class);
     }
 
-    public ArrayList<Member> getMember() {
-        return null;
-    }
-
     @Override
     public  void addMember(Member member){
         if(!memberAlreadyExists(member) && nameNotNull(member)){
@@ -44,11 +40,6 @@ public class MemberServiceImpl implements MemberService {
     private boolean memberAlreadyExists(Member member){ return memberRepository.existsByName(member.getName()); }
 
     private boolean nameNotNull(Member member){ return !member.getName().isEmpty(); }
-
-    @Override
-    public String deleteSoftDelete(Long id) {
-        return null;
-    }
 
     @Override
     public List<MemberDTO> getMembers() {
@@ -74,7 +65,20 @@ public class MemberServiceImpl implements MemberService {
             return new ResponseEntity<>("El miembro ha sido actualizado!", HttpStatus.OK);
         }
         catch(Exception e){
-            return new ResponseEntity<>("No se encontro al miembro",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("ERROR: No se encontro al miembro",HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> deleteMember(Long memberId) {
+        boolean exists = memberRepository.existsById(memberId);
+        try{
+            if(!exists){throw new IllegalStateException();}
+            memberRepository.deleteById(memberId);
+            return new ResponseEntity<>("El miembro ha sido eliminado!",HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity<>("ERROR: No se encontro al miembro.",HttpStatus.BAD_REQUEST);
         }
     }
 }

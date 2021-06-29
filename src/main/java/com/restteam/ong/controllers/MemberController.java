@@ -37,4 +37,9 @@ public class MemberController {
                                        @RequestParam(required = false) String description){
         return memberService.updateMember(memberId,name,facebook,instagram,linkedin,image,description);
     }
+
+    @DeleteMapping(path = ":{memberId}")
+    public ResponseEntity<String> deleteMember(@PathVariable Long memberId){
+        return memberService.deleteMember(memberId);
+    }
 }
