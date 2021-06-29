@@ -34,9 +34,6 @@ public class AuthenticationController {
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
 
-    @Autowired
-    private PasswordEncoder bcryptEncoder;
-
     private ModelMapper modelMapper = new ModelMapper();
 
     @PostMapping(path = "/login")
@@ -59,8 +56,6 @@ public class AuthenticationController {
     @PostMapping(path = "/register")
     ResponseEntity<?> register(@RequestBody UserDTO userDTO) {
         ResponseEntity response;
-        //Encriptamos la contraseña.
-        userDTO.setPassword(bcryptEncoder.encode(userDTO.getPassword()));
         try{
             var user = modelMapper.map(userDTO, User.class);
             response = ResponseEntity.ok(userDetailsService.registerUser(user));
