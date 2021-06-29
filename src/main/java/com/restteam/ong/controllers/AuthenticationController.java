@@ -5,6 +5,7 @@ import com.restteam.ong.controllers.dto.AuthenticationResponse;
 import com.restteam.ong.controllers.dto.UserDTO;
 import com.restteam.ong.models.User;
 import com.restteam.ong.models.impl.UserDetailsImpl;
+import com.restteam.ong.services.RoleService;
 import com.restteam.ong.services.impl.UserDetailsServiceImpl;
 import com.restteam.ong.util.JwtUtil;
 import org.modelmapper.ModelMapper;
@@ -32,6 +33,9 @@ public class AuthenticationController {
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
 
+    @Autowired
+    private RoleService roleService;
+
     private ModelMapper modelMapper = new ModelMapper();
 
     @PostMapping(path = "/login")
@@ -55,8 +59,23 @@ public class AuthenticationController {
     ResponseEntity<?> register(@RequestBody UserDTO userDTO) {
         ResponseEntity response;
         try{
+            //Buscamos el rol por defecto de los usuarios registrados.
+            var roleName = "ROLE_USER";
+            var roleUser = roleService.findByName(roleName);
+            //Creamos el Usuario a registrar
             var user = modelMapper.map(userDTO, User.class);
-            response = ResponseEntity.ok(userDetailsService.registerUser(user));
+            //Le agregamos el Role de Usuario registrado.
+            user.setRole(roleUser);
+            //Guardamos la contraseña sin encriptar para luego poder iniciar sesion una vez registrado.
+            var password = user.getPassword();
+            //Lo registramos
+            userDetailsService.registerUser(user);
+            //Creamos la authentication request para poder logearnos en el sistema.
+            var authRequest = new AuthenticationRequest();
+            authRequest.setUsername(user.getEmail());
+            authRequest.setPassword(password);
+            //Iniciamos sesion para recibir el JWT y devolverlo.
+            response = createAthenticationToken(authRequest);
         }catch (Exception e){
             response = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
