@@ -5,6 +5,7 @@ import com.restteam.ong.controllers.dto.MemberDTO;
 import com.restteam.ong.models.Member;
 import com.restteam.ong.services.MemberService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,13 +28,13 @@ public class MemberController {
     }
 
     @PutMapping(path = ":{memberId}")
-    public void updateMember(@PathVariable Long memberId,
-                                          @RequestParam(required = false) String name,
-                                          @RequestParam(required = false) String facebook,
-                                          @RequestParam(required = false) String instagram,
-                                          @RequestParam(required = false) String linkedin,
-                                          @RequestParam(required = false) String image,
-                                          @RequestParam(required = false) String description){
-        memberService.updateMember(memberId,name,facebook,instagram,linkedin,image,description);
+    public ResponseEntity<String> updateMember(@PathVariable Long memberId,
+                                       @RequestParam(required = false) String name,
+                                       @RequestParam(required = false) String facebook,
+                                       @RequestParam(required = false) String instagram,
+                                       @RequestParam(required = false) String linkedin,
+                                       @RequestParam(required = false) String image,
+                                       @RequestParam(required = false) String description){
+        return memberService.updateMember(memberId,name,facebook,instagram,linkedin,image,description);
     }
 }

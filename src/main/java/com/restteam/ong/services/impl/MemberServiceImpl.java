@@ -7,6 +7,8 @@ import com.restteam.ong.services.MemberService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -56,20 +58,20 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void updateMember(Long memberId, String name, String facebook, String instagram, String linkedin, String image, String description) {
-        //try{
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new IllegalStateException("..."));
-        if(name != null){member.setName(name);}
-        if(facebook != null){member.setFacebookUrl(facebook);}
-        if(instagram != null){member.setInstagramUrl(instagram);}
-        if(linkedin != null){member.setLinkedinUrl(linkedin);}
-        if(image != null){member.setImage(image);}
-        if(description != null){member.setDescription(description);}
-        memberRepository.save(member);
-        //return new ResponseEntity<>("El miembro ha sido actualizado!",HttpStatus.OK);
-        //}
-        //catch(Exception e){
-        //    return new ResponseEntity<>("No se encontro al miembro",HttpStatus.BAD_REQUEST);
-        //}
+    public ResponseEntity<String> updateMember(Long memberId, String name, String facebook, String instagram, String linkedin, String image, String description) {
+        try{
+            Member member = memberRepository.findById(memberId).orElseThrow(() -> new IllegalStateException("..."));
+            if(name != null){member.setName(name);}
+            if(facebook != null){member.setFacebookUrl(facebook);}
+            if(instagram != null){member.setInstagramUrl(instagram);}
+            if(linkedin != null){member.setLinkedinUrl(linkedin);}
+            if(image != null){member.setImage(image);}
+            if(description != null){member.setDescription(description);}
+            memberRepository.save(member);
+            return new ResponseEntity<>("El miembro ha sido actualizado!", HttpStatus.OK);
+        }
+        catch(Exception e){
+            return new ResponseEntity<>("No se encontro al miembro",HttpStatus.BAD_REQUEST);
+        }
     }
 }
