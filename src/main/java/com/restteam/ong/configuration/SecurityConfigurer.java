@@ -32,12 +32,14 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     private static final String[] AUTH_WHITELIST = {
             // -- Swagger UI v3 (OpenAPI)
+            "/api/docs/**",
+            "/api/swagger-ui/**",
             "/v3/api-docs/**",
-            "/swagger-ui/**",
+            "**/swagger-ui/**",
             // Para agregar otras rutas al whitelist, agregarlas aca.
             "/auth/register",
-            "/auth/login"
-            //,"/**"   <--- //descomentar esta linea para deshabilitar la seguridad.
+            "/auth/login",
+            //"/**"   //<--- descomentar esta linea para deshabilitar la seguridad.
     };
 
     protected void configure(HttpSecurity httpSecurity) throws Exception {
