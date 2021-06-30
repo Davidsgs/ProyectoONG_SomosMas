@@ -20,6 +20,7 @@ public class Contact {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true,nullable = false)
     private Long id;
+    private String name;
     private Integer phone;
     private String email;
     private String message;
