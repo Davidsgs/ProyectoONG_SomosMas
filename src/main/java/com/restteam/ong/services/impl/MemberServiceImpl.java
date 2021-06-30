@@ -7,13 +7,12 @@ import com.restteam.ong.services.MemberService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static java.lang.System.currentTimeMillis;
 
@@ -30,11 +29,13 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public  void addMember(Member member){
+    public Optional<Long> addMember(Member member){
         if(!memberAlreadyExists(member) && nameNotNull(member)){
             member.setCreatedAt(currentTimeMillis()/1000);
             memberRepository.save(member);
+            return Optional.of(member.getId());
         }
+        return Optional.empty();
     }
 
     private boolean memberAlreadyExists(Member member){ return memberRepository.existsByName(member.getName()); }
@@ -51,9 +52,11 @@ public class MemberServiceImpl implements MemberService {
         return memberDTOList;
     }
 
+
     @Override
     @Transactional
-    public ResponseEntity<String> updateMember(Long memberId, String name, String facebook, String instagram, String linkedin, String image, String description) {
+    public Optional<Member> updateMember(Long memberId, String name, String facebook, String instagram, String linkedin, String image, String description) {
+        //Si anda ok devuelve al miembro, si no, devuelve null.
         try{
             Member member = memberRepository.findById(memberId).orElseThrow(() -> new IllegalStateException("..."));
             if(name != null){member.setName(name);}
@@ -62,23 +65,21 @@ public class MemberServiceImpl implements MemberService {
             if(linkedin != null){member.setLinkedinUrl(linkedin);}
             if(image != null){member.setImage(image);}
             if(description != null){member.setDescription(description);}
-            return new ResponseEntity<>("El miembro ha sido actualizado!", HttpStatus.OK);
+            return Optional.of(member);
         }
         catch(Exception e){
-            return new ResponseEntity<>("ERROR: No se encontro al miembro",HttpStatus.BAD_REQUEST);
+            return Optional.empty();
         }
     }
 
     @Override
-    public ResponseEntity<String> deleteMember(Long memberId) {
+    public Optional<Long> deleteMember(Long memberId) {
         boolean exists = memberRepository.existsById(memberId);
-        try{
-            if(!exists){throw new IllegalStateException();}
+        if(exists){
             memberRepository.deleteById(memberId);
-            return new ResponseEntity<>("El miembro ha sido eliminado!",HttpStatus.OK);
+            return Optional.of(memberId);
         }
-        catch (Exception e){
-            return new ResponseEntity<>("ERROR: No se encontro al miembro.",HttpStatus.BAD_REQUEST);
-        }
+        return Optional.empty();
     }
+
 }
