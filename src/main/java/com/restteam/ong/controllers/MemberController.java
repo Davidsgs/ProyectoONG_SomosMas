@@ -25,7 +25,7 @@ public class MemberController {
             return new ResponseEntity<Long>(memberId,HttpStatus.OK);
         }
         catch(Exception e){
-            return new ResponseEntity<String>("Error: No se encontro al miembro.",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<String>("Error: No se pudo crear al miembro.",HttpStatus.BAD_REQUEST);
         }
     }
 

@@ -30,15 +30,11 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Optional<Long> addMember(Member member){
-        if(!memberAlreadyExists(member) && nameNotNull(member)){
-            member.setCreatedAt(currentTimeMillis()/1000);
-            memberRepository.save(member);
-            return Optional.of(member.getId());
-        }
-        return Optional.empty();
+        if(member.getName().isBlank()){ return Optional.empty(); }
+        member.setCreatedAt(currentTimeMillis()/1000);
+        memberRepository.save(member);
+        return Optional.of(member.getId());
     }
-
-    private boolean memberAlreadyExists(Member member){ return memberRepository.existsByName(member.getName()); }
 
     private boolean nameNotNull(Member member){ return !member.getName().isEmpty(); }
 
