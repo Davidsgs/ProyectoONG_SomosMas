@@ -1,5 +1,6 @@
 package com.restteam.ong.controllers;
 
+import com.restteam.ong.controllers.dto.ContactDTO;
 import com.restteam.ong.models.Contact;
 import com.restteam.ong.services.ContactService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -31,7 +33,7 @@ public class ContactController {
 
     @GetMapping
     public ResponseEntity<?> getContacts(){
-        List<Contact> contacts;
+        List<ContactDTO> contacts;
         try {
             contacts = contactService.getContacts();
         } catch (Exception e) {
