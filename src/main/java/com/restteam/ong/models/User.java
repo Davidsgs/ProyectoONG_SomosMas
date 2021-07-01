@@ -8,10 +8,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
+import javax.validation.constraints.NotBlank;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
-import org.springframework.lang.NonNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,21 +26,23 @@ import lombok.NoArgsConstructor;
 @Where(clause = "deleted = false")
 public class User {
 
+    @Schema(hidden = true)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
     private Long id;
 
-    @NonNull
+    @NotBlank
     private String firstName;
 
-    @NonNull
+    @NotBlank
     private String lastName;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true)
+    @NotBlank
     private String email;
 
-    @NonNull
+    @NotBlank
     private String password;
 
     private String photo;
