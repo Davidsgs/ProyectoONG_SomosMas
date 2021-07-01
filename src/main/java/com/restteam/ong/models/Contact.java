@@ -21,7 +21,7 @@ public class Contact {
     @Column(unique = true,nullable = false)
     private Long id;
     private String name;
-    private Integer phone;
+    private String phone;
     private String email;
     private String message;
     @Column(columnDefinition = "boolean default false")
