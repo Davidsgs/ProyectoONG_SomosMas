@@ -7,31 +7,36 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Collection;
 
 @Data
 public class UserDetailsImpl implements UserDetails {
 
-    private String username;
-    private String password;
-    private boolean deleted;
-    private Role role;
+    private User user;
 
     public UserDetailsImpl(User user){
-        this.username = user.getEmail();
-        this.password = user.getPassword();
-        this.deleted = user.getDeleted();
-        this.role = user.getRole();
+        this.user = user;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         ArrayList<GrantedAuthority> roles = new ArrayList<>();
-        if(role != null){
-            roles.add(new SimpleGrantedAuthority(role.getName()));
+        if(user.getRole() != null){
+            roles.add(new SimpleGrantedAuthority(user.getRole().getName()));
         }
         return roles;
+    }
+
+    @Override
+    public String getPassword() {
+        return user.getPassword();
+    }
+
+    @Override
+    public String getUsername() {
+        return user.getEmail();
     }
 
     @Override
@@ -51,7 +56,7 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return !deleted;
+        return !user.getDeleted();
     }
 }
 
