@@ -1,5 +1,6 @@
 package com.restteam.ong.services;
 
+import com.restteam.ong.controllers.dto.UserDTO;
 import com.restteam.ong.models.User;
 import com.restteam.ong.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,21 +57,21 @@ public class UserService {
     // --- Método de Actualizar (Update) ---
 
     @Transactional
-    public User updateUser(Long id, User user) {
+    public User updateUser(Long id, UserDTO user) {
         var userToUpdate = findById(id);
-        if (!user.getFirstName().isBlank() && user.getFirstName() != null) {
+        if (user.getFirstName() != null && !user.getFirstName().isBlank() ) {
             userToUpdate.setFirstName(user.getFirstName());
         }
-        if (!user.getLastName().isBlank() && user.getLastName() != null) {
+        if (user.getLastName() != null && !user.getLastName().isBlank()) {
             userToUpdate.setLastName(user.getLastName());
         }
-        if (!user.getEmail().isBlank() && user.getEmail() != null ) {
+        if (user.getEmail() != null && !user.getEmail().isBlank()) {
             userToUpdate.setEmail(user.getEmail());
         }
-        if (!user.getPassword().isBlank() && user.getPassword() != null) {
-            userToUpdate.setPassword(user.getPassword());
+        if (user.getPassword() != null && !user.getPassword().isBlank()) {
+            userToUpdate.setPassword(bcryptEncoder.encode(user.getPassword()));
         }
-        if (!user.getPhoto().isBlank() && user.getPhoto() != null) {
+        if (user.getPhoto() != null && !user.getPhoto().isBlank()) {
             userToUpdate.setPhoto(user.getPhoto());
         }
         if (user.getRole() != null){
