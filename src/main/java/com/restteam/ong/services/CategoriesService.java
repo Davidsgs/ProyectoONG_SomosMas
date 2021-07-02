@@ -44,4 +44,12 @@ public class CategoriesService {
     public ArrayList<Categories> getCategories(){
         return (ArrayList<Categories>)this.categoriesRepository.findAll();
     }
+
+    public boolean existCategory(Long id){
+        return this.categoriesRepository.existsById(id);
+    }
+
+    public Optional<Categories> getCategoryById(Long id){
+        return this.categoriesRepository.findById(id);
+    }
 }

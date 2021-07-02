@@ -33,7 +33,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf().disable().authorizeRequests()
                 //Acá, RUTAS PUBLICAS. (Cualquier usuario puede acceder a ellas.)
-                .antMatchers("/auth/register","/auth/login").permitAll()
+                .antMatchers("/auth/register","/auth/login", "/**").permitAll()
                 //Acá, RUTAS PRIVADAS. (Solo acceden usuarios registrados y admins.)
                 .antMatchers("/users/**","/auth/me").hasAnyAuthority("ROLE_USER","ROLE_ADMIN")
                 //Acá, RUTAS SOLO DE ADMINS.
