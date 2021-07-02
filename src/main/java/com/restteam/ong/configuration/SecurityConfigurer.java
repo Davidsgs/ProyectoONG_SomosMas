@@ -30,14 +30,36 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(userDetailsService);
     }
 
+    private static final String[] AUTH_PATHLIST = {
+            // -- Swagger UI v3 (OpenAPI)
+            "/api/docs/**",
+            "/api/swagger-ui/**",
+            "/v3/api-docs/**",
+            "**/swagger-ui/**",
+            // Para agregar otras rutas al whitelist, agregarlas aca.
+            "/auth/register",
+            "/auth/login",
+            //"/**"   //<--- descomentar esta linea para testear endpoints.
+    };
+
+    private static final String[] USER_PATHLIST = {
+            "/users/**",
+            "/auth/me",
+            "/members/**"
+    };
+    
+    private static final String[] ADMIN_PATHLIST = {
+            "/**"
+    };
+
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf().disable().authorizeRequests()
                 //Acá, RUTAS PUBLICAS. (Cualquier usuario puede acceder a ellas.)
-                .antMatchers("/auth/register","/auth/login", "/**").permitAll()
+                .antMatchers(AUTH_PATHLIST).permitAll()
                 //Acá, RUTAS PRIVADAS. (Solo acceden usuarios registrados y admins.)
-                .antMatchers("/users/**","/auth/me").hasAnyAuthority("ROLE_USER","ROLE_ADMIN")
+                .antMatchers(USER_PATHLIST).hasAnyAuthority("ROLE_USER","ROLE_ADMIN")
                 //Acá, RUTAS SOLO DE ADMINS.
-                .antMatchers("/**").hasAnyAuthority("ROLE_ADMIN")
+                .antMatchers(ADMIN_PATHLIST).hasAuthority("ROLE_ADMIN")
                 .anyRequest().authenticated()
                 .and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
