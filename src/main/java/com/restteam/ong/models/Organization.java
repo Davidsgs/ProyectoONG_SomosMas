@@ -42,6 +42,16 @@ public class Organization {
     @Column(nullable = false)
     private Long createdAt;
 
+    @Column
+    private String facebookUrl;
+
+    @Column
+    private String instagramUrl;
+
+    @Column
+    private String linkedinUrl;
+
+
     @Column(nullable = false)
     private Long updatedAt;
 
