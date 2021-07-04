@@ -13,7 +13,7 @@ import java.sql.Timestamp;
 @Data
 @Getter
 @Setter
-@SQLDelete(sql = "UPDATE news SET deleted = true WHERE id_news=?")
+@SQLDelete(sql = "UPDATE news SET deleted = true WHERE id=?")
 @Where(clause = "deleted=false")
 @Table(name = "news")
 @NoArgsConstructor
@@ -30,6 +30,7 @@ public class News {
     @NonNull
     private String image;
 
+    
     @ManyToOne
     @JoinColumn(name = "categories_id",nullable = false)
     private Categories categories;
