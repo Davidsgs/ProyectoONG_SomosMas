@@ -29,21 +29,26 @@ public class TestimonialController {
           responseEntity=ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
       }
 
+
+      if (testimonialDto.getName().equals("") || testimonialDto.getContent().equals("")){
+          return responseEntity= ResponseEntity.status(HttpStatus.FORBIDDEN).body("Testimonial is null");
+        }
+
     return  responseEntity;
     }
 
-    @DeleteMapping("/:{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity removeTestimonial(@RequestParam("id") Long id) {
         ResponseEntity respo;
         try {
             respo=ResponseEntity.ok(testimonialService.deleteSoft(id));
         }catch (Exception e){
-            respo= ResponseEntity.status(HttpStatus.FORBIDDEN).body("Testimonial does no exist");
+            respo= ResponseEntity.status(HttpStatus.FORBIDDEN).body("Name or content is null,try again ");
         }
       return  respo;
     }
 
-    @PutMapping("/testimonials/:{id}")
+    @PutMapping("/testimonials/{id}")
     public ResponseEntity<TestimonialDto> updateTestimonial(@RequestBody TestimonialDto testimonialDto){
         var testimonial =modelMapper.map(testimonialDto,Testimonial.class);
         return  new ResponseEntity(this.testimonialService.updateTestimonial(testimonial),HttpStatus.CREATED);

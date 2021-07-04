@@ -46,8 +46,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
     private static final String[] USER_PATHLIST = {
             "/users/**",
             "/auth/me",
-            "/members/**",
-            "/testimonials/**"
+            "/members/**"
     };
     
     private static final String[] ADMIN_PATHLIST = {

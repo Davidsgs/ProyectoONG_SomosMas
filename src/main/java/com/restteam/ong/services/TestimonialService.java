@@ -25,9 +25,9 @@ public class TestimonialService {
         //Verifico que el Testimonio no exista
         if (testimonialRepository.findByName(testimonialCreate.getName()).isPresent() && testimonialRepository.findByContent(testimonialCreate.getContent()).isPresent()){
             throw new IllegalStateException(String.format(" Name or Content already exist try again",testimonialCreate.getName(), testimonialCreate.getContent()));
-
         }
-        // si no existe crea el testimonio
+
+        // si no son iguales crea el testimonio
         testimonialCreate.setCreatedAt(System.currentTimeMillis() / 1000);
         return testimonialRepository.save(testimonialCreate);
     }
