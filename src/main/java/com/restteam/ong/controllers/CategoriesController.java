@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
+import com.restteam.ong.controllers.dto.CategoryNameDetailResponse;
 import com.restteam.ong.controllers.dto.CategoryRequest;
 import com.restteam.ong.models.Categories;
 import com.restteam.ong.services.CategoriesService;
@@ -41,16 +42,24 @@ public class CategoriesController {
     ////// GetMapping
 
     @GetMapping
-    public ResponseEntity<?> getCategories() {
-        ArrayList<Categories> categories = new ArrayList<>();
-        categories = this.categoriesService.getCategories();
-
-        ArrayList<String> categoriesNames = new ArrayList<>();
-
-        for (int i = 0; i < categories.size(); i++) {
-            categoriesNames.add(categories.get(i).getName());
+    public ResponseEntity<?> getCategories(){
+    
+        try{
+        ArrayList<Categories> categories =  this.categoriesService.getCategories();
+        if(categories.size()==0){
+            return ResponseEntity.status(HttpStatus.OK).body("Category table is empty");
         }
-        return ResponseEntity.ok(categoriesNames);
+        ArrayList<CategoryNameDetailResponse> categoriesNames= new ArrayList<>();
+
+        for(int i=0; i<categories.size(); i++){
+            CategoryNameDetailResponse aux= new CategoryNameDetailResponse();
+            modelMapper.map(categories.get(i), aux);
+            categoriesNames.add(aux);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(categoriesNames);
+    }catch(Exception e){
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error. Contact support");
+    }
     }
 
     @GetMapping("/{id}")

@@ -24,7 +24,7 @@ import lombok.Setter;
 @Data
 @Getter
 @Setter
-@SQLDelete(sql = "UPDATE categories SET deleted = true WHERE id_categories=?")
+@SQLDelete(sql = "UPDATE categories SET deleted = true WHERE id=?")
 @Where(clause = "deleted=false")
 @Table(name = "categories")
 @NoArgsConstructor
@@ -49,6 +49,8 @@ public class Categories {
     @Column(columnDefinition = "boolean default false")
     private Boolean deleted = Boolean.FALSE;
 
+    
     @OneToMany(mappedBy = "categories")
     private Set<News> news;
+    
 }
