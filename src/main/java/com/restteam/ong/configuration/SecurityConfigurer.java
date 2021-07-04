@@ -59,6 +59,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                 //Acá, RUTAS PUBLICAS. (Cualquier usuario puede acceder a ellas.)
                 .antMatchers(AUTH_PATHLIST).permitAll()
                 //Acá, RUTAS PRIVADAS. (Solo acceden usuarios registrados y admins.)
+                .antMatchers(HttpMethod.GET,"/organization/public/{\\d+}").access("hasAnyAuthority('ROLE_USER','ROLE_ADMIN')")
                 .antMatchers(USER_PATHLIST).hasAnyAuthority("ROLE_USER","ROLE_ADMIN")
                 //Agrego autorizacion a usuarios, solo con metodo POST en /contacts
                 .antMatchers(HttpMethod.POST, "/contacts").hasAnyAuthority("ROLE_USER","ROLE_ADMIN")
