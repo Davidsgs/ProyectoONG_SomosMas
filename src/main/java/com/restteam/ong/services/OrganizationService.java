@@ -1,14 +1,15 @@
 package com.restteam.ong.services;
 
+import com.restteam.ong.controllers.dto.OrganizationCreateDTO;
 import com.restteam.ong.controllers.dto.OrganizationDTO;
 import com.restteam.ong.models.Organization;
 
 import java.util.List;
 
 public interface OrganizationService {
-    public Long create(Organization organization);
-    public List<Organization> getAll();
-    public Long update(OrganizationDTO dto, Long id);
-    public Boolean delete(Long id);
-    public OrganizationDTO getDetail(Long id) ;
+     Long create(OrganizationCreateDTO dto);
+     List<Organization> getAll();
+     Long update(OrganizationDTO dto, Long id);
+     Boolean delete(Long id);
+     OrganizationDTO getDetail(Long id) ;
 }
