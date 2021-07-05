@@ -31,15 +31,15 @@ public class News {
     private String image;
 
     
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER,cascade=CascadeType.ALL)
     @JoinColumn(name = "categories_id",nullable = false)
     private Categories categories;
 
-    @CreationTimestamp
-    private Timestamp regDate;
+    // @CreationTimestamp
+    private Long regDate;
 
-    @UpdateTimestamp
-    private Timestamp upDateDate;
+    // @UpdateTimestamp
+    private Long upDateDate;
 
     @Column(columnDefinition = "boolean default false")
     private Boolean deleted = Boolean.FALSE;
