@@ -1,6 +1,7 @@
 package com.restteam.ong.controllers;
 
 
+import com.restteam.ong.controllers.dto.OrganizationCreateDTO;
 import com.restteam.ong.controllers.dto.OrganizationDTO;
 import com.restteam.ong.services.OrganizationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +15,12 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping(path = "/organization/public")
 public class OrganizationController {
+
+    public static final String UNEXPECTED_ERROR = "UNEXPECTED ERROR";
+
     @Autowired
     OrganizationService service;
+
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getDetail (@PathVariable Long id){
@@ -24,13 +29,28 @@ public class OrganizationController {
         }catch (IllegalStateException i){
             return new ResponseEntity<>(i.getMessage(),HttpStatus.NOT_FOUND);
         }catch (Exception e){
-            return new ResponseEntity<>("UNEXPECTED ERROR",HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(UNEXPECTED_ERROR,HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     @PostMapping("/{id}")
-    public ResponseEntity<Long> update (@PathVariable Long id , @Valid @RequestBody OrganizationDTO dto){
-        service.update(dto, id);
-        return new ResponseEntity<>(id,HttpStatus.OK);
+    public ResponseEntity<?> update (@PathVariable Long id , @Valid @RequestBody OrganizationDTO dto){
+        try {
+            service.update(dto, id);
+            return new ResponseEntity<>(id,HttpStatus.OK);
+        }catch (IllegalStateException i){
+            return new ResponseEntity<>(i.getMessage(),HttpStatus.NOT_FOUND);
+        }catch (Exception e){
+            return new ResponseEntity<>(UNEXPECTED_ERROR,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping
+    public ResponseEntity<?> create(@Valid @RequestBody OrganizationCreateDTO dto){
+       try {
+           return new ResponseEntity<>(service.create(dto) ,HttpStatus.OK);
+       }catch (Exception e){
+           return new ResponseEntity<>(UNEXPECTED_ERROR,HttpStatus.INTERNAL_SERVER_ERROR);
+       }
     }
 
 }
