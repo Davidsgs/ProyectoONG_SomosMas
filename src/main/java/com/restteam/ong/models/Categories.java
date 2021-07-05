@@ -1,22 +1,30 @@
 package com.restteam.ong.models;
 
-import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.UpdateTimestamp;
-import org.hibernate.annotations.Where;
-
-
-import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.Set;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.Setter;
 
 @Entity
 @Data
 @Getter
 @Setter
-@SQLDelete(sql = "UPDATE categories SET deleted = true WHERE id_categories=?")
+@SQLDelete(sql = "UPDATE categories SET deleted = true WHERE id=?")
 @Where(clause = "deleted=false")
 @Table(name = "categories")
 @NoArgsConstructor
@@ -24,7 +32,7 @@ import java.util.Set;
 public class Categories {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(unique = true,nullable = false)
+    @Column(unique = true, nullable = false)
     private Long id;
     @NonNull
     private String name;
@@ -33,14 +41,16 @@ public class Categories {
 
     private String image;
 
-    @CreationTimestamp
-    private Timestamp regDate;
-    @UpdateTimestamp
-    private Timestamp upDateDate;
+    // @CreationTimestamp
+    private Long regDate;
+    // @UpdateTimestamp
+    private Long upDateDate;
 
     @Column(columnDefinition = "boolean default false")
     private Boolean deleted = Boolean.FALSE;
 
+    
     @OneToMany(mappedBy = "categories")
     private Set<News> news;
+    
 }

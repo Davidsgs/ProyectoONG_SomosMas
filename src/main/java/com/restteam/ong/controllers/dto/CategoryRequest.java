@@ -11,16 +11,13 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ActivityRequest {
+public class CategoryRequest {
 
-    private Long id;
-
-    @NotBlank(message = "Please provide name")
+    @NotBlank(message = "please, provide name")
     private String name;
 
-    @NotBlank(message = "Please provide content")
-    private String content;
+    @NotBlank(message = "please, provide description")
+    private String description;
 
     private String image;
-
 }

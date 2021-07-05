@@ -1,12 +1,12 @@
 package com.restteam.ong.repositories;
 
-import com.restteam.ong.models.Categories;
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import java.util.Optional;
 
+import com.restteam.ong.models.Categories;
 
-public interface CategoriesRepository extends JpaRepository<Categories,Long> {
+import org.springframework.data.repository.CrudRepository;
 
-    Optional<Categories> findByName(String name);
+public interface CategoriesRepository extends CrudRepository<Categories, Long> {
+
+   public abstract Optional<Categories> findByName(String name);
 }
