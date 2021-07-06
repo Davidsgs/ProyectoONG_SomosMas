@@ -18,7 +18,7 @@ public class NewsDTO {
 
     private String image;
 
-
+    private CategoryRequest categoryRequest;
 
 
 
