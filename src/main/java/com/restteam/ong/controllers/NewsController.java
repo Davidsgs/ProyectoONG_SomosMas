@@ -34,12 +34,13 @@ public class NewsController {
 
         News news = new News();
         Categories categories = new Categories();
+        modelMapper.map(newsDTO.getCategoryRequest(),categories);
         modelMapper.map(newsDTO, news);
 
-        news.setDeleted(false);
-        news.setRegDate(new Date().getTime());
+        news.setRegDate(new Date().getTime()/1000);
         news.setUpDateDate(news.getRegDate());
         news.setCategories(categories);
+
 
         News newNews = this.newsService.postNews(news);
 
