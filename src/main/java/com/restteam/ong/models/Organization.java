@@ -5,6 +5,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import java.util.Set;
 
 
 @Table
@@ -57,5 +58,8 @@ public class Organization {
 
     @Column(nullable = false)
     private Boolean deleted = false;
+
+    @OneToMany(mappedBy = "organizationId", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE, CascadeType.REFRESH})
+    private Set<Slide> slides;
 
 }
