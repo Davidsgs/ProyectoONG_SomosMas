@@ -31,7 +31,7 @@ public class TestimonialController {
 
 
       if (testimonialDto.getName().equals("") || testimonialDto.getContent().equals("")){
-          return responseEntity= ResponseEntity.status(HttpStatus.FORBIDDEN).body("Testimonial is null");
+          return responseEntity= ResponseEntity.status(HttpStatus.FORBIDDEN).body("Testimonial is  ");
         }
 
     return  responseEntity;
@@ -43,15 +43,15 @@ public class TestimonialController {
         try {
             respo=ResponseEntity.ok(testimonialService.deleteSoft(id));
         }catch (Exception e){
-            respo= ResponseEntity.status(HttpStatus.FORBIDDEN).body("Name or content is null,try again ");
+            respo= ResponseEntity.status(HttpStatus.FORBIDDEN).body("Testimonial id does no exist");
         }
       return  respo;
     }
 
     @PutMapping("/testimonials/{id}")
-    public ResponseEntity<TestimonialDto> updateTestimonial(@RequestBody TestimonialDto testimonialDto){
+    public ResponseEntity<TestimonialDto> updateTestimonial(@RequestBody TestimonialDto testimonialDto,@PathVariable("id") Long id){
         var testimonial =modelMapper.map(testimonialDto,Testimonial.class);
-        return  new ResponseEntity(this.testimonialService.updateTestimonial(testimonial),HttpStatus.CREATED);
+        return  new ResponseEntity(this.testimonialService.updateTestimonial(testimonial,id),HttpStatus.CREATED);
     }
 
 }

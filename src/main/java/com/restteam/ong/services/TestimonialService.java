@@ -1,6 +1,5 @@
 package com.restteam.ong.services;
 
-import com.restteam.ong.controllers.dto.TestimonialDto;
 import com.restteam.ong.models.Testimonial;
 import com.restteam.ong.repositories.TestimonialRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,10 +32,10 @@ public class TestimonialService {
     }
 
     //--Metodo de Actulizar--
-
-    public String updateTestimonial(Testimonial testimonialUpdate) {
+    public Object updateTestimonial(Testimonial testimonialUpdate, Long id) {
+        Testimonial testimo = testimonialRepository.findById(id).orElse(null);
         try {
-            Testimonial testimo = testimonialRepository.findById(testimonialUpdate.getId()).orElse(null);
+
             testimo.setContent(testimonialUpdate.getContent());
             testimo.setUpdatedAt(System.currentTimeMillis() / 1000);
             testimo.setImage(testimonialUpdate.getImage());
@@ -45,7 +44,7 @@ public class TestimonialService {
         } catch (Exception e) {
             return ("i do not know update, Id does not exist");
         }
-        return  "Testimonial Update";
+        return  testimo;
     }
     @Transactional
     public String deleteSoft(Long id) {
