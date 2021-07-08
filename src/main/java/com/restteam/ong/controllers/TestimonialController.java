@@ -8,7 +8,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,20 +20,20 @@ public class TestimonialController {
 
     @PostMapping("/")
     public ResponseEntity<?> saveTestimonial(@RequestBody TestimonialDto testimonialDto) {
-      ResponseEntity responseEntity;
+        if(testimonialDto.getName() == null || testimonialDto.getImage() == null || testimonialDto.getContent() == null ){
+            return new ResponseEntity<>("Request must contain name,image and Content values.", HttpStatus.BAD_REQUEST);
+        }
+        ResponseEntity responseEntity;
       try {
           var testimonial=modelMapper.map(testimonialDto,Testimonial.class);
           responseEntity=ResponseEntity.ok(testimonialService.createTestimonial(testimonial));
       }catch (Exception e){
-          responseEntity=ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+          return  new ResponseEntity<>("Name or Content already exist try again",HttpStatus.BAD_REQUEST);
       }
-
-
       if (testimonialDto.getName().equals("") || testimonialDto.getContent().equals("")){
-          return responseEntity= ResponseEntity.status(HttpStatus.FORBIDDEN).body("Testimonial is  ");
+          return responseEntity= ResponseEntity.status(HttpStatus.FORBIDDEN).body("Name or Content is null  ");
         }
-
-    return  responseEntity;
+      return  responseEntity;
     }
 
     @DeleteMapping("/{id}")
