@@ -16,6 +16,7 @@
 	<description>Alkemy project for ONG</description>
 	<properties>
 		<java.version>11</java.version>
+		<junit.jupiter.version>5.7.2</junit.jupiter.version>
 	</properties>
 
 	<dependencies>
@@ -89,6 +90,18 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
+		<!-- JUNIT -->
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<version>5.7.2</version>
+		</dependency>
+		<!-- Mockito -->
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<version>3.11.1</version>
 		</dependency>
 	</dependencies>
 </project>
