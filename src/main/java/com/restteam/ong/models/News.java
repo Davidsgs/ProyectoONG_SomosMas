@@ -7,12 +7,11 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.sql.Timestamp;
 
 @Entity
 @Data
-@Getter
-@Setter
 @SQLDelete(sql = "UPDATE news SET deleted = true WHERE id=?")
 @Where(clause = "deleted=false")
 @Table(name = "news")
@@ -23,23 +22,23 @@ public class News {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true,nullable = false)
     private Long id;
-    @NonNull
+    @NotBlank
     private String name;
-    @NonNull
+    @NotBlank
     private String content;
-    @NonNull
+    @NotBlank
     private String image;
 
     
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER,cascade=CascadeType.ALL)
     @JoinColumn(name = "categories_id",nullable = false)
     private Categories categories;
 
-    @CreationTimestamp
-    private Timestamp regDate;
+    // @CreationTimestamp
+    private Long regDate;
 
-    @UpdateTimestamp
-    private Timestamp upDateDate;
+    // @UpdateTimestamp
+    private Long upDateDate;
 
     @Column(columnDefinition = "boolean default false")
     private Boolean deleted = Boolean.FALSE;

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import com.restteam.ong.controllers.dto.OrganizationCreateDTO;
 import com.restteam.ong.controllers.dto.OrganizationDTO;
 import com.restteam.ong.models.Organization;
 import com.restteam.ong.repositories.OrganizationRepository;
@@ -23,16 +24,14 @@ public class OrganizationServiceImpl implements OrganizationService {
     ModelMapper modelMapper = new ModelMapper();
 
     @Override
-    public Long create(Organization organization) {
+    public Long create(OrganizationCreateDTO dto) {
         try {
-            if (Objects.isNull(organization.getId())) {
                 long timestamp = System.currentTimeMillis() / 1000;
+                Organization organization = modelMapper.map(dto, Organization.class);
                 organization.setCreatedAt(timestamp);
                 organization.setUpdatedAt(timestamp);
                 Organization newOrganization = repository.save(organization);
                 return newOrganization.getId();
-            }
-            throw new IllegalStateException("The Organization can't be no Null");
         } catch(Exception e){
             throw new IllegalStateException("Unexpected error creating an organization");
         }
@@ -49,7 +48,6 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     @Override
     public Long update(OrganizationDTO dto, Long id) {
-        try {
             Optional<Organization> organizationOptional = repository.findById(id);
             if (organizationOptional.isPresent()) {
                 Organization organization = organizationOptional.get();
@@ -57,9 +55,6 @@ public class OrganizationServiceImpl implements OrganizationService {
                 return repository.save(organization).getId();
             }
             throw new IllegalStateException("The Organization is not present");
-        } catch(Exception e){
-            throw new IllegalStateException("Unexpected error updating an organization");
-        }
     }
 
     private void updateOrganization(OrganizationDTO dto, Organization organization) {
