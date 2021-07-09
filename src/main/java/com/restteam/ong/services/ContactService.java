@@ -3,20 +3,22 @@ package com.restteam.ong.services;
 import com.restteam.ong.controllers.dto.ContactDTO;
 import com.restteam.ong.models.Contact;
 import com.restteam.ong.repositories.ContactRepository;
+import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.ModelMap;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class ContactService {
 
     @Autowired
     ContactRepository contactRepository;
-    ModelMapper modelMapper = new ModelMapper();
+
+    ModelMapper modelMapper;
 
     public void createContact(Contact contact) {
         contactRepository.save(contact);
