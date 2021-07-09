@@ -31,4 +31,17 @@ public class Contact {
     private Boolean deleted = Boolean.FALSE;
     @Schema(hidden = true)
     private Long deletedAt;
+
+    @Override
+    public String toString() {
+        return "Contact{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", phone='" + phone + '\'' +
+                ", email='" + email + '\'' +
+                ", message='" + message + '\'' +
+                ", deleted=" + deleted +
+                ", deletedAt=" + deletedAt +
+                '}';
+    }
 }

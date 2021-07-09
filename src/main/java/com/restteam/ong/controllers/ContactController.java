@@ -4,6 +4,7 @@ import com.restteam.ong.controllers.dto.ContactDTO;
 import com.restteam.ong.models.Contact;
 import com.restteam.ong.services.ContactService;
 import com.restteam.ong.services.EmailService;
+import org.springframework.beans.factory.UnsatisfiedDependencyException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,14 +26,14 @@ public class ContactController {
     public ResponseEntity<String> createContact(@RequestBody Contact contact){
         try{
             contactService.createContact(contact);
+            return new ResponseEntity<>("La solicitud se ejecuto correctamente!",HttpStatus.OK);
         }
         catch(IllegalStateException ise){
             return new ResponseEntity<>(ise.getMessage(),HttpStatus.BAD_REQUEST);
         }
-        catch(RuntimeException re){
-            return new ResponseEntity<>(re.getMessage(),HttpStatus.FAILED_DEPENDENCY);
+        catch(UnsatisfiedDependencyException ude){
+            return new ResponseEntity<>(ude.getMessage(),HttpStatus.FAILED_DEPENDENCY);
         }
-        return new ResponseEntity<>("La solicitud se ejecuto correctamente!",HttpStatus.OK);
     }
 
     @GetMapping

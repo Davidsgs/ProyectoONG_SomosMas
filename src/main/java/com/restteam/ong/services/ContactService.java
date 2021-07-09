@@ -8,6 +8,7 @@ import com.sendgrid.Response;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.UnsatisfiedDependencyException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,16 +33,8 @@ public class ContactService {
             throw new IllegalStateException("El email o el usuario no son validos. Intente de nuevo.");
         }
         contactRepository.save(contact);
-
-        EmailRequest emailRequest = new EmailRequest();
-        emailRequest.setTo(contact.getEmail());
-        emailRequest.setSubject("Contacto completado con exito.");
-        emailRequest.setBody(String.format("Hola %s! Te informamos que el formulario de contacto se completo con " +
-                "exito. Desde fundacion SOMOS MÁS te agradecemos por contactarte. Saludos!", contact.getName()));
-        Response emailResponse = emailService.sendTextEmail(emailRequest);
-
-        if(emailResponse.getStatusCode() != 200){
-            throw new RuntimeException("Se ha creado el usuario, pero no se pudo enviar el correo.");
+        if(!sendWelcomeMail(contact)){
+            throw new UnsatisfiedDependencyException("Se creo el usuario, pero fallo el envio de correo.","","","");
         }
     }
 
@@ -49,7 +42,16 @@ public class ContactService {
         return contact.getName() != null && contact.getEmail() != null;
     }
 
+    public boolean sendWelcomeMail(Contact contact) {
+        EmailRequest emailRequest = new EmailRequest();
+        emailRequest.setTo(contact.getEmail());
+        emailRequest.setSubject("Contacto completado con exito.");
+        emailRequest.setBody(String.format("Hola %s! Te informamos que el formulario de contacto se completo con " +
+                "exito. Desde fundacion SOMOS MÁS te agradecemos por contactarte. Saludos!", contact.getName()));
+        Response emailResponse = emailService.sendTextEmail(emailRequest);
 
+        return emailResponse.getStatusCode() == 200 || emailResponse.getStatusCode() == 202;
+    }
 
     public List<ContactDTO> getContacts() {
         List<Contact> contacts = contactRepository.findAll();

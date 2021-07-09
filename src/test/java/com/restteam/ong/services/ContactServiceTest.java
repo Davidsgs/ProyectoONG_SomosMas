@@ -9,18 +9,23 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.modelmapper.ModelMapper;
+import org.springframework.core.env.Environment;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 
 
 class ContactServiceTest {
 
     ModelMapper modelMapper = new ModelMapper();
 
-    EmailService emailService = new EmailService();
+    Environment env = Mockito.mock(Environment.class);
+
+    EmailService emailService = new EmailService(env);
 
     ContactRepository contactRepository = Mockito.mock(ContactRepository.class);
 
@@ -31,7 +36,7 @@ class ContactServiceTest {
     void setUp() {
         //contacto mock 1
         Contact contactMock1 = new Contact();
-        contactMock1.setEmail("test1@asdasd.com");
+        contactMock1.setEmail("askjfuhje@hotmail.com");
         contactMock1.setId(1L);
         contactMock1.setName("test1");
         contactMock1.setMessage("Hola1");
@@ -57,15 +62,32 @@ class ContactServiceTest {
 
         //Comandos a mockear:
         Mockito.when(contactRepository.findAll()).thenReturn(contactList);
-        Mockito.when(contactRepository.save(any())).thenReturn("OK");
+        Mockito.when(contactRepository.save(any(Contact.class))).thenReturn(new Contact());
+        Mockito.when(contactRepository.findByName("test1")).thenReturn(Optional.of(contactMock1));
+        Mockito.when(contactRepository.findByName("test2")).thenReturn(Optional.of(contactMock2));
+        Mockito.when(contactRepository.findByName("test3")).thenReturn(Optional.of(contactMock3));
+        Mockito.when(env.getProperty(anyString())).thenReturn("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");
+    }
+
+    @Test
+    void isValid() {
+        Contact contact = contactRepository.findByName("test1").orElse(new Contact());
+        Assertions.assertNotNull(contact.getName());
+        Assertions.assertNotNull(contact.getEmail());
+        Assertions.assertTrue(contactService.isValid(contact));
+    }
+
+    @Test //Es de integracion, no unit test.
+    void sendWelcomeMail(){
+        Contact contact = contactRepository.findByName("test1").orElse(new Contact());
+        //El assert de abajo funciona cuando se le da un email confirmado en sendgrid.
+        //Assertions.assertTrue(contactService.sendWelcomeMail(contact));
     }
 
     @Test
     void createContact() {
-        /*TODO:
-        Delegar las tareas del controller al service, asi queda mas coherente la business layer,
-        y a su vez, pueda testear createContact.*/
-    }
+        //create contact es isValid + repo.save + sendWelcomeMail, asi que esta testeado.
+}
 
     @Test
     void getContacts() {
