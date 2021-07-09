@@ -1,12 +1,13 @@
 package com.restteam.ong.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.*;
-import org.hibernate.annotations.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
 
 import javax.persistence.*;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 
 @Entity
 @Table(name="contacts")
@@ -19,12 +20,15 @@ public class Contact {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true,nullable = false)
+    @Schema(hidden = true)
     private Long id;
     private String name;
     private String phone;
     private String email;
     private String message;
     @Column(columnDefinition = "boolean default false")
+    @Schema(hidden = true)
     private Boolean deleted = Boolean.FALSE;
+    @Schema(hidden = true)
     private Long deletedAt;
 }

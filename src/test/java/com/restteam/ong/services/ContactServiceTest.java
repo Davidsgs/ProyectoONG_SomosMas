@@ -20,9 +20,11 @@ class ContactServiceTest {
 
     ModelMapper modelMapper = new ModelMapper();
 
+    EmailService emailService = new EmailService();
+
     ContactRepository contactRepository = Mockito.mock(ContactRepository.class);
 
-    ContactService contactService = new ContactService(contactRepository,modelMapper);
+    ContactService contactService = new ContactService(contactRepository,emailService,modelMapper);
 
 
     @BeforeEach //El codigo dentro del setup se corre antes de cada test.

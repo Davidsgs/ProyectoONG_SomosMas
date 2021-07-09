@@ -1,9 +1,12 @@
 package com.restteam.ong.services;
 
 import com.restteam.ong.controllers.dto.ContactDTO;
+import com.restteam.ong.controllers.dto.EmailRequest;
 import com.restteam.ong.models.Contact;
 import com.restteam.ong.repositories.ContactRepository;
+import com.sendgrid.Response;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,16 +16,40 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
+@NoArgsConstructor
 public class ContactService {
 
     @Autowired
     ContactRepository contactRepository;
 
-    ModelMapper modelMapper;
+    @Autowired
+    EmailService emailService;
+
+    ModelMapper modelMapper = new ModelMapper();
 
     public void createContact(Contact contact) {
+        if(!isValid(contact)){
+            throw new IllegalStateException("El email o el usuario no son validos. Intente de nuevo.");
+        }
         contactRepository.save(contact);
+
+        EmailRequest emailRequest = new EmailRequest();
+        emailRequest.setTo(contact.getEmail());
+        emailRequest.setSubject("Contacto completado con exito.");
+        emailRequest.setBody(String.format("Hola %s! Te informamos que el formulario de contacto se completo con " +
+                "exito. Desde fundacion SOMOS MÁS te agradecemos por contactarte. Saludos!", contact.getName()));
+        Response emailResponse = emailService.sendTextEmail(emailRequest);
+
+        if(emailResponse.getStatusCode() != 200){
+            throw new RuntimeException("Se ha creado el usuario, pero no se pudo enviar el correo.");
+        }
     }
+
+    public boolean isValid(Contact contact){
+        return contact.getName() != null && contact.getEmail() != null;
+    }
+
+
 
     public List<ContactDTO> getContacts() {
         List<Contact> contacts = contactRepository.findAll();
