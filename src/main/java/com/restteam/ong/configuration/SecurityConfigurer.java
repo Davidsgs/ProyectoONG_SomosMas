@@ -39,15 +39,15 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
             "**/swagger-ui/**",
             // Para agregar otras rutas al whitelist, agregarlas aca.
             "/auth/register",
-            "/auth/login",
+            "/auth/login"
+
             //"/**"   //<--- descomentar esta linea para testear endpoints.
     };
 
     private static final String[] USER_PATHLIST = {
             "/users/**",
             "/auth/me",
-            "/members/**",
-
+            "/members/**"
     };
     
     private static final String[] ADMIN_PATHLIST = {
