@@ -31,7 +31,7 @@ public class MemberServiceTest {
     Member memberMock4WithOutName;
 
     @BeforeEach
-    public void nose(){
+    public void setUp(){
         memberMock1 = new Member();
         memberMock1.setId(1L);
         memberMock1.setName("member1");

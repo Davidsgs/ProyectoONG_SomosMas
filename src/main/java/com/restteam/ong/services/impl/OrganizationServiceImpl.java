@@ -95,4 +95,7 @@ public class OrganizationServiceImpl implements OrganizationService {
         }
         throw new IllegalStateException("The Organization is not present");
     }
+
+    public OrganizationServiceImpl() {
+    }
 }
