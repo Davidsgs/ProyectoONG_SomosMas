@@ -52,13 +52,13 @@ public class ActivityController {
     @PutMapping(path = "/{id}")
     public ResponseEntity<?> updateActivity(@Valid @RequestBody ActivityRequest activity, @PathVariable Long id) {
 
-        Optional<Activity> activityOptional = this.activityService.getActivityById(id);
+        Activity activityOptional = this.activityService.getActivityById(id);
 
-        if (!activityOptional.isPresent()) {
+        if (activityService.existId(id)) {
             return ResponseEntity.notFound().build();
 
         } else {
-            Activity myActivity = activityOptional.get();
+            Activity myActivity = new Activity();
             modelMapper.map(activity, myActivity);
             myActivity.setId(id);
             myActivity.setUpdatedAt(new Date().getTime());
@@ -67,6 +67,8 @@ public class ActivityController {
             return ResponseEntity.ok(activityOutput);
         }
     }
+
+
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
