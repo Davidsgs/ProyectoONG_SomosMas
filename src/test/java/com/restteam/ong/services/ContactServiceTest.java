@@ -19,6 +19,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 
 
+//@SpringBootTest esta anotacion no hace falta, al ser en su mayoria unit test no es necesario encender el server.
 class ContactServiceTest {
 
     ModelMapper modelMapper = new ModelMapper();
@@ -77,10 +78,12 @@ class ContactServiceTest {
         Assertions.assertTrue(contactService.isValid(contact));
     }
 
-    @Test //Es de integracion, no unit test.
+    @Test
     void sendWelcomeMail(){
         Contact contact = contactRepository.findByName("test1").orElse(new Contact());
-        //El assert de abajo funciona cuando se le da un email confirmado en sendgrid.
+        /* El test de abajo funciona, pero solo si se utiliza el email "verificado".
+         * AVISO: La linea de abajo es de integracion, no unit testing.*/
+
         //Assertions.assertTrue(contactService.sendWelcomeMail(contact));
     }
 
