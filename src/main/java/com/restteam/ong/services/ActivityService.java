@@ -26,8 +26,10 @@ public class ActivityService {
 
 
 
-    public Optional<Activity> getActivityById(Long id){
-        return this.activityRepository.findById(id);
+    public Activity getActivityById(Long id){
+        return activityRepository.findById(id).orElseThrow(
+                () -> new IllegalStateException(String.format("Testimonial with id %d doesn't exists.",id))
+        );
     }
 
 
@@ -49,5 +51,8 @@ public class ActivityService {
         } catch (Exception e) {
             return "failed to delete activity " + id + "\nERROR\n\n" + e;
         }
+    }
+    public Boolean existId(Long id) {
+        return activityRepository.existsById(id);
     }
 }
