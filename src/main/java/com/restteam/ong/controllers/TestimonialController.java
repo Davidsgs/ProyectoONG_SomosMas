@@ -20,6 +20,7 @@ public class TestimonialController {
 
     @PostMapping()
     public ResponseEntity<?> saveTestimonial(@RequestBody TestimonialDto testimonialDto) {
+
         if(testimonialDto.getName() == null || testimonialDto.getImage() == null || testimonialDto.getContent() == null ){
             return new ResponseEntity<>("Request must contain name,image and Content values.", HttpStatus.BAD_REQUEST);
         }
@@ -49,8 +50,20 @@ public class TestimonialController {
 
     @PutMapping("/{id}")
     public ResponseEntity<TestimonialDto> updateTestimonial(@RequestBody TestimonialDto testimonialDto,@PathVariable("id") Long id){
-        var testimonial =modelMapper.map(testimonialDto,Testimonial.class);
-        return  new ResponseEntity(this.testimonialService.updateTestimonial(testimonial,id),HttpStatus.OK);
+        ResponseEntity respoUp;
+
+        try {
+
+            var testimonial = modelMapper.map(testimonialDto, Testimonial.class);
+             respoUp= ResponseEntity.ok(testimonialService.updateTestimonial(testimonial,id));
+        }
+        catch (Exception e){
+            respoUp= ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Testimonial id does no exist");
+        }
+        if (id<=1 || id ==null){
+            return new ResponseEntity("Request must contain name,image and Content values.", HttpStatus.BAD_REQUEST);
+        }
+        return respoUp;
     }
 
 }
