@@ -102,6 +102,7 @@
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
 			<version>3.11.1</version>
+			<scope>test</scope>
 		</dependency>
 		<!-- Jackson Databind -->
 		<dependency>

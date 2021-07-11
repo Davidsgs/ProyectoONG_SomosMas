@@ -1,10 +1,11 @@
 package com.restteam.ong.controllers.dto;
 
-import com.restteam.ong.models.Categories;
-import lombok.*;
-import net.bytebuddy.asm.Advice;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.persistence.*;
 @Getter
 @Data
 @Setter
@@ -19,9 +20,5 @@ public class NewsDTO {
     private String image;
 
     private CategoryRequest categoryRequest;
-
-
-
-
 
 }
