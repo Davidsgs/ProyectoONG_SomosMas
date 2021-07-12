@@ -13,7 +13,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ActivityRequest {
 
-    private Long id;
 
     @NotBlank(message = "Please provide name")
     private String name;

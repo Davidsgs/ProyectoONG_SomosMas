@@ -1,5 +1,7 @@
 package com.restteam.ong.services.impl;
 
+import java.util.Optional;
+
 import com.restteam.ong.controllers.dto.NewsDTO;
 import com.restteam.ong.models.News;
 import com.restteam.ong.repositories.NewsRepository;
@@ -8,13 +10,12 @@ import com.restteam.ong.services.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 
 public class NewsServicelmpl implements NewsService {
     @Autowired
     NewsRepository newsRepository;
+
     @Override
     public News postNews(News news) {
 
@@ -36,20 +37,17 @@ public class NewsServicelmpl implements NewsService {
     public String patchNews(News news) {
         if (this.existId(news.getId())) {
 
-            News newNews = newsRepository.save(news);
+            newsRepository.save(news);
             return "se pudo modificar la novedad con id ingresada";
-        }
-        else{
+        } else {
             return "no se pudo modificar la novedad con la id ingresada";
         }
     }
 
-
-
     @Override
     public Optional<News> getNewsByName(String name) {
         Optional<News> news = newsRepository.findByName(name);
-        if(news != null && news.isPresent()){
+        if (news != null && news.isPresent()) {
             return news;
         }
         return null;
@@ -65,6 +63,7 @@ public class NewsServicelmpl implements NewsService {
 
         return newsRepository.findById(id);
     }
+
     public NewsDTO getNewsDTO(Long id) {
         Optional<News> news = this.getNewsById(id);
         if (news != null && news.isPresent()) {
@@ -77,4 +76,3 @@ public class NewsServicelmpl implements NewsService {
         return null;
     }
 }
-

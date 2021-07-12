@@ -19,6 +19,12 @@ public class TestimonialService {
         return (ArrayList<Testimonial>) testimonialRepository.findAll();
     }
 
+    public Testimonial findById(Long id){
+        return testimonialRepository.findById(id).orElseThrow(
+                () -> new IllegalStateException(String.format("Testimonial with id %d doesn't exists.",id))
+        );
+    }
+
     //Guardar Testimonio--
     public Testimonial createTestimonial(Testimonial testimonialCreate) {
 

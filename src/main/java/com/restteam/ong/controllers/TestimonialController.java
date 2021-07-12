@@ -18,8 +18,9 @@ public class TestimonialController {
 
     private ModelMapper modelMapper= new ModelMapper();
 
-    @PostMapping("/")
+    @PostMapping()
     public ResponseEntity<?> saveTestimonial(@RequestBody TestimonialDto testimonialDto) {
+
         if(testimonialDto.getName() == null || testimonialDto.getImage() == null || testimonialDto.getContent() == null ){
             return new ResponseEntity<>("Request must contain name,image and Content values.", HttpStatus.BAD_REQUEST);
         }
@@ -37,20 +38,32 @@ public class TestimonialController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity removeTestimonial(@RequestParam("id") Long id) {
+    public ResponseEntity removeTestimonial(@PathVariable("id") Long id) {
         ResponseEntity respo;
         try {
             respo=ResponseEntity.ok(testimonialService.deleteSoft(id));
         }catch (Exception e){
-            respo= ResponseEntity.status(HttpStatus.FORBIDDEN).body("Testimonial id does no exist");
+            respo= ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Testimonial id does no exist");
         }
       return  respo;
     }
 
-    @PutMapping("/testimonials/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<TestimonialDto> updateTestimonial(@RequestBody TestimonialDto testimonialDto,@PathVariable("id") Long id){
-        var testimonial =modelMapper.map(testimonialDto,Testimonial.class);
-        return  new ResponseEntity(this.testimonialService.updateTestimonial(testimonial,id),HttpStatus.CREATED);
+        ResponseEntity respoUp;
+
+        try {
+
+            var testimonial = modelMapper.map(testimonialDto, Testimonial.class);
+             respoUp= ResponseEntity.ok(testimonialService.updateTestimonial(testimonial,id));
+        }
+        catch (Exception e){
+            respoUp= ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Testimonial id does no exist");
+        }
+        if (id<=1 || id ==null){
+            return new ResponseEntity("Request must contain name,image and Content values.", HttpStatus.BAD_REQUEST);
+        }
+        return respoUp;
     }
 
 }
