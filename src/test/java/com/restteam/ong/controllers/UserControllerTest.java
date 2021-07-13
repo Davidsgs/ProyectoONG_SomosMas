@@ -47,6 +47,17 @@ class UserControllerTest {
                 .andReturn();
     }
 
+    @Test
+    @WithMockUser(username = "userDeveloper@email.com", authorities = {"ROLE_USER"})
+    void getUsersWithRoleUserReturnsStatus403() throws Exception {
+        String url = "http://localhost:9800/users";
+        mockMvc.perform(get(url)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isForbidden())
+                .andReturn();
+    }
+
     /*
     @Test
     void updateUser() {
