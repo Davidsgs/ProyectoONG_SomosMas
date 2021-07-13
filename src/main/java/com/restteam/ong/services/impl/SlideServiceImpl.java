@@ -15,7 +15,7 @@ public class SlideServiceImpl implements SlideService {
     @Autowired
     SlideRepository slideRepository;
 
-    private final String SLIDE_NOT_FOUND = "Slide with id: %n not found";
+    private final String SLIDE_NOT_FOUND = "Slide with id: %d not found";
 
     @Override
     public void addSlide(Slide slide) {
