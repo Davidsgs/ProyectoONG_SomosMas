@@ -1,15 +1,6 @@
 package com.restteam.ong.models;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
 import org.hibernate.annotations.SQLDelete;
@@ -18,6 +9,9 @@ import org.hibernate.annotations.Where;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -50,5 +44,8 @@ public class News {
 
     @Column(columnDefinition = "boolean default false")
     private Boolean deleted = Boolean.FALSE;
+
+    @OneToMany(mappedBy = "news")
+    private List<Comment> comments;
 
 }
