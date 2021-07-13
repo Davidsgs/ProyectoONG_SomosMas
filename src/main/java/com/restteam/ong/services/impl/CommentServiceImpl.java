@@ -19,6 +19,15 @@ public class CommentServiceImpl implements CommentService {
 
     private final String COMMENT_NOT_FOUND = "Comment with id: %n. Not found.";
 
+    @Override
+    public Comment createComment(Comment comment) {
+        if(comment.getId() != null){
+            throw new IllegalStateException("The comment can't have id before is created.");
+        } else if(comment == null){
+            throw new IllegalStateException("The comment can't be null.");
+        }
+        return commentRepository.save(comment);
+    }
 
     @Override
     public void deleteComment(Long commentId){
@@ -31,7 +40,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<Comment> getAllComments() {
-        return (List<Comment>) commentRepository.findAll();
+        return commentRepository.findAllByOrderByCreatedAt();
     }
 
     @Override
