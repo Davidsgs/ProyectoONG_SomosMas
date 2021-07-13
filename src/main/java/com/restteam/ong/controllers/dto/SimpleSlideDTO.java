@@ -9,6 +9,6 @@ public class SimpleSlideDTO {
 
     private String image;
 
-    private String orderId;
+    private Integer numberOrder;
 
 }
