@@ -17,7 +17,7 @@ import javax.validation.Valid;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping
+@RequestMapping("/slides")
 @AllArgsConstructor
 public class SlideController {
 
