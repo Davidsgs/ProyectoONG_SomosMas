@@ -17,7 +17,7 @@ public class CommentServiceImpl implements CommentService {
     @Autowired
     CommentRepository commentRepository;
 
-    private final String COMMENT_NOT_FOUND = "Comment with id: %n. Not found.";
+    private final String COMMENT_NOT_FOUND = "Comment with id: %d. Not found.";
 
     @Override
     public Comment createComment(Comment comment) {
