@@ -10,6 +10,4 @@ import java.util.Optional;
 public interface SlideRepository extends CrudRepository<Slide, Long> {
 
     Optional<Slide> findTopByOrderByIdDesc();
-
-
 }
