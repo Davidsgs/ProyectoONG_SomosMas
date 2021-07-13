@@ -10,6 +10,8 @@ import com.restteam.ong.services.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 @Service
 
 public class NewsServicelmpl implements NewsService {
@@ -33,15 +35,24 @@ public class NewsServicelmpl implements NewsService {
         }
     }
 
-    @Override
-    public String patchNews(News news) {
-        if (this.existId(news.getId())) {
-
-            newsRepository.save(news);
-            return "se pudo modificar la novedad con id ingresada";
-        } else {
-            return "no se pudo modificar la novedad con la id ingresada";
+    @Transactional
+    public News updateNews(NewsDTO news, Long id) {
+        var newsToUpdate = getNewsById(id);
+        if (news.getCategories() != null) {
+            newsToUpdate.setCategories(news.getCategories());
         }
+        if (news.getContent() != null && !news.getContent().isBlank()) {
+            newsToUpdate.setContent(news.getContent());
+        }
+        if (news.getName() != null && !news.getName().isBlank()) {
+            newsToUpdate.setName(news.getName());
+        }
+        if (news.getImage() != null && !news.getImage().isBlank()) {
+            newsToUpdate.setImage(news.getImage());
+        }
+        //Se agrega la ultima vez que fue actualizado.
+        newsToUpdate.setUpDateDate(System.currentTimeMillis() / 1000);
+        return newsToUpdate;
     }
 
     @Override
@@ -59,20 +70,22 @@ public class NewsServicelmpl implements NewsService {
     }
 
     @Override
-    public Optional<News> getNewsById(Long id) {
-
-        return newsRepository.findById(id);
+    public News getNewsById(Long id) {
+        return newsRepository.findById(id).orElseThrow(
+                () -> new IllegalStateException(String.format("News with ID %n doesn't exist",id))
+        );
     }
 
     public NewsDTO getNewsDTO(Long id) {
-        Optional<News> news = this.getNewsById(id);
-        if (news != null && news.isPresent()) {
-            NewsDTO newsDTO = new NewsDTO();
-            newsDTO.setName(news.get().getName());
-            newsDTO.setImage(news.get().getImage());
-            newsDTO.setContent(news.get().getContent());
-            return newsDTO;
+        var newsDTO = new NewsDTO();
+        try{
+            var news = this.getNewsById(id);
+            newsDTO.setName(news.getName());
+            newsDTO.setImage(news.getImage());
+            newsDTO.setContent(news.getContent());
+        }catch (Exception e){
+            throw new IllegalStateException(e.getMessage());
         }
-        return null;
+        return newsDTO;
     }
 }
