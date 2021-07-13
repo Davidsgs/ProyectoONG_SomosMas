@@ -28,7 +28,7 @@ public class Comment {
     @JoinColumn(name = "news_id",nullable = false)
     private News news;
 
-    private Long cretedAt;
+    private Long createdAt;
 
     private Long updatedAt;
 
