@@ -19,7 +19,7 @@ public class Comment {
     private Long id;
 
     @ManyToOne(targetEntity = User.class)
-    @Column(name = "user_id",nullable = false)
+    @JoinColumn(name = "user_id",nullable = false)
     private User user;
 
     private String body;
