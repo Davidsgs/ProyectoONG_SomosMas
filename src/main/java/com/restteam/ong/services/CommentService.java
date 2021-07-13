@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface CommentService {
 
+    public Comment createComment(Comment comment);
+
     void deleteComment(Long commentId);
 
     public List<Comment> getAllComments();
