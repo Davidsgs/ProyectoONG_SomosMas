@@ -5,8 +5,10 @@ import com.restteam.ong.controllers.dto.SimpleSlideDTO;
 import com.restteam.ong.controllers.dto.SlideDTO;
 import com.restteam.ong.models.Slide;
 import com.restteam.ong.services.SlideService;
+import com.restteam.ong.services.impl.SlideServiceImpl;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,9 +21,10 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class SlideController {
 
+    @Autowired
     private final SlideService slideService;
 
-    private final ModelMapper modelMapper;
+    private final ModelMapper modelMapper = new ModelMapper();
 
     @PostMapping
     public ResponseEntity<String> addSlide(@RequestBody Slide slide) {
