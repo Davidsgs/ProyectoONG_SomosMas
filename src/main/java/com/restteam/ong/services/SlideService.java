@@ -4,4 +4,10 @@ import com.restteam.ong.models.Slide;
 
 public interface SlideService {
     void addSlide(Slide slide);
+
+    public Slide getSlideById(Long id);
+
+    public void deleteSlide(Long slideId);
+
+    public ArrayList<Slide> getAllSlides();
 }

@@ -18,4 +18,31 @@ public class SlideServiceImpl implements SlideService {
         }
         slideRepository.save(slide);
     }
+
+    //Si lo van a usar tener cuidado, tira error.
+    private Slide lastSlideOfDB(){ return slideRepository.findTopByOrderByIdDesc().orElseThrow(
+            () -> new IllegalStateException("There's no slides on database.")); }
+
+    @Override
+    public void deleteSlide(Long slideID){
+        boolean exists = slideRepository.existsById(slideID);
+        if(!exists){
+            throw new IllegalStateException("");
+        }
+        slideRepository.deleteById(slideID);
+    }
+
+
+    @Override
+    public Slide getSlideById(Long id) {
+        return slideRepository.findById(id).orElseThrow(
+                () -> new IllegalStateException(String.format(SLIDE_NOT_FOUND,id))
+        );
+    }
+    
+    @Override
+    public ArrayList<Slide> getAllSlides() {
+        return (ArrayList<Slide>) slideRepository.findAll();
+    }
+
 }
