@@ -1,10 +1,19 @@
 package com.restteam.ong.services.impl;
 
 import com.restteam.ong.models.Slide;
+import com.restteam.ong.repositories.SlideRepository;
 import com.restteam.ong.services.SlideService;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.ArrayList;
+import java.util.IllegalFormatCodePointException;
 
 public class SlideServiceImpl implements SlideService {
 
+    @Autowired
+    SlideRepository slideRepository;
+
+    private final String SLIDE_NOT_FOUND = "Slide with id: %n not found";
 
     @Override
     public void addSlide(Slide slide) {
