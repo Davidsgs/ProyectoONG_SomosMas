@@ -18,17 +18,40 @@ public class SlideController {
 
     private final SlideService slideService;
 
+    ModelMapper modelMapper;
+
     @PostMapping
     public ResponseEntity<String> addSlide(@RequestBody Slide slide){
         try{
             slideService.addSlide(slide);
             return new ResponseEntity<>("El slice se agrego correctamente", HttpStatus.OK);
         }
-        catch(Exception e){
+        catch(Exception ex){
             return new ResponseEntity< >("Error: No se pudo crear el slice",HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<String> deleteSlide(@PathVariable("id") Long slideId){
+        try{
+           slideService.deleteSlide(slideId);
+           return new ResponseEntity<>("Slide deteled successfully.",HttpStatus.OK);
+        }
+        catch(Exception ex){
+           return new ResponseEntity<>("Slide wasn't found.",HttpStatus.BAD_REQUEST);
         }
     }
 
 
 
+
+
+    private SlideDTO mapToDto(Slide slide){
+        return modelMapper.map(slide,SlideDTO.class);
+    }
+
+    private Slide mapToClass(SlideDTO slideDTO,Slide slide){
+        modelMapper.map(slideDTO,slide);
+        return slide;
+    }
 }

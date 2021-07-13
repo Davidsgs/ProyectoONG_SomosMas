@@ -20,7 +20,8 @@ public class Slide {
     private String imageUrl;
     private String text;
     private Integer numberOrder;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY,
+            cascade = {CascadeType.PERSIST,CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH})
     @JoinColumn(name="organization_id", nullable = false)
     private Organization organizationId;
 
