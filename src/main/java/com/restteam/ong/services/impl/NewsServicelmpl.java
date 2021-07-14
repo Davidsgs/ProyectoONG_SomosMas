@@ -3,10 +3,12 @@ package com.restteam.ong.services.impl;
 import java.util.Optional;
 
 import com.restteam.ong.controllers.dto.NewsDTO;
+import com.restteam.ong.models.Categories;
 import com.restteam.ong.models.News;
 import com.restteam.ong.repositories.NewsRepository;
 import com.restteam.ong.services.NewsService;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,12 +47,10 @@ public class NewsServicelmpl implements NewsService {
     }
 
     @Override
-    public Optional<News> getNewsByName(String name) {
-        Optional<News> news = newsRepository.findByName(name);
-        if (news != null && news.isPresent()) {
-            return news;
-        }
-        return null;
+    public News getNewsByName(String name) {
+        return newsRepository.findByName(name).orElseThrow(
+                () -> new IllegalStateException(String.format("News with name: %s not found.",name))
+        );
     }
 
     @Override
@@ -74,5 +74,16 @@ public class NewsServicelmpl implements NewsService {
             return newsDTO;
         }
         return null;
+    }
+
+    @Override
+    public News findByNameOrElseCreateNewNews(NewsDTO newsDTO){
+        var modelMapper = new ModelMapper();
+        var news = newsRepository.findByName(newsDTO.getName())
+                .orElse(modelMapper.map(newsDTO,News.class));
+        news.setCategories(
+                modelMapper.map(newsDTO.getCategoryRequest(), Categories.class)
+        );
+        return news;
     }
 }
