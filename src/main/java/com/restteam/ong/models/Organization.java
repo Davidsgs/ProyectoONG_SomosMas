@@ -1,6 +1,9 @@
 package com.restteam.ong.models;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -17,6 +20,7 @@ public class Organization {
 
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
+   @Schema(hidden = true)
     private Long id;
 
     @Column(nullable = false, unique = true)

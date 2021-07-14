@@ -1,11 +1,11 @@
 package com.restteam.ong.controllers;
 
 
+
 import com.restteam.ong.controllers.dto.SimpleSlideDTO;
 import com.restteam.ong.controllers.dto.SlideDTO;
 import com.restteam.ong.models.Slide;
 import com.restteam.ong.services.SlideService;
-import com.restteam.ong.services.impl.SlideServiceImpl;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,10 +49,11 @@ public class SlideController {
     @PutMapping("/{id}")
     public ResponseEntity<?> PutSlide(@PathVariable("id") Long id, @Valid @RequestBody SlideDTO slideDTO) {
         ResponseEntity response;
+
         try {
-            var slide = this.mapToClass(slideDTO, slideService.getSlideById(id));
-            response = ResponseEntity.ok(slide);
-        } catch (Exception e) {
+            response = ResponseEntity.ok(slideService.updateSlide(id, slideDTO));
+        }
+        catch (Exception e) {
             response = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
         return response;
@@ -85,8 +86,5 @@ public class SlideController {
         return modelMapper.map(slide, SlideDTO.class);
     }
 
-    private Slide mapToClass(SlideDTO slideDTO, Slide slide) {
-        modelMapper.map(slideDTO, slide);
-        return slide;
-    }
+
 }

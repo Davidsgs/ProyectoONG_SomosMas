@@ -1,11 +1,14 @@
 package com.restteam.ong.services.impl;
 
+import com.restteam.ong.controllers.dto.SlideDTO;
 import com.restteam.ong.models.Slide;
+import com.restteam.ong.models.Testimonial;
 import com.restteam.ong.repositories.SlideRepository;
 import com.restteam.ong.services.SlideService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.IllegalFormatCodePointException;
 
@@ -55,5 +58,25 @@ public class SlideServiceImpl implements SlideService {
     public ArrayList<Slide> getAllSlides() {
         return (ArrayList<Slide>) slideRepository.findAll();
     }
+
+    @Override
+    @Transactional
+    public Object updateSlide(Long id, SlideDTO slide){
+        var slideToUpdate = this.getSlideById(id);
+        var organization = this.getSlideById(id).getOrganizationId();
+        slideToUpdate.setOrganizationId(organization);
+        if (slide.getImageUrl() != null && !slide.getImageUrl().isBlank()) {
+            slideToUpdate.setImageUrl(slide.getImageUrl());
+        }
+        if (slide.getText() != null && !slide.getText().isBlank()) {
+            slideToUpdate.setText(slide.getText());
+        }
+
+            slideToUpdate.setNumberOrder(slide.getNumberOrder());
+
+
+        return  slideToUpdate;
+    }
+
 
 }

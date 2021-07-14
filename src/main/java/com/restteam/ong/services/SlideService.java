@@ -1,5 +1,6 @@
 package com.restteam.ong.services;
 
+import com.restteam.ong.controllers.dto.SlideDTO;
 import com.restteam.ong.models.Slide;
 
 import java.util.ArrayList;
@@ -12,4 +13,6 @@ public interface SlideService {
     public void deleteSlide(Long slideId);
 
     public ArrayList<Slide> getAllSlides();
+
+    public Object updateSlide(Long id, SlideDTO slide);
 }
