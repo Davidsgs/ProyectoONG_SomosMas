@@ -1,5 +1,6 @@
 package com.restteam.ong.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,6 +27,7 @@ public class Comment {
 
     @ManyToOne(targetEntity = News.class, cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
     @JoinColumn(name = "news_id",nullable = false)
+    @JsonIgnoreProperties("comments")
     private News news;
 
     private Long createdAt;
