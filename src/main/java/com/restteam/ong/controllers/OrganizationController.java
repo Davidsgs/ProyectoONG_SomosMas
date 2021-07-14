@@ -25,6 +25,10 @@ public class OrganizationController {
     @Autowired
     OrganizationService service;
 
+    public OrganizationController(OrganizationService orgServMok) {
+        this.service=orgServMok;
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getDetail(@PathVariable Long id) {
         try {
