@@ -9,10 +9,8 @@ import javax.validation.constraints.NotNull;
 
 @Data
 public class CommentDTO {
-    @NotNull
-    private User user;
     @NotBlank
     private String body;
     @NotNull
-    private News news;
+    private NewsDTO newsDTO;
 }
