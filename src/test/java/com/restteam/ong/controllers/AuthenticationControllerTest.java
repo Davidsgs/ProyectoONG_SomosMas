@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.restteam.ong.controllers.dto.AuthenticationRequest;
 import com.restteam.ong.controllers.dto.AuthenticationResponse;
 import com.restteam.ong.controllers.dto.UserRegisterRequest;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
