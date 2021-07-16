@@ -1,25 +1,25 @@
 package com.restteam.ong.services;
 
-import com.restteam.ong.controllers.dto.NewsDTO;
-import com.restteam.ong.models.News;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import com.restteam.ong.controllers.dto.NewsDTO;
+import com.restteam.ong.models.News;
 
 @Service
 public interface NewsService {
 
+	public News postNews(News news);
 
-    public News postNews(News news);
+	public String deleteNewsById(Long id);
 
-    public String deleteNewsById(Long id);
+	public News updateNews(NewsDTO news, Long id);
 
-    public String patchNews(News news);
+	public Boolean existId(Long id);
 
+	public News getNewsByName(String name);
 
-    public Boolean existId(Long id);
-    public Optional<News> getNewsById(Long id);
-    public News getNewsByName(String name);
+	public News findByNameOrElseCreateNewNews(NewsDTO newsDTO);
 
-    public News findByNameOrElseCreateNewNews(NewsDTO newsDTO);
+	public News getNewsById(Long id);
+
 }

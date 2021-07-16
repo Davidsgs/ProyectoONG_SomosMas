@@ -2,6 +2,7 @@ package com.restteam.ong.services;
 
 import com.restteam.ong.controllers.dto.UserDTO;
 import com.restteam.ong.models.User;
+import com.restteam.ong.models.impl.UserDetailsImpl;
 import com.restteam.ong.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,6 +16,9 @@ public class UserService {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    RoleService roleService;
 
     @Autowired
     private PasswordEncoder bcryptEncoder;
@@ -93,6 +97,14 @@ public class UserService {
             return false;
         }
 
+    }
+
+    public boolean userCanModifyUserWithId(UserDetailsImpl userDetailsImpl, Long id) {
+        var bool = userDetailsImpl.getUser().getRole().getName().contentEquals("ROLE_ADMIN");
+        if (!bool) {
+            bool = userDetailsImpl.getUser().getId().equals(id);
+        }
+        return bool;
     }
 
 }

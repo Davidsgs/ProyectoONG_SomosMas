@@ -41,7 +41,7 @@ public class UserController {
                                  @PathVariable("id") Long id,
                                  @Parameter(hidden = true) @AuthenticationPrincipal UserDetailsImpl userDetails) {
         ResponseEntity<?> response = ResponseEntity.status(HttpStatus.FORBIDDEN).body("You don't have permissions to do that.");
-        if(userCanModifyUserWithId(userDetails,id)) {
+        if(userService.userCanModifyUserWithId(userDetails,id)) {
             try {
                 response = ResponseEntity.ok(userService.updateUser(id, userDTO));
             } catch (IllegalStateException e) {
@@ -57,21 +57,12 @@ public class UserController {
     ResponseEntity<?> deleteUser(@PathVariable("id") Long id,
                                  @Parameter(hidden = true) @AuthenticationPrincipal UserDetailsImpl userDetails) {
         ResponseEntity<?> response = ResponseEntity.status(HttpStatus.FORBIDDEN).body("You don't have permissions to do that.");
-        if (userCanModifyUserWithId(userDetails,id)) {
+        if (userService.userCanModifyUserWithId(userDetails,id)) {
             response = ResponseEntity.ok(userService.deleteUser(id));
-            if (response.getBody().toString() == "false") {
+            if (response.getBody().toString().equals("false")) {
                 response = ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format(USER_WITH_ID_NOT_FOUND, id));
             }
         }
         return response;
-    }
-
-    public boolean userCanModifyUserWithId(UserDetailsImpl userDetailsImpl, Long id) {
-        var adminRole = roleService.findByName("ROLE_ADMIN");
-        var bool = userDetailsImpl.getUser().getRole().getName().contentEquals(adminRole.getName());
-        if (!bool) {
-            bool = userDetailsImpl.getUser().getId() == id;
-        }
-        return bool;
     }
 }
