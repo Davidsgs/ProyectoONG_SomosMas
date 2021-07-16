@@ -1,11 +1,13 @@
 package com.restteam.ong.controllers;
 
+import com.restteam.ong.controllers.dto.CommentBodyDTO;
 import com.restteam.ong.controllers.dto.CommentBodyResponse;
 import com.restteam.ong.controllers.dto.CommentDTO;
 import com.restteam.ong.models.Comment;
 import com.restteam.ong.models.impl.UserDetailsImpl;
 import com.restteam.ong.services.CommentService;
 import com.restteam.ong.services.NewsService;
+import com.restteam.ong.services.RoleService;
 import com.restteam.ong.util.BindingResultsErrors;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.AllArgsConstructor;
@@ -32,6 +34,9 @@ public class CommentController {
 
     @Autowired
     private final NewsService newsService;
+
+    @Autowired
+    RoleService roleService;
 
     private final ModelMapper modelMapper = new ModelMapper();
 
@@ -90,5 +95,40 @@ public class CommentController {
             }
         }
         return response;
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateComment(@PathVariable("id") Long id,@RequestBody CommentBodyDTO commentDTO,
+                                           @Parameter(hidden = true)
+                                           @AuthenticationPrincipal UserDetailsImpl userDetailsImpl){
+        ResponseEntity response ;
+        if(! commentService.exitsCommentsById(id)){
+           return response = ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("no existe el comentario");
+        }
+        if(! this.userCanModifyUserWithId(userDetailsImpl,id)){
+            return  response = ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body("usted no puede modificar este comentario");
+        }
+        else{
+            try{
+                 response = ResponseEntity.ok(commentService.updateComment(id,commentDTO));
+            }
+            catch (Exception e){
+                response = ResponseEntity.status(HttpStatus.BAD_REQUEST).
+                        body("no se pudo modificar el comentario");
+            }
+            return response;
+        }
+
+    }
+
+    public boolean userCanModifyUserWithId( UserDetailsImpl userDetailsImpl, Long id) {
+        var adminRole = roleService.findByName("ROLE_ADMIN");
+        var bool = userDetailsImpl.getUser().getRole().getName().contentEquals(adminRole.getName());
+        if (!bool) {
+            bool = userDetailsImpl.getUser().getId() == id;
+        }
+        return bool;
     }
 }

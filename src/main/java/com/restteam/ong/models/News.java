@@ -3,6 +3,7 @@ package com.restteam.ong.models;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -32,7 +33,7 @@ public class News {
     @NotBlank
     private String image;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(targetEntity = News.class, cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
     @JoinColumn(name = "categories_id", nullable = false)
     private Categories categories;
 
@@ -46,6 +47,7 @@ public class News {
     private Boolean deleted = Boolean.FALSE;
 
     @OneToMany(mappedBy = "news")
+    @JsonIgnoreProperties("news")
     private List<Comment> comments;
 
 }
