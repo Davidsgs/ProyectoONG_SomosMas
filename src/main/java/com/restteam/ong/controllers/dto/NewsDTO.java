@@ -23,6 +23,6 @@ public class NewsDTO {
     @NotBlank
     private String image;
     @NotNull
-    private Categories categories;
+    private CategoryRequest categoryRequest;
 
 }
