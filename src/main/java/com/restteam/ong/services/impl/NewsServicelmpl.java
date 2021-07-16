@@ -6,6 +6,7 @@ import com.restteam.ong.controllers.dto.NewsDTO;
 import com.restteam.ong.models.Categories;
 import com.restteam.ong.models.News;
 import com.restteam.ong.repositories.NewsRepository;
+import com.restteam.ong.services.CategoriesService;
 import com.restteam.ong.services.NewsService;
 
 import org.modelmapper.ModelMapper;
@@ -19,6 +20,9 @@ import javax.transaction.Transactional;
 public class NewsServicelmpl implements NewsService {
     @Autowired
     NewsRepository newsRepository;
+
+    @Autowired
+    CategoriesService categoriesService;
 
     @Override
     public News postNews(News news) {
@@ -46,19 +50,20 @@ public class NewsServicelmpl implements NewsService {
     }
 
     @Transactional
-    public News updateNews(NewsDTO news, Long id) {
+    public News updateNews(NewsDTO newsDTO, Long id) {
         var newsToUpdate = getNewsById(id);
-        if (news.getCategories() != null) {
-            newsToUpdate.setCategories(news.getCategories());
+        var categorie = categoriesService.getCategoriesByName(newsDTO.getCategoryRequest().getName());
+        if (categorie.isPresent()) {
+            newsToUpdate.setCategories(categorie.get());
         }
-        if (news.getContent() != null && !news.getContent().isBlank()) {
-            newsToUpdate.setContent(news.getContent());
+        if (newsDTO.getContent() != null && !newsDTO.getContent().isBlank()) {
+            newsToUpdate.setContent(newsDTO.getContent());
         }
-        if (news.getName() != null && !news.getName().isBlank()) {
-            newsToUpdate.setName(news.getName());
+        if (newsDTO.getName() != null && !newsDTO.getName().isBlank()) {
+            newsToUpdate.setName(newsDTO.getName());
         }
-        if (news.getImage() != null && !news.getImage().isBlank()) {
-            newsToUpdate.setImage(news.getImage());
+        if (newsDTO.getImage() != null && !newsDTO.getImage().isBlank()) {
+            newsToUpdate.setImage(newsDTO.getImage());
         }
         //Se agrega la ultima vez que fue actualizado.
         newsToUpdate.setUpDateDate(System.currentTimeMillis() / 1000);
@@ -80,7 +85,7 @@ public class NewsServicelmpl implements NewsService {
     @Override
     public News getNewsById(Long id) {
         return newsRepository.findById(id).orElseThrow(
-                () -> new IllegalStateException(String.format("News with ID %n doesn't exist",id))
+                () -> new IllegalStateException(String.format("News with ID %n doesn't exist %s",id))
         );
     }
 

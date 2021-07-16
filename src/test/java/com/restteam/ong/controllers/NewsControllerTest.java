@@ -23,6 +23,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -71,7 +72,7 @@ public class NewsControllerTest {
         String url = "/news";
         //Creamos un NewsDto.
         NewsDTO newsDTO = new NewsDTO();
-        var cat= new Categories();
+        var cat= new CategoryRequest();
         cat.setName("Hola1");
         cat.setImage("url:1");
         cat.setDescription("test1");
@@ -80,7 +81,7 @@ public class NewsControllerTest {
         newsDTO.setName("Test News");
         newsDTO.setContent("This is the content for example");
         newsDTO.setImage("image.png");
-        newsDTO.setCategories(cat);
+        newsDTO.setCategoryRequest(cat);
 
 
         //Verificamos que el JSON que vamos a enviar se cree sin errores.
@@ -149,7 +150,7 @@ public class NewsControllerTest {
         //Creamos el DTO que va a tener información a modificar al News.
         //Creamos un NewsDto.
         NewsDTO newsDTO = new NewsDTO();
-        var cata = new Categories();
+        var cata = new CategoryRequest();
         cata.setName("Holaaa");
         cata.setImage("ur1");
         cata.setDescription("texto");
@@ -158,7 +159,7 @@ public class NewsControllerTest {
         newsDTO.setName("Test News");
         newsDTO.setContent("This is the content for example newsrt");
         newsDTO.setImage("image.png");
-        newsDTO.setCategories(cata);
+        newsDTO.setCategoryRequest(cata);
         //Verificamos que el JSON que vamos a enviar se cree sin errores.
         Assertions.assertDoesNotThrow(() -> {
             mapToJSON(newsDTO);
@@ -182,7 +183,7 @@ public class NewsControllerTest {
         //Definimos la ruta a la cual vamos a estar haciendo el test.
         String url = "/news";
         // creo categyRequest para pasar a newDTO
-        var cata = new Categories();
+        var cata = new CategoryRequest();
         cata.setName("Holaaa");
         cata.setImage("ur1");
         cata.setDescription("texto");
@@ -193,7 +194,7 @@ public class NewsControllerTest {
         newsDTO.setName("Test News");
         newsDTO.setContent("This is the content for example");
         newsDTO.setImage("image.png");
-        newsDTO.setCategories(cata);
+        newsDTO.setCategoryRequest(cata);
         //Verificamos que el JSON que vamos a enviar se cree sin errores.
         Assertions.assertDoesNotThrow(() -> {
             mapToJSON(newsDTO);
@@ -214,7 +215,7 @@ public class NewsControllerTest {
         //Definimos la ruta a la cual vamos a estar haciendo el test.
         String url = "/news";
         // creo categyRequest para pasar a newDTO
-        var cata = new Categories();;
+        var cata = new CategoryRequest();;
         cata.setName("Holaaa");
         cata.setImage("ur1");
         cata.setDescription("texto");
@@ -223,7 +224,7 @@ public class NewsControllerTest {
         //Le agregamos sus campos correspondientes faltando el de name.
         newsDTO.setContent("This is the content for example");
         newsDTO.setImage("image.png");
-        newsDTO.setCategories(cata);
+        newsDTO.setCategoryRequest(cata);
         //Verificamos que el JSON que vamos a enviar se cree sin errores.
         Assertions.assertDoesNotThrow(() -> {
             mapToJSON(newsDTO);
@@ -243,7 +244,7 @@ public class NewsControllerTest {
     public void tryCreateANewsWithoutImage() throws Exception {
         //Definimos la ruta a la cual vamos a estar haciendo el test.
         String url = "/news";
-        var cata = new Categories();;
+        var cata = new CategoryRequest();;
         cata.setName("Holaaa");
         cata.setImage("ur1");
         cata.setDescription("texto");
@@ -252,7 +253,7 @@ public class NewsControllerTest {
         //Le agregamos sus campos correspondientes faltando el de imagen.
         newsDTO.setName("Test");
         newsDTO.setContent("This is the content for example");
-        newsDTO.setCategories(cata);
+        newsDTO.setCategoryRequest(cata);
         //Verificamos que el JSON que vamos a enviar se cree sin errores.
         Assertions.assertDoesNotThrow(() -> {
             mapToJSON(newsDTO);
@@ -273,7 +274,7 @@ public class NewsControllerTest {
         //Definimos la ruta a la cual vamos a estar haciendo el test.
         String url = "/news";
         //Creo Categoryreques
-        var cata = new Categories();
+        var cata = new CategoryRequest();
         cata.setName("Holaaa");
         cata.setImage("ur1");
         cata.setDescription("texto");
@@ -282,7 +283,7 @@ public class NewsControllerTest {
         //Le agregamos sus campos correspondientes faltando el de content.
         newsDTO.setName("Test");
         newsDTO.setImage("image.png");
-        newsDTO.setCategories(cata);
+        newsDTO.setCategoryRequest(cata);
         //Verificamos que el JSON que vamos a enviar se cree sin errores.
         Assertions.assertDoesNotThrow(() -> {
             mapToJSON(newsDTO);
@@ -347,7 +348,7 @@ public class NewsControllerTest {
         //Definimos la ruta a la cual vamos a estar haciendo el test.
         String url = "/news/{id}";
         //Creo Categories
-        Categories cata= new Categories();
+        var cata= new Categories();
         cata.setId(15L);
         cata.setName("Holaaa");
         cata.setImage("ur1");
@@ -411,7 +412,7 @@ public class NewsControllerTest {
         //Creamos una variable con un ID invalido.
         Long invalidId = 0L;
         //Creamos la categoria que se va a almacenar en el DTO.
-        Categories cata= new Categories();
+        CategoryRequest cata= new CategoryRequest();
         cata.setName("Holaaa");
         cata.setImage("ur1");
         cata.setDescription("texto");
@@ -420,7 +421,7 @@ public class NewsControllerTest {
         newsDTO.setName("New Test News 2.0");
         newsDTO.setContent("New content");
         newsDTO.setImage("newImage.png");
-        newsDTO.setCategories(cata);
+        newsDTO.setCategoryRequest(cata);
         //Verificamos que el JSON que vamos a enviar se cree sin errores.
         Assertions.assertDoesNotThrow(() -> {
             mapToJSON(newsDTO);
@@ -452,7 +453,7 @@ public class NewsControllerTest {
         //Asignamos el string en el JSONRequest.
         String JSONRequest = mapToJSON(null);
         //Creamos la respuesta de parte del service.
-        given(service.updateNews(null,null))
+        given(service.patchNews(null,null))
                 .willThrow(IllegalStateException.class);
 
         //Hacemos las validaciones.
@@ -469,7 +470,7 @@ public class NewsControllerTest {
         String url = "/news/{id}";
         //Creamos un News.
         News news = new News();
-        //Creo Categories
+        //Creo CategoryRequest
         Categories cata= new Categories();
         cata.setId(15L);
         cata.setName("Holaaa");
@@ -483,14 +484,14 @@ public class NewsControllerTest {
 
         //Creamos el DTO que va a tener información a modificar al News.
         NewsDTO newsDTO = new NewsDTO();
-        var cat = new Categories();
+        var cat = new CategoryRequest();
         cat.setName("Holaaa");
         cat.setImage("ur1");
         cat.setDescription("texto");
         newsDTO.setName("New Test News 2.0");
         newsDTO.setContent("New content");
         newsDTO.setImage("newImage.png");
-        newsDTO.setCategories(cat);
+        newsDTO.setCategoryRequest(cat);
         //Verificamos que el JSON que vamos a enviar se cree sin errores.
         Assertions.assertDoesNotThrow(() -> {
             mapToJSON(newsDTO);

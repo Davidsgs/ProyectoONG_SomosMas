@@ -14,11 +14,10 @@ public interface NewsService {
 
     public String deleteNewsById(Long id);
 
-    public String patchNews(News news);
-
+    public String patchNews(NewsDTO newsDTO, Long id);
 
     public Boolean existId(Long id);
-    public Optional<News> getNewsById(Long id);
+    public News getNewsById(Long id);
     public News getNewsByName(String name);
 
     public News findByNameOrElseCreateNewNews(NewsDTO newsDTO);

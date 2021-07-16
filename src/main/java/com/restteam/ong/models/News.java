@@ -4,6 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -25,6 +26,7 @@ public class News {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
+    @Schema(hidden = true)
     private Long id;
     @NotBlank
     private String name;
@@ -44,6 +46,7 @@ public class News {
     private Long upDateDate;
 
     @Column(columnDefinition = "boolean default false")
+    @Schema(hidden = true)
     private Boolean deleted = Boolean.FALSE;
 
     @OneToMany(mappedBy = "news")

@@ -2,15 +2,11 @@ package com.restteam.ong.controllers.dto;
 
 import javax.validation.constraints.NotBlank;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
+@Data
 public class CategoryRequest {
 
     @NotBlank(message = "please, provide name")
