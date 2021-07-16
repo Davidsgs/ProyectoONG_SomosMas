@@ -1,6 +1,5 @@
 package com.restteam.ong.services;
 
-import com.restteam.ong.controllers.dto.NewsDTO;
 import com.restteam.ong.models.News;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +13,12 @@ public interface NewsService {
 
     public String deleteNewsById(Long id);
 
-    public News updateNews(NewsDTO news, Long id);
+    public String patchNews(News news);
+
 
     public Boolean existId(Long id);
-    public News getNewsById(Long id);
-    public Optional<News> getNewsByName(String name);
+    public Optional<News> getNewsById(Long id);
+    public News getNewsByName(String name);
+
+    public News findByNameOrElseCreateNewNews(NewsDTO newsDTO);
 }
