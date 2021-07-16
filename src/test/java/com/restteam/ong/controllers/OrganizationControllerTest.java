@@ -69,10 +69,10 @@ public class OrganizationControllerTest {
                 "http://linkedinUrl.com");
 
         orgDTO1= new OrganizationDTO("name11", "image11", 789456123, "address11", "http://facebookUrl11.com", 
-                "http://instagramUrl11.com", "http://linkedingUrl11.com");
+                "http://instagramUrl11.com", "http://linkedingUrl11.com", null);
 
         orgDTO2= new OrganizationDTO("name22", "image22", 789456123, "address22", "http://facebookUrl22.com", 
-                "http://instagramUrl22.com", "http://linkedingUrl22.com");
+                "http://instagramUrl22.com", "http://linkedingUrl22.com", null);
 
         orgEntity1 = new Organization();
         orgEntity2 = new Organization();
