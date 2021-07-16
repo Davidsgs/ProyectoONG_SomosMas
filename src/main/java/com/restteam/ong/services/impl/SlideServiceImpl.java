@@ -1,16 +1,16 @@
 package com.restteam.ong.services.impl;
 
-import com.restteam.ong.controllers.dto.SlideDTO;
-import com.restteam.ong.models.Slide;
-import com.restteam.ong.models.Testimonial;
-import com.restteam.ong.repositories.SlideRepository;
-import com.restteam.ong.services.SlideService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import java.util.ArrayList;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.IllegalFormatCodePointException;
+
+import com.restteam.ong.controllers.dto.SlideDTO;
+import com.restteam.ong.models.Slide;
+import com.restteam.ong.repositories.SlideRepository;
+import com.restteam.ong.services.SlideService;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class SlideServiceImpl implements SlideService {
@@ -77,6 +77,15 @@ public class SlideServiceImpl implements SlideService {
 
         return  slideToUpdate;
     }
+
+    @Override
+    public ArrayList<Slide> getAllSlidesByOrganizationId(Long id){
+        ArrayList<Slide> aux= new ArrayList<>();
+        
+        aux= this.slideRepository.findByOrganizationIdOrderByNumberOrderAsc(id);
+        return aux;
+    }
+
 
 
 }

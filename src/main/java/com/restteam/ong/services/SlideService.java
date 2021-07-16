@@ -15,4 +15,6 @@ public interface SlideService {
     public ArrayList<Slide> getAllSlides();
 
     public Object updateSlide(Long id, SlideDTO slide);
+
+    public ArrayList<Slide> getAllSlidesByOrganizationId(Long id);
 }

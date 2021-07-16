@@ -1,9 +1,12 @@
 package com.restteam.ong.controllers.dto;
 
+import java.util.ArrayList;
+
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.restteam.ong.models.Slide;
 
 import lombok.Data;
 
@@ -25,4 +28,6 @@ public class OrganizationDTO {
     private String instagramUrl;
 
     private String linkedinUrl;
+
+    private ArrayList<Slide> slides;
 }
