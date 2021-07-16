@@ -453,7 +453,7 @@ public class NewsControllerTest {
         //Asignamos el string en el JSONRequest.
         String JSONRequest = mapToJSON(null);
         //Creamos la respuesta de parte del service.
-        given(service.patchNews(null,null))
+        given(service.updateNews(null,null))
                 .willThrow(IllegalStateException.class);
 
         //Hacemos las validaciones.
