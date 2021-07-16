@@ -1,10 +1,14 @@
 package com.restteam.ong.controllers;
 
+import java.util.ArrayList;
+
 import javax.validation.Valid;
 
 import com.restteam.ong.controllers.dto.OrganizationCreateDTO;
 import com.restteam.ong.controllers.dto.OrganizationDTO;
+import com.restteam.ong.models.Slide;
 import com.restteam.ong.services.OrganizationService;
+import com.restteam.ong.services.SlideService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,14 +29,24 @@ public class OrganizationController {
     @Autowired
     OrganizationService service;
 
+    @Autowired
+    SlideService slides;
     public OrganizationController(OrganizationService orgServMok) {
         this.service=orgServMok;
     }
 
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getDetail(@PathVariable Long id) {
         try {
-            return new ResponseEntity<>(service.getDetail(id), HttpStatus.OK);
+            OrganizationDTO responseDto= this.service.getDetail(id);
+            ArrayList<Slide> slides= this.slides.getAllSlidesByOrganizationId(id);
+            if(slides.size()>1){
+                 responseDto.setSlides(slides);
+            }
+           
+            return new ResponseEntity<>(responseDto, HttpStatus.OK);
+         //   return new ResponseEntity<>(service.getDetail(id), HttpStatus.OK);
         } catch (IllegalStateException i) {
             return new ResponseEntity<>(i.getMessage(), HttpStatus.NOT_FOUND);
         } catch (Exception e) {
