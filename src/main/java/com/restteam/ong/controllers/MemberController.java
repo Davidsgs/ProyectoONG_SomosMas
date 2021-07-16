@@ -21,9 +21,9 @@ public class MemberController {
     public ResponseEntity<?> addMember(@RequestBody Member member) {
         try {
             Long memberId = memberService.addMember(member).orElseThrow(() -> new IllegalStateException(""));
-            return new ResponseEntity<Long>(memberId, HttpStatus.OK);
+            return new ResponseEntity<>(memberId, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<String>("Error: No se pudo crear al miembro.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Error: No se pudo crear al miembro.", HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -38,9 +38,9 @@ public class MemberController {
 
     Pageable firstPageWithTwoElements = PageRequest.of(0, 2);*/
 
-    @GetMapping()
-    public List<MemberDTO> getMembers() {
-        return memberService.getMembers();
+    @GetMapping(path = "/{pageId}")
+    public List<MemberDTO> getMembers(@PathVariable int pageId) {
+        return memberService.getMembers(pageId);
     }
 
     @PutMapping(path = "{memberId}")
@@ -51,9 +51,9 @@ public class MemberController {
         try {
             memberService.updateMember(memberId, name, facebook, instagram, linkedin, image, description)
                     .orElseThrow(() -> new IllegalStateException(""));
-            return new ResponseEntity<String>("El miembro se ha actualizado!", HttpStatus.OK);
+            return new ResponseEntity<>("El miembro se ha actualizado!", HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<String>("ERROR: No se pudo actualizar.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("ERROR: No se pudo actualizar.", HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -61,9 +61,9 @@ public class MemberController {
     public ResponseEntity<String> deleteMember(@PathVariable Long memberId) {
         try {
             memberService.deleteMember(memberId).orElseThrow(() -> new IllegalStateException(""));
-            return new ResponseEntity<String>("Miembro borrado.", HttpStatus.OK);
+            return new ResponseEntity<>("Miembro borrado.", HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<String>("No se ha podido borrar al miembro solicitado.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("No se ha podido borrar al miembro solicitado.", HttpStatus.BAD_REQUEST);
         }
     }
 }

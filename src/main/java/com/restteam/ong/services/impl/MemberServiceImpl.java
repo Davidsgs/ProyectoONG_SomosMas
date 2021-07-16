@@ -1,23 +1,23 @@
 package com.restteam.ong.services.impl;
 
-import static java.lang.System.currentTimeMillis;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import javax.transaction.Transactional;
-
 import com.restteam.ong.controllers.dto.MemberDTO;
 import com.restteam.ong.models.Member;
 import com.restteam.ong.repositories.MemberRepository;
 import com.restteam.ong.services.MemberService;
-
+import com.restteam.ong.util.PageableCreator;
+import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import lombok.AllArgsConstructor;
+import javax.transaction.Transactional;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static java.lang.System.currentTimeMillis;
 
 @Service
 @AllArgsConstructor
@@ -25,6 +25,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Autowired
     private final MemberRepository memberRepository;
+    private final PageableCreator pageableCreator;
     private final ModelMapper modelMapper = new ModelMapper();
 
     private MemberDTO mapToDTO(Member member) {
@@ -46,13 +47,17 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public List<MemberDTO> getMembers() {
-        Iterable<Member> memberList = memberRepository.findAll();
+    public List<MemberDTO> getMembers(int pageId) {
+        /*Iterable<Member> memberList = memberRepository.findAll();
         List<MemberDTO> memberDTOList = new ArrayList<>();
         for (Member member : memberList) {
             memberDTOList.add(mapToDTO(member));
         }
-        return memberDTOList;
+        return memberDTOList;*/
+        Pageable page = pageableCreator.goToPage(pageId);
+        List<Member> pagedList = memberRepository.findAll(page).toList();
+        Stream<MemberDTO> pagedDTOList = (pagedList.stream().map(this::mapToDTO));
+        return pagedDTOList.collect(Collectors.toList());
     }
 
     @Override
