@@ -8,5 +8,5 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface CategoriesRepository extends CrudRepository<Categories, Long> {
 
-   public abstract Optional<Categories> findByName(String name);
+   public Optional<Categories> findByName(String name);
 }

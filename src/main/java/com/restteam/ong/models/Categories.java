@@ -52,7 +52,7 @@ public class Categories {
     private Boolean deleted = Boolean.FALSE;
 
     
-    @OneToMany(mappedBy = "categories")
+    @OneToMany(targetEntity = News.class,mappedBy = "categories")
     private Set<News> news;
     
 }

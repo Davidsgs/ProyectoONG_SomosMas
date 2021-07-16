@@ -14,7 +14,7 @@ public interface NewsService {
 
     public String deleteNewsById(Long id);
 
-    public String patchNews(NewsDTO newsDTO, Long id);
+    public News updateNews(NewsDTO newsDTO, Long id);
 
     public Boolean existId(Long id);
     public News getNewsById(Long id);

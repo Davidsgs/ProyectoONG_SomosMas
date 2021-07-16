@@ -379,7 +379,7 @@ public class NewsControllerTest {
         //Definimos la ruta a la cual vamos a estar haciendo el test.
         String url = "/news/{id}";
         //Creo Categories
-        Categories cata= new Categories();
+        var cata= new Categories();
         cata.setId(15L);
         cata.setName("Holaaa");
         cata.setImage("ur1");

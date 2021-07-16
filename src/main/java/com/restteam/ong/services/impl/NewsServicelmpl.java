@@ -42,14 +42,6 @@ public class NewsServicelmpl implements NewsService {
     }
 
     @Transactional
-    @Override
-    public News patchNews(NewsDTO newsDTO, Long id) {
-        var newsToUpdate = getNewsById(id);
-
-        return ;
-    }
-
-    @Transactional
     public News updateNews(NewsDTO newsDTO, Long id) {
         var newsToUpdate = getNewsById(id);
         var categorie = categoriesService.getCategoriesByName(newsDTO.getCategoryRequest().getName());

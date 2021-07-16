@@ -35,8 +35,9 @@ public class News {
     @NotBlank
     private String image;
 
-    @ManyToOne(targetEntity = News.class, cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = News.class, cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
     @JoinColumn(name = "categories_id", nullable = false)
+    @JsonIgnoreProperties("news")
     private Categories categories;
 
     // @CreationTimestamp

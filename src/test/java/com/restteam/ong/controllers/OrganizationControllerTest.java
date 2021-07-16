@@ -18,15 +18,18 @@ import com.restteam.ong.controllers.dto.OrganizationDTO;
 import com.restteam.ong.models.Organization;
 import com.restteam.ong.services.OrganizationService;
 
+import com.restteam.ong.services.SlideService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -41,10 +44,12 @@ public class OrganizationControllerTest {
     private MockMvc mockMvc;
     private ModelMapper modelMapper = new ModelMapper();
 
+    @MockBean
+    OrganizationService orgServMock;
+    @MockBean
+    SlideService slideService;
     @InjectMocks
     OrganizationController orgControllMock;
-
-    OrganizationService orgServMock = Mockito.mock(OrganizationService.class);
 
     ObjectMapper objectMapper = new ObjectMapper();
 
@@ -124,7 +129,9 @@ public class OrganizationControllerTest {
     @Test
     @WithMockUser(username = "userDeveloper@email.com", authorities = { "ROLE_ADMIN" })
     public void getDetail() throws Exception {
-        mockMvc.perform(get("/organization/public/1").accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
+        mockMvc.perform(get("/organization/public/1")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
                 .andDo(print()).andReturn();
     }
 
