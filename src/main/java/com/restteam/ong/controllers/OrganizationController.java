@@ -31,6 +31,10 @@ public class OrganizationController {
 
     @Autowired
     SlideService slides;
+    public OrganizationController(OrganizationService orgServMok) {
+        this.service=orgServMok;
+    }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getDetail(@PathVariable Long id) {
