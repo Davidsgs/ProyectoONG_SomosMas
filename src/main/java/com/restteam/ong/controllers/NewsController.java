@@ -5,13 +5,10 @@ import java.util.Date;
 import javax.validation.Valid;
 
 import com.restteam.ong.controllers.dto.NewsDTO;
-import com.restteam.ong.models.Categories;
 import com.restteam.ong.models.News;
 import com.restteam.ong.services.impl.NewsServicelmpl;
-
 import com.restteam.ong.util.BindingResultsErrors;
-import com.sendgrid.Response;
-import io.swagger.v3.oas.annotations.Parameter;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,6 +22,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import io.swagger.v3.oas.annotations.Parameter;
 
 @RestController
 @RequestMapping("/news")
