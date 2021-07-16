@@ -1,24 +1,14 @@
 package com.restteam.ong.controllers;
 
-import java.util.List;
-
 import com.restteam.ong.controllers.dto.MemberDTO;
 import com.restteam.ong.models.Member;
 import com.restteam.ong.services.MemberService;
-
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import lombok.AllArgsConstructor;
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "/members")
@@ -36,6 +26,17 @@ public class MemberController {
             return new ResponseEntity<String>("Error: No se pudo crear al miembro.", HttpStatus.BAD_REQUEST);
         }
     }
+
+    /*Once we have our repository extending from PagingAndSortingRepository, we just need to:
+
+    Create or obtain a PageRequest object, which is an implementation of the Pageable interface
+    Pass the PageRequest object as an argument to the repository method we intend to use
+
+    We can create a PageRequest object by passing in the requested page number and the page size.
+
+    Here the page count starts at zero:
+
+    Pageable firstPageWithTwoElements = PageRequest.of(0, 2);*/
 
     @GetMapping()
     public List<MemberDTO> getMembers() {
