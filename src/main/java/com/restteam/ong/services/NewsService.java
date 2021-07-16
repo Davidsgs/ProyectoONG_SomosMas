@@ -5,6 +5,7 @@ import com.restteam.ong.models.News;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -21,4 +22,8 @@ public interface NewsService {
     public News getNewsByName(String name);
 
     public News findByNameOrElseCreateNewNews(NewsDTO newsDTO);
+
+    public NewsDTO getNewsDTO(Long id);
+
+
 }

@@ -1,5 +1,6 @@
 package com.restteam.ong.services.impl;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.restteam.ong.controllers.dto.NewsDTO;
@@ -45,9 +46,8 @@ public class NewsServicelmpl implements NewsService {
     public News updateNews(NewsDTO newsDTO, Long id) {
         var newsToUpdate = getNewsById(id);
         var categorie = categoriesService.getCategoriesByName(newsDTO.getCategoryRequest().getName());
-        if (categorie.isPresent()) {
-            newsToUpdate.setCategories(categorie.get());
-        }
+            newsToUpdate.setCategories(categorie);
+
         if (newsDTO.getContent() != null && !newsDTO.getContent().isBlank()) {
             newsToUpdate.setContent(newsDTO.getContent());
         }
@@ -80,7 +80,7 @@ public class NewsServicelmpl implements NewsService {
                 () -> new IllegalStateException(String.format("News with ID %n doesn't exist %s",id))
         );
     }
-
+    @Override
     public NewsDTO getNewsDTO(Long id) {
         var newsDTO = new NewsDTO();
         try{
@@ -93,6 +93,7 @@ public class NewsServicelmpl implements NewsService {
         }
         return newsDTO;
     }
+
 
     @Override
     public News findByNameOrElseCreateNewNews(NewsDTO newsDTO){

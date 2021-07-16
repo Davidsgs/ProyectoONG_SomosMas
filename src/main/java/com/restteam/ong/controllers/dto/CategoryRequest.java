@@ -4,6 +4,8 @@ import javax.validation.constraints.NotBlank;
 
 import lombok.*;
 
+import java.util.ArrayList;
+
 @Getter
 @Setter
 @Data
@@ -16,4 +18,7 @@ public class CategoryRequest {
     private String description;
 
     private String image;
+
+
+
 }

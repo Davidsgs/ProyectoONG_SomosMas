@@ -1,23 +1,41 @@
 package com.restteam.ong.services;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Optional;
 
+import com.restteam.ong.controllers.dto.CategoryRequest;
 import com.restteam.ong.models.Categories;
+import com.restteam.ong.models.News;
 import com.restteam.ong.repositories.CategoriesRepository;
 
+import com.restteam.ong.repositories.NewsRepository;
+import org.hibernate.mapping.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
 
 @Service
 public class CategoriesService {
     @Autowired
     CategoriesRepository categoriesRepository;
+    NewsService newsService;
 
-    public Categories postCategory(Categories categories) {
-        return categoriesRepository.save(categories);
+    private final String CATEGORY_NOT_FOUND_NAME = "Category with name: %s not found";
+
+    private final String CATEGORY_NOT_FOUND_ID = "Category with id: %d not found";
+//crea una categoria.
+    public Categories postCategory(CategoryRequest categories) {
+        var newCategory = new Categories(); // crea una variable de clase categoria
+        newCategory.setDescription(categories.getDescription()); //hace un map de name,image,descripton
+        newCategory.setName(categories.getName());
+        newCategory.setImage(categories.getImage());
+        newCategory.setRegDate(new Date().getTime()); //le agrega los getTime en regDate y upDateDate
+        newCategory.setUpDateDate(newCategory.getRegDate());
+        return categoriesRepository.save(newCategory); //guarda la categoria creada
     }
-
+//elimina una categoria que recibe por parametro un id
     public String deleteCategoriesById(Long id) {
         try {
             this.categoriesRepository.deleteById(id);
@@ -27,31 +45,33 @@ public class CategoriesService {
         }
     }
 
-    public String patchCategories(Categories categories) {
-        if (categoriesRepository.existsById(categories.getId())) {
-            categoriesRepository.save(categories);
-            return "La categoría fue modificada con id " + categories.getId();
-        }
-        return "No puedo modificar la categoría porque no se encontró en la base de datos, inténtelo de nuevo";
+//modifica una categoria mediantre un DTO y un id que se envia por parametro
+    @Transactional
+    public Categories updateCategory(CategoryRequest categoryRequest,Long id) {
+        var category = this.getCategoryById(id); //devuelve la categoria que se busca por la id
+        category.setName(categoryRequest.getName()); //modifica el name,image,description
+        category.setImage(categoryRequest.getImage());
+        category.setDescription(categoryRequest.getDescription());
+        return category; //devuelve la categoria
     }
-
-    public Optional<Categories> getCategoriesByName(String name) {
-        Optional<Categories> categories = categoriesRepository.findByName(name);
-        if (categories != null && categories.isPresent()) {
-            return categories;
-        }
-        return null;
+// devuelve la categoria mediante el nombre que se recibe por parametro
+    public Categories getCategoriesByName(String name) {
+        return categoriesRepository.findByName(name).orElseThrow(
+                () -> new IllegalStateException(String.format(CATEGORY_NOT_FOUND_NAME, name))
+        );
     }
-
+// devuelve una lista de todas las categorias
     public ArrayList<Categories> getCategories() {
         return (ArrayList<Categories>) this.categoriesRepository.findAll();
     }
-
+//devuelve un booleano dependiendo si existe o no la categoria con id que se envia por parametro
     public boolean existCategory(Long id) {
         return this.categoriesRepository.existsById(id);
     }
-
-    public Optional<Categories> getCategoryById(Long id) {
-        return this.categoriesRepository.findById(id);
+//devuelve la categoria que tiene como id el que se manda por parametro
+    public Categories getCategoryById(Long id) {
+        return categoriesRepository.findById(id).orElseThrow(
+                () -> new IllegalStateException(String.format(CATEGORY_NOT_FOUND_ID, id))
+        );
     }
 }

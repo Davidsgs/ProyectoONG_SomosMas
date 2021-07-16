@@ -13,10 +13,13 @@ import com.restteam.ong.controllers.dto.CategoryRequest;
 import com.restteam.ong.models.Categories;
 import com.restteam.ong.services.CategoriesService;
 
+import com.restteam.ong.util.BindingResultsErrors;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -40,10 +43,9 @@ public class CategoriesController {
     ModelMapper modelMapper = new ModelMapper();
 
     ////// GetMapping
-
     @GetMapping
     public ResponseEntity<?> getCategories(){
-    
+
         try{
         ArrayList<Categories> categories =  this.categoriesService.getCategories();
         if(categories.size()==0){
@@ -61,11 +63,11 @@ public class CategoriesController {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error. Contact support");
     }
     }
-
+////GetMappingByID
     @GetMapping("/{id}")
     public ResponseEntity<?> getCategoryById(@PathVariable("id") Long id) {
         if (this.categoriesService.existCategory(id)) {
-            Categories category = this.categoriesService.getCategoryById(id).get();
+            Categories category = this.categoriesService.getCategoryById(id);
             return ResponseEntity.status(HttpStatus.OK).body(category);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Category " + id + " not found!");
@@ -74,24 +76,19 @@ public class CategoriesController {
 
     ////// PostMapping
     @PostMapping
-    public ResponseEntity<?> createCategory(@Valid @RequestBody CategoryRequest category) {
-
-        Optional<Categories> existCategory = this.categoriesService.getCategoriesByName(category.getName());
-
-        if (existCategory != null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("This Category already exists!");
-        } else {
-            Categories newCategory = new Categories();
-            modelMapper.map(category, newCategory);
-            newCategory.setDeleted(false);
-            newCategory.setRegDate(new Date().getTime());
-            newCategory.setUpDateDate(newCategory.getRegDate());
-
-            Categories myCategory = this.categoriesService.postCategory(newCategory);
-
-            return ResponseEntity.ok(myCategory);
-        }
-
+    public ResponseEntity<?> createCategory(
+        @Valid @RequestBody CategoryRequest category,
+        @Schema(hidden = true) BindingResult bindingResult){
+            if(bindingResult.hasErrors()){
+                return BindingResultsErrors.getResponseEntityWithErrors(bindingResult);
+            }
+            ResponseEntity response;
+            try{
+                response = ResponseEntity.ok(categoriesService.postCategory(category));
+            }catch(Error e){
+                response = ResponseEntity.status(HttpStatus.CONFLICT).body("The data entered may be in conflict. try again!");
+            }
+            return response;
     }
 
     ///////// DeleteMapping
@@ -106,26 +103,18 @@ public class CategoriesController {
 
     /////////PutMapping
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateCategory(@PathVariable("id") Long id, @RequestBody CategoryRequest category){
-        if(this.categoriesService.existCategory(id)){
-            Categories newCategory= new Categories();
-            Categories oldCategory= this.categoriesService.getCategoryById(id).get();
-            modelMapper.map(category, newCategory);
-            newCategory.setId(id);
-            newCategory.setUpDateDate(new Date().getTime());
-            newCategory.setRegDate(oldCategory.getRegDate());
-            newCategory.setDeleted(oldCategory.getDeleted());
-            newCategory.setDescription(oldCategory.getDescription());
-            newCategory.setNews(oldCategory.getNews());
-
-            try{
-                return ResponseEntity.status(HttpStatus.OK).body(this.categoriesService.postCategory(newCategory));
-            }catch(Error e){
-                return ResponseEntity.status(HttpStatus.CONFLICT).body("The data entered may be in conflict. try again!");
-            }
-        }else{
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Category not found. try another one!");
+    public ResponseEntity<?> updateCategory(@PathVariable("id") Long id, @Valid @RequestBody CategoryRequest category,
+                                            @Schema(hidden = true) BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+            return BindingResultsErrors.getResponseEntityWithErrors(bindingResult);
         }
+            ResponseEntity response;
+            try{
+                response = ResponseEntity.ok(categoriesService.updateCategory(category,id));
+            }catch(Error e){
+                response = ResponseEntity.status(HttpStatus.CONFLICT).body("The data entered may be in conflict. try again!");
+            }
+            return response;
     }
 
     //////////////////// @Valid

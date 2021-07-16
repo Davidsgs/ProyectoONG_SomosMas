@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import com.restteam.ong.controllers.dto.NewsDTO;
 import com.restteam.ong.models.News;
+import com.restteam.ong.services.CategoriesService;
 import com.restteam.ong.services.impl.NewsServicelmpl;
 import com.restteam.ong.util.BindingResultsErrors;
 
@@ -31,6 +32,7 @@ public class NewsController {
     @Autowired
     NewsServicelmpl newsService;
     ModelMapper modelMapper = new ModelMapper();
+    CategoriesService categoriesService;
 
     @PostMapping
     public ResponseEntity<News> postNews(@Valid @RequestBody NewsDTO newsDTO,
@@ -43,9 +45,11 @@ public class NewsController {
         //Si no hay errores entonces:
         else {
             News news = new News();
+            var category = categoriesService.getCategoriesByName(newsDTO.getCategoryRequest().getName());
             modelMapper.map(newsDTO, news);
             news.setRegDate(new Date().getTime() / 1000);
             news.setUpDateDate(news.getRegDate());
+            news.setCategories(category);
             response = new ResponseEntity<>(newsService.postNews(news), HttpStatus.OK);
         }
 
