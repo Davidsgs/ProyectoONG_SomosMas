@@ -54,5 +54,6 @@ public class Categories {
     
     @OneToMany(targetEntity = News.class,mappedBy = "categories")
     private Set<News> news;
-    
+
+
 }

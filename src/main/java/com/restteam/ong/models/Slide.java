@@ -18,15 +18,18 @@ import javax.persistence.*;
 public class Slide {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Schema(hidden = true)
+    @Column(unique = true, nullable = false)
     private Long id;
+
     @Column(name = "image_url")
     private String imageUrl;
+
     private String text;
+
     @Column(name = "number_order")
     private Integer numberOrder;
-    @ManyToOne(fetch = FetchType.EAGER,
-            cascade = {CascadeType.PERSIST,CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH})
+
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST,CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH})
     @JoinColumn(name="organization_id", nullable = false)
     @JsonIgnoreProperties("slides")
     private Organization organizationId;
