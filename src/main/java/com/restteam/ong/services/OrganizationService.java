@@ -15,4 +15,5 @@ public interface OrganizationService {
      Long update(OrganizationDTO dto, Long id);
      Boolean delete(Long id);
      OrganizationDTO getDetail(Long id) ;
+     Organization getOrganization(Long id);
 }

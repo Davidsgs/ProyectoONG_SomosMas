@@ -4,7 +4,9 @@ package com.restteam.ong.controllers;
 
 import com.restteam.ong.controllers.dto.SimpleSlideDTO;
 import com.restteam.ong.controllers.dto.SlideDTO;
+import com.restteam.ong.controllers.dto.SlideRequestDTO;
 import com.restteam.ong.models.Slide;
+import com.restteam.ong.services.OrganizationService;
 import com.restteam.ong.services.SlideService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -24,11 +26,17 @@ public class SlideController {
     @Autowired
     private final SlideService slideService;
 
+    @Autowired
+    OrganizationService organizationService;
+
     private final ModelMapper modelMapper = new ModelMapper();
 
     @PostMapping
-    public ResponseEntity<String> addSlide(@RequestBody Slide slide) {
+    public ResponseEntity<String> addSlide(@RequestBody SlideRequestDTO slideDTO) {
         try {
+            Slide slide= new Slide();
+            modelMapper.map(slideDTO, slide);
+            slide.setOrganizationId(organizationService.getOrganization(slideDTO.getOrgId()));
             slideService.addSlide(slide);
             return new ResponseEntity<>("El slice se agrego correctamente", HttpStatus.OK);
         } catch (Exception ex) {

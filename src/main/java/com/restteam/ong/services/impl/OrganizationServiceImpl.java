@@ -98,4 +98,9 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     public OrganizationServiceImpl() {
     }
+
+    @Override
+    public Organization getOrganization(Long id) {
+        return this.repository.findById(id).get();
+    }
 }

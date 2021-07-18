@@ -12,5 +12,5 @@ public interface SlideRepository extends CrudRepository<Slide, Long> {
 
     Optional<Slide> findTopByOrderByIdDesc();
 
-    public abstract ArrayList<Slide> findByOrganizationIdOrderByNumberOrderAsc(Long organizationId);
+    public abstract ArrayList<Slide> findByOrganizationId_IdOrderByNumberOrderAsc(Long organizationId);
 }

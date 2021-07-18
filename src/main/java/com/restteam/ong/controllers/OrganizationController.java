@@ -31,6 +31,7 @@ public class OrganizationController {
 
     @Autowired
     SlideService slides;
+    
     public OrganizationController(OrganizationService orgServMok) {
         this.service=orgServMok;
     }
@@ -41,7 +42,7 @@ public class OrganizationController {
         try {
             OrganizationDTO responseDto= this.service.getDetail(id);
             ArrayList<Slide> slides= this.slides.getAllSlidesByOrganizationId(id);
-            if(slides.size()>1){
+            if(slides.size()>0){
                  responseDto.setSlides(slides);
             }
            

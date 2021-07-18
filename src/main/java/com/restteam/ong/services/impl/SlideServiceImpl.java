@@ -82,7 +82,7 @@ public class SlideServiceImpl implements SlideService {
     public ArrayList<Slide> getAllSlidesByOrganizationId(Long id){
         ArrayList<Slide> aux= new ArrayList<>();
         
-        aux= this.slideRepository.findByOrganizationIdOrderByNumberOrderAsc(id);
+        aux= this.slideRepository.findByOrganizationId_IdOrderByNumberOrderAsc(id);
         return aux;
     }
 
