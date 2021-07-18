@@ -35,14 +35,15 @@ public class SlideController {
     public ResponseEntity<String> addSlide(@RequestBody SlideRequestDTO slideDTO) {
         try {
             Slide slide= new Slide();
-            modelMapper.map(slideDTO, slide);
+            modelMapper.map(slideDTO, slide); slide.setId(null);
             slide.setOrganizationId(organizationService.getOrganization(slideDTO.getOrgId()));
+            slide.setNumberOrder(slideService.getAllSlidesByOrganizationId(slideDTO.getOrgId()).size()+1);
             slideService.addSlide(slide);
             return new ResponseEntity<>("El slice se agrego correctamente", HttpStatus.OK);
         } catch (Exception ex) {
             return new ResponseEntity<>("Error: No se pudo crear el slice", HttpStatus.BAD_REQUEST);
         }
-    }
+    }  
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<String> deleteSlide(@PathVariable("id") Long slideId) {

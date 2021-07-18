@@ -20,8 +20,5 @@ public class SlideRequestDTO {
     private String text;
 
     @NotBlank
-    private Integer numberOrder;
-
-    @NotBlank
     private Long orgId;
 }

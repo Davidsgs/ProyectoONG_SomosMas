@@ -27,7 +27,7 @@ public class Organization {
 
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
-   @Schema(hidden = true)
+   @Column(unique = true, nullable = false)
     private Long id;
 
     @Column(nullable = false, unique = true)

@@ -18,7 +18,7 @@ import javax.persistence.*;
 public class Slide {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Schema(hidden = true)
+    @Column(unique = true, nullable = false)
     private Long id;
 
     @Column(name = "image_url")

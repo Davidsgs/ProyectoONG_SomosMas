@@ -23,19 +23,10 @@ public class SlideServiceImpl implements SlideService {
     @Override
     public void addSlide(Slide slide) {
         //TODO: pasar imagen de string a Byte[].
-        if(slide.getNumberOrder() == null){
-            try{
-                slide.setNumberOrder(lastSlideOfDB().getNumberOrder());
-            }catch(Exception ex){
-                slide.setNumberOrder(0);
-            }
-        }
+  
         slideRepository.save(slide);
     }
 
-    //Si lo van a usar tener cuidado, tira error.
-    private Slide lastSlideOfDB(){ return slideRepository.findTopByOrderByIdDesc().orElseThrow(
-            () -> new IllegalStateException("There's no slides on database.")); }
 
     @Override
     public void deleteSlide(Long slideID){
@@ -79,11 +70,8 @@ public class SlideServiceImpl implements SlideService {
     }
 
     @Override
-    public ArrayList<Slide> getAllSlidesByOrganizationId(Long id){
-        ArrayList<Slide> aux= new ArrayList<>();
-        
-        aux= this.slideRepository.findByOrganizationId_IdOrderByNumberOrderAsc(id);
-        return aux;
+    public ArrayList<Slide> getAllSlidesByOrganizationId(Long id){        
+        return this.slideRepository.findByOrganizationId_IdOrderByNumberOrderAsc(id);
     }
 
 
