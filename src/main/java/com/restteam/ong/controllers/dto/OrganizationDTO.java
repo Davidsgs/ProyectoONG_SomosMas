@@ -33,5 +33,5 @@ public class OrganizationDTO {
 
     private String linkedinUrl;
 
-    private ArrayList<Slide> slides;
+    private ArrayList<SlideDTO> slides;
 }

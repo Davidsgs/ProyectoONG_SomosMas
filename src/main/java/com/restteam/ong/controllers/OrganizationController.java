@@ -6,10 +6,12 @@ import javax.validation.Valid;
 
 import com.restteam.ong.controllers.dto.OrganizationCreateDTO;
 import com.restteam.ong.controllers.dto.OrganizationDTO;
+import com.restteam.ong.controllers.dto.SlideDTO;
 import com.restteam.ong.models.Slide;
 import com.restteam.ong.services.OrganizationService;
 import com.restteam.ong.services.SlideService;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,23 +33,31 @@ public class OrganizationController {
 
     @Autowired
     SlideService slides;
-    
-    public OrganizationController(OrganizationService orgServMok) {
-        this.service=orgServMok;
-    }
 
+    ModelMapper modelMapper = new ModelMapper();
+
+    public OrganizationController(OrganizationService orgServMok) {
+        this.service = orgServMok;
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getDetail(@PathVariable Long id) {
         try {
-            OrganizationDTO responseDto= this.service.getDetail(id);
-            ArrayList<Slide> slides= this.slides.getAllSlidesByOrganizationId(id);
-            if(slides.size()>0){
-                 responseDto.setSlides(slides);
+            OrganizationDTO responseDto = this.service.getDetail(id);
+            ArrayList<Slide> slides = this.slides.getAllSlidesByOrganizationId(id);
+            ArrayList<SlideDTO> slidesDTO = new ArrayList<>();
+
+            for (int i = 0; i < slides.size(); i++) {
+                SlideDTO aux = new SlideDTO();
+                modelMapper.map(slides.get(i), aux);
+                slidesDTO.add(aux);
             }
-           
+            if (slides.size() > 0) {
+                responseDto.setSlides(slidesDTO);
+            }
+
             return new ResponseEntity<>(responseDto, HttpStatus.OK);
-         //   return new ResponseEntity<>(service.getDetail(id), HttpStatus.OK);
+            // return new ResponseEntity<>(service.getDetail(id), HttpStatus.OK);
         } catch (IllegalStateException i) {
             return new ResponseEntity<>(i.getMessage(), HttpStatus.NOT_FOUND);
         } catch (Exception e) {
