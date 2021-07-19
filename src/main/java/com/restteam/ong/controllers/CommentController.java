@@ -1,6 +1,5 @@
 package com.restteam.ong.controllers;
 
-import com.restteam.ong.controllers.dto.CommentBodyDTO;
 import com.restteam.ong.controllers.dto.CommentBodyResponse;
 import com.restteam.ong.controllers.dto.CommentDTO;
 import com.restteam.ong.models.Comment;
@@ -17,7 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -98,7 +96,7 @@ public class CommentController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateComment(@PathVariable("id") Long id,@RequestBody CommentBodyDTO commentDTO,
+    public ResponseEntity<?> updateComment(@PathVariable("id") Long id,@RequestBody CommentBodyResponse commentDTO,
                                            @Parameter(hidden = true)
                                            @AuthenticationPrincipal UserDetailsImpl userDetailsImpl){
         ResponseEntity response ;
