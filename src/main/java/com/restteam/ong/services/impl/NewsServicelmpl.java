@@ -56,9 +56,13 @@ public class NewsServicelmpl implements NewsService {
 	@Transactional
 	public News updateNews(NewsDTO newsDTO, Long id) {
 		var newsToUpdate = getNewsById(id);
-		var categorie = categoriesService.getCategoriesByName(newsDTO.getCategoryRequest().getName());
-		newsToUpdate.setCategories(categorie);
-
+		Categories categories;
+		if(!categoriesService.existCategoryByName(newsDTO.getCategoryRequest().getName())){
+			categories = categoriesService.postCategory(newsDTO.getCategoryRequest());
+		}else{
+			categories = categoriesService.getCategoriesByName(newsDTO.getCategoryRequest().getName());
+		}
+		newsToUpdate.setCategories(categories);
 		if (newsDTO.getContent() != null && !newsDTO.getContent().isBlank()) {
 			newsToUpdate.setContent(newsDTO.getContent());
 		}
