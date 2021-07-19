@@ -1,23 +1,24 @@
 package com.restteam.ong.services.impl;
 
-import static java.lang.System.currentTimeMillis;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import javax.transaction.Transactional;
-
 import com.restteam.ong.controllers.dto.MemberDTO;
+import com.restteam.ong.controllers.dto.MemberPageableDTO;
 import com.restteam.ong.models.Member;
 import com.restteam.ong.repositories.MemberRepository;
 import com.restteam.ong.services.MemberService;
-
+import com.restteam.ong.util.PageableCreator;
+import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
-import lombok.AllArgsConstructor;
+import javax.transaction.Transactional;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static java.lang.System.currentTimeMillis;
 
 @Service
 @AllArgsConstructor
@@ -25,6 +26,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Autowired
     private final MemberRepository memberRepository;
+    private final PageableCreator pageableCreator;
     private final ModelMapper modelMapper = new ModelMapper();
 
     private MemberDTO mapToDTO(Member member) {
@@ -46,13 +48,19 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public List<MemberDTO> getMembers() {
-        Iterable<Member> memberList = memberRepository.findAll();
-        List<MemberDTO> memberDTOList = new ArrayList<>();
-        for (Member member : memberList) {
-            memberDTOList.add(mapToDTO(member));
+    public MemberPageableDTO getMembers(int pageId) {
+        MemberPageableDTO memberPageableDTO = new MemberPageableDTO();
+        Pageable page = pageableCreator.goToPage(pageId);
+        Slice<Member> pagedList = memberRepository.findAll(page);
+        List<MemberDTO> pagedMembersDTO = pagedList.getContent().stream().map(it -> modelMapper.map(it,MemberDTO.class)).collect(Collectors.toList());
+        memberPageableDTO.setMemberList(pagedMembersDTO);
+        if(pagedList.hasPrevious()){
+            memberPageableDTO.setPreviousURL("http://localhost:8080/members/"+(pageId-1));
         }
-        return memberDTOList;
+        if(pagedList.hasNext()){
+            memberPageableDTO.setNextUrl("http://localhost:8080/members/"+(pageId+1));
+        }
+        return memberPageableDTO;
     }
 
     @Override
