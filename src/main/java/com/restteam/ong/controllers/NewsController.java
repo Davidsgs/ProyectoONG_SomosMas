@@ -32,6 +32,7 @@ public class NewsController {
     @Autowired
     NewsServicelmpl newsService;
     ModelMapper modelMapper = new ModelMapper();
+    @Autowired
     CategoriesService categoriesService;
 
     @PostMapping
@@ -44,13 +45,7 @@ public class NewsController {
         }
         //Si no hay errores entonces:
         else {
-            News news = new News();
-            var category = categoriesService.getCategoriesByName(newsDTO.getCategoryRequest().getName());
-            modelMapper.map(newsDTO, news);
-            news.setRegDate(new Date().getTime() / 1000);
-            news.setUpDateDate(news.getRegDate());
-            news.setCategories(category);
-            response = new ResponseEntity<>(newsService.postNews(news), HttpStatus.OK);
+            response = new ResponseEntity<>(newsService.postNews(newsDTO), HttpStatus.OK);
         }
 
         return response;
@@ -88,6 +83,21 @@ public class NewsController {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("news " + id + " no encontrada!");
         }
+    }
+
+    @GetMapping("/{id}/comments")
+    public ResponseEntity<?> getCommentsOfNewsWithId(@PathVariable("id") Long id){
+        ResponseEntity responseEntity;
+        try{
+            var news = newsService.getNewsById(id);
+            var commentsOfNews = news.getComments();
+            responseEntity = ResponseEntity.ok(commentsOfNews);
+        }catch (IllegalStateException e){
+            responseEntity = ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }catch (Exception e){
+            responseEntity = ResponseEntity.badRequest().body(e.getMessage());
+        }
+        return responseEntity;
     }
 
 }

@@ -13,6 +13,8 @@ import com.restteam.ong.repositories.NewsRepository;
 import com.restteam.ong.services.CategoriesService;
 import com.restteam.ong.services.NewsService;
 
+import java.util.Date;
+
 @Service
 
 public class NewsServicelmpl implements NewsService {
@@ -21,10 +23,22 @@ public class NewsServicelmpl implements NewsService {
 
 	@Autowired
 	CategoriesService categoriesService;
+	ModelMapper modelMapper = new ModelMapper();
 
 	@Override
-	public News postNews(News news) {
+	public News postNews(NewsDTO newsDTO) {
+		News news = new News();
+		Categories categories;
+		if(!categoriesService.existCategoryByName(newsDTO.getCategoryRequest().getName())){
+			categories = categoriesService.postCategory(newsDTO.getCategoryRequest());
+		}else{
+			categories = categoriesService.getCategoriesByName(newsDTO.getCategoryRequest().getName());
+		}
 
+		modelMapper.map(newsDTO, news);
+		news.setRegDate(new Date().getTime() / 1000);
+		news.setUpDateDate(news.getRegDate());
+		news.setCategories(categories);
 		return newsRepository.save(news);
 
 	}
@@ -42,9 +56,13 @@ public class NewsServicelmpl implements NewsService {
 	@Transactional
 	public News updateNews(NewsDTO newsDTO, Long id) {
 		var newsToUpdate = getNewsById(id);
-		var categorie = categoriesService.getCategoriesByName(newsDTO.getCategoryRequest().getName());
-		newsToUpdate.setCategories(categorie);
-
+		Categories categories;
+		if(!categoriesService.existCategoryByName(newsDTO.getCategoryRequest().getName())){
+			categories = categoriesService.postCategory(newsDTO.getCategoryRequest());
+		}else{
+			categories = categoriesService.getCategoriesByName(newsDTO.getCategoryRequest().getName());
+		}
+		newsToUpdate.setCategories(categories);
 		if (newsDTO.getContent() != null && !newsDTO.getContent().isBlank()) {
 			newsToUpdate.setContent(newsDTO.getContent());
 		}
@@ -92,7 +110,7 @@ public class NewsServicelmpl implements NewsService {
 	public News findByNameOrElseCreateNewNews(NewsDTO newsDTO) {
 		var modelMapper = new ModelMapper();
 		var news = newsRepository.findByName(newsDTO.getName()).orElse(modelMapper.map(newsDTO, News.class));
-		news.setCategories(modelMapper.map(newsDTO.getCategoryRequest(), Categories.class));
+		news.setCategories( categoriesService.getCategoriesByNameOrCreateNew(newsDTO.getCategoryRequest()));
 		return news;
 	}
 }

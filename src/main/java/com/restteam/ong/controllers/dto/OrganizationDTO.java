@@ -6,7 +6,6 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.restteam.ong.models.Slide;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

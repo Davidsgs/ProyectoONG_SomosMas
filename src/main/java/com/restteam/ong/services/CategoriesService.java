@@ -11,6 +11,7 @@ import com.restteam.ong.repositories.CategoriesRepository;
 
 import com.restteam.ong.repositories.NewsRepository;
 import org.hibernate.mapping.Set;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +29,7 @@ public class CategoriesService {
 //crea una categoria.
     public Categories postCategory(CategoryRequest categories) {
         var newCategory = new Categories(); // crea una variable de clase categoria
+        News news;
         newCategory.setDescription(categories.getDescription()); //hace un map de name,image,descripton
         newCategory.setName(categories.getName());
         newCategory.setImage(categories.getImage());
@@ -74,4 +76,22 @@ public class CategoriesService {
                 () -> new IllegalStateException(String.format(CATEGORY_NOT_FOUND_ID, id))
         );
     }
+    public Boolean existCategoryByName(String name){
+        return categoriesRepository.existsByName(name);
+    }
+
+    public Categories getCategoriesByNameOrCreateNew(CategoryRequest categoryRequest){
+        Categories categories;
+        ModelMapper modelMapper = new ModelMapper();
+        try{
+            categories = this.getCategoriesByName(categoryRequest.getName());
+        }catch (Exception e){
+            categories = modelMapper.map(categoryRequest, Categories.class);
+            categories.setRegDate(System.currentTimeMillis() / 1000);
+            categories.setUpDateDate(categories.getRegDate());
+            categories = categoriesRepository.save(categories);
+        }
+        return categories;
+    }
+
 }

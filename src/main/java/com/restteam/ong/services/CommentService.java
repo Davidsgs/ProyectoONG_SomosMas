@@ -1,7 +1,6 @@
 package com.restteam.ong.services;
 
-import com.restteam.ong.controllers.dto.CommentBodyDTO;
-import com.restteam.ong.controllers.dto.CommentDTO;
+import com.restteam.ong.controllers.dto.CommentBodyResponse;
 import com.restteam.ong.models.Comment;
 import com.restteam.ong.models.User;
 
@@ -19,6 +18,6 @@ public interface CommentService {
 
     public Boolean exitsCommentsById(Long id);
 
-    public Object updateComment(Long id, CommentBodyDTO commentDTO);
+    public Object updateComment(Long id, CommentBodyResponse commentDTO);
 
 }

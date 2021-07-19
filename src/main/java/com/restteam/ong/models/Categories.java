@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.transaction.Transactional;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.hibernate.annotations.SQLDelete;
@@ -55,5 +56,9 @@ public class Categories {
     @OneToMany(targetEntity = News.class,mappedBy = "categories")
     private Set<News> news;
 
+    @Transactional
+    public void addNew(News news){
+        this.news.add(news);
+    }
 
 }
