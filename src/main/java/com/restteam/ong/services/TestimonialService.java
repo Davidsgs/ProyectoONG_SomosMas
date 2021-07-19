@@ -1,8 +1,15 @@
 package com.restteam.ong.services;
 
+import com.restteam.ong.controllers.dto.TestimonialDto;
+import com.restteam.ong.controllers.dto.TestimonialPageResponse;
 import com.restteam.ong.models.Testimonial;
 import com.restteam.ong.repositories.TestimonialRepository;
+import com.restteam.ong.services.util.EmptyRepositoryException;
+import com.restteam.ong.services.util.PageEmptyException;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -13,10 +20,33 @@ public class TestimonialService {
     @Autowired
     private TestimonialRepository testimonialRepository;
 
-//-*-Trae todos los testimonios-*-//
-    public ArrayList<Testimonial> getTestimonial() {
+    ModelMapper modelMapper = new ModelMapper();
 
-        return (ArrayList<Testimonial>) testimonialRepository.findAll();
+    public TestimonialPageResponse getTestimonial(Integer page) throws EmptyRepositoryException, PageEmptyException {
+        if(testimonialRepository.findAll().isEmpty()){
+            throw new EmptyRepositoryException("There are 0 registers of testimonials at the moment.");
+        }
+        PageRequest pageRequest = PageRequest.of(page, 10);
+        Page<Testimonial> pageRequested =  testimonialRepository.findAll(pageRequest);
+        if(pageRequested.getContent().isEmpty()){
+            throw new PageEmptyException(String.format("Page not found, there are only %s pages.", pageRequested.getTotalPages()));
+        }
+        ArrayList<TestimonialDto> testimonialDtoArrayList = new ArrayList<>();
+        pageRequested.forEach(
+                (Testimonial testimonial) -> testimonialDtoArrayList.add(mapToDto(testimonial))
+        );
+        // Una vez que obtengo la pagina y la mapeo en una lista de DTOs
+        // lo siguiente es armar la response
+        TestimonialPageResponse testimonialPageResponse = new TestimonialPageResponse();
+        testimonialPageResponse.setTestimonials(testimonialDtoArrayList);
+        // Aca me tengo que fijar si tienen pagina siguiente o previa para incluir los links
+        if(pageRequested.hasNext()){
+            testimonialPageResponse.setNextPageUrl(String.format("/testimonials?page=%s", page + 1));
+        }
+        if(pageRequested.hasPrevious()){
+            testimonialPageResponse.setPreviousPageUrl(String.format("/testimonials?page=%s", page - 1));
+        }
+        return testimonialPageResponse;
     }
 
     public Testimonial findById(Long id){
@@ -61,5 +91,9 @@ public class TestimonialService {
             return ("Testimonial does no exist");
         }
         return "Testimonial deleted";
+    }
+
+    private TestimonialDto mapToDto(Testimonial testimonial) {
+        return modelMapper.map(testimonial, TestimonialDto.class);
     }
 }

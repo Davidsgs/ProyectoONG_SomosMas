@@ -4,17 +4,15 @@ import com.restteam.ong.controllers.dto.TestimonialDto;
 import com.restteam.ong.models.Testimonial;
 import com.restteam.ong.services.TestimonialService;
 
+import com.restteam.ong.services.util.EmptyRepositoryException;
+import com.restteam.ong.services.util.PageEmptyException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/testimonials")
@@ -22,7 +20,7 @@ public class TestimonialController {
     @Autowired
     private TestimonialService testimonialService;
 
-    private ModelMapper modelMapper= new ModelMapper();
+    private final ModelMapper modelMapper= new ModelMapper();
 
     @PostMapping()
     public ResponseEntity<?> saveTestimonial(@RequestBody TestimonialDto testimonialDto) {
@@ -72,4 +70,14 @@ public class TestimonialController {
         return respoUp;
     }
 
+    @GetMapping
+    public ResponseEntity<?> getTestimonials(@RequestParam(name = "page", required = true) Integer page) throws Exception {
+        try {
+            return ResponseEntity.ok(testimonialService.getTestimonial(page));
+        } catch (EmptyRepositoryException e) {
+            return ResponseEntity.ok(e.getMessage());
+        } catch (PageEmptyException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }
