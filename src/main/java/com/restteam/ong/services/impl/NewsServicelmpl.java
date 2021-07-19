@@ -110,7 +110,7 @@ public class NewsServicelmpl implements NewsService {
 	public News findByNameOrElseCreateNewNews(NewsDTO newsDTO) {
 		var modelMapper = new ModelMapper();
 		var news = newsRepository.findByName(newsDTO.getName()).orElse(modelMapper.map(newsDTO, News.class));
-		news.setCategories(modelMapper.map(newsDTO.getCategoryRequest(), Categories.class));
+		news.setCategories( categoriesService.getCategoriesByNameOrCreateNew(newsDTO.getCategoryRequest()));
 		return news;
 	}
 }
