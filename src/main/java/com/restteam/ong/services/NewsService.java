@@ -8,7 +8,7 @@ import com.restteam.ong.models.News;
 @Service
 public interface NewsService {
 
-	public News postNews(News news);
+	public News postNews(NewsDTO newsDTO);
 
 	public String deleteNewsById(Long id);
 

@@ -1,6 +1,7 @@
 package com.restteam.ong.models;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
 import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -54,4 +55,9 @@ public class News {
     @JsonIgnoreProperties("news")
     private List<Comment> comments;
 
+    @Transactional
+    public void setCategories(Categories categories) {
+        this.categories = categories;
+        categories.addNew(this);
+    }
 }

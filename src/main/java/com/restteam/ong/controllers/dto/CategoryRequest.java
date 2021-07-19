@@ -19,7 +19,7 @@ public class CategoryRequest {
 
     private String image;
 
-    
+    private NewsDTO newsDTO;
 
 
 }

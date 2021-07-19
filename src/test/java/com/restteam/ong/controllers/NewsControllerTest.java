@@ -348,21 +348,19 @@ public class NewsControllerTest {
         //Definimos la ruta a la cual vamos a estar haciendo el test.
         String url = "/news/{id}";
         //Creo Categories
-        var cata= new Categories();
-        cata.setId(15L);
+        var cata= new CategoryRequest();
         cata.setName("Holaaa");
         cata.setImage("ur1");
         cata.setDescription("texto");
         //Creamos un News.
-        News news = new News();
+        NewsDTO newsDTO = new NewsDTO();
         //Le agregamos sus campos correspondientes.
-        news.setId(15L);
-        news.setName("Test News");
-        news.setContent("This is the content for example");
-        news.setImage("image.png");
-        news.setCategories(cata);
+        newsDTO.setName("Test News");
+        newsDTO.setContent("This is the content for example");
+        newsDTO.setImage("image.png");
+        newsDTO.setCategoryRequest(cata);
         //Guardamos en el service el News.
-        service.postNews(news);
+        News news = service.postNews(newsDTO);
         //Le indicamos al repository mock que debe retornar cuando le pidan el news.
         given(service.deleteNewsById(news.getId())).willReturn(news.toString());
         //Hacemos las validaciones.

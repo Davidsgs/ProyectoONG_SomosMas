@@ -28,6 +28,7 @@ public class CategoriesService {
 //crea una categoria.
     public Categories postCategory(CategoryRequest categories) {
         var newCategory = new Categories(); // crea una variable de clase categoria
+        News news;
         newCategory.setDescription(categories.getDescription()); //hace un map de name,image,descripton
         newCategory.setName(categories.getName());
         newCategory.setImage(categories.getImage());
@@ -73,5 +74,8 @@ public class CategoriesService {
         return categoriesRepository.findById(id).orElseThrow(
                 () -> new IllegalStateException(String.format(CATEGORY_NOT_FOUND_ID, id))
         );
+    }
+    public Boolean existCategoryByName(String name){
+        return categoriesRepository.existsByName(name);
     }
 }
