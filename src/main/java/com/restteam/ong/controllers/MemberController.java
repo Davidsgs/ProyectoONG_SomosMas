@@ -1,14 +1,12 @@
 package com.restteam.ong.controllers;
 
-import com.restteam.ong.controllers.dto.MemberDTO;
+import com.restteam.ong.controllers.dto.MemberPageableDTO;
 import com.restteam.ong.models.Member;
 import com.restteam.ong.services.MemberService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(path = "/members")
@@ -39,7 +37,7 @@ public class MemberController {
     Pageable firstPageWithTwoElements = PageRequest.of(0, 2);*/
 
     @GetMapping(path = "/{pageId}")
-    public List<MemberDTO> getMembers(@PathVariable int pageId) {
+    public MemberPageableDTO getMembers(@PathVariable int pageId) {
         return memberService.getMembers(pageId);
     }
 

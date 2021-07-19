@@ -1,6 +1,7 @@
 package com.restteam.ong.services.impl;
 
 import com.restteam.ong.controllers.dto.MemberDTO;
+import com.restteam.ong.controllers.dto.MemberPageableDTO;
 import com.restteam.ong.models.Member;
 import com.restteam.ong.repositories.MemberRepository;
 import com.restteam.ong.services.MemberService;
@@ -9,13 +10,13 @@ import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static java.lang.System.currentTimeMillis;
 
@@ -47,17 +48,19 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public List<MemberDTO> getMembers(int pageId) {
-        /*Iterable<Member> memberList = memberRepository.findAll();
-        List<MemberDTO> memberDTOList = new ArrayList<>();
-        for (Member member : memberList) {
-            memberDTOList.add(mapToDTO(member));
-        }
-        return memberDTOList;*/
+    public MemberPageableDTO getMembers(int pageId) {
+        MemberPageableDTO memberPageableDTO = new MemberPageableDTO();
         Pageable page = pageableCreator.goToPage(pageId);
-        List<Member> pagedList = memberRepository.findAll(page).toList();
-        Stream<MemberDTO> pagedDTOList = (pagedList.stream().map(this::mapToDTO));
-        return pagedDTOList.collect(Collectors.toList());
+        Slice<Member> pagedList = memberRepository.findAll(page);
+        List<MemberDTO> pagedMembersDTO = pagedList.getContent().stream().map(it -> modelMapper.map(it,MemberDTO.class)).collect(Collectors.toList());
+        memberPageableDTO.setMemberList(pagedMembersDTO);
+        if(pagedList.hasPrevious()){
+            memberPageableDTO.setPreviousURL("http://localhost:8080/members/"+(pageId-1));
+        }
+        if(pagedList.hasNext()){
+            memberPageableDTO.setNextUrl("http://localhost:8080/members/"+(pageId+1));
+        }
+        return memberPageableDTO;
     }
 
     @Override
