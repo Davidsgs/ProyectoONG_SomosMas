@@ -74,6 +74,19 @@ public class SlideServiceImpl implements SlideService {
         return this.slideRepository.findByOrganizationId_IdOrderByNumberOrderAsc(id);
     }
 
+    @Override
+    public void orderSlides(Long orgId){
+        ArrayList<Slide> slides= this.getAllSlidesByOrganizationId(orgId);
+    //    ArrayList<Slide> newSlides= new ArrayList<>();
+
+        for(int i=0; i<slides.size(); i++){
+            if(slides.get(i).getNumberOrder()>i+1){
+                slides.get(i).setNumberOrder(i+1);
+                this.slideRepository.save(slides.get(i));
+            }
+        } 
+    }
+
 
 
 }

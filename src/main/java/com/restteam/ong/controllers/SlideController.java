@@ -61,10 +61,13 @@ public class SlideController {
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<String> deleteSlide(@PathVariable("id") Long slideId) {
         try {
+            Long orgId= slideService.getSlideById(slideId).getOrganizationId().getId();
             slideService.deleteSlide(slideId);
+            slideService.orderSlides(orgId);
+            
             return new ResponseEntity<>("Slide deteled successfully.", HttpStatus.OK);
         } catch (Exception ex) {
-            return new ResponseEntity<>("Slide wasn't found.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Slide wasn't found.", HttpStatus.BAD_REQUEST); 
         }
     }
 
@@ -72,7 +75,7 @@ public class SlideController {
     public ResponseEntity<?> PutSlide(@PathVariable("id") Long id, @Valid @RequestBody SlideDTO slideDTO) {
         ResponseEntity<?> response;
 
-        try {
+        try { 
             response = ResponseEntity.ok(slideService.updateSlide(id, slideDTO));
         } catch (Exception e) {
             response = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
