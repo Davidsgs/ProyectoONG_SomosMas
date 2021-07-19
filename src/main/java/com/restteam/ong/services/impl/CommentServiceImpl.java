@@ -1,10 +1,8 @@
 package com.restteam.ong.services.impl;
 
 
-import com.restteam.ong.controllers.dto.CommentBodyDTO;
-import com.restteam.ong.controllers.dto.CommentDTO;
+import com.restteam.ong.controllers.dto.CommentBodyResponse;
 import com.restteam.ong.models.Comment;
-import com.restteam.ong.models.Role;
 import com.restteam.ong.models.User;
 import com.restteam.ong.repositories.CommentRepository;
 import com.restteam.ong.services.CommentService;
@@ -14,6 +12,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -69,9 +68,11 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public Comment updateComment(Long id, CommentBodyDTO commentDTO){
+    public Comment updateComment(Long id, CommentBodyResponse commentDTO){
         Comment comment = this.getById(id);
         comment.setBody(commentDTO.getBody());
+        comment.setCreatedAt(new Date().getTime() / 1000);
+        comment.setUpdatedAt(comment.getCreatedAt());
         return commentRepository.findById(id).orElseThrow(
                 () -> new IllegalStateException(String.format(COMMENT_NOT_FOUND,id))
         );
