@@ -85,4 +85,19 @@ public class NewsController {
         }
     }
 
+    @GetMapping("/{id}/comments")
+    public ResponseEntity<?> getCommentsOfNewsWithId(@PathVariable("id") Long id){
+        ResponseEntity responseEntity;
+        try{
+            var news = newsService.getNewsById(id);
+            var commentsOfNews = news.getComments();
+            responseEntity = ResponseEntity.ok(commentsOfNews);
+        }catch (IllegalStateException e){
+            responseEntity = ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }catch (Exception e){
+            responseEntity = ResponseEntity.badRequest().body(e.getMessage());
+        }
+        return responseEntity;
+    }
+
 }
