@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 public class NewsServicelmpl implements NewsService {
 
     private static final int PAGE_SIZE = 10 ;
-    private static final String URL_NEWS_PAGINATION_SERVICE = String.format("/news?page=%s");
+    private static final String URL_NEWS_PAGINATION_SERVICE = "/news?page=";
 
     @Autowired
 	NewsRepository newsRepository;
