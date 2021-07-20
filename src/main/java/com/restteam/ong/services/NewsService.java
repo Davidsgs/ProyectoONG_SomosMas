@@ -1,5 +1,6 @@
 package com.restteam.ong.services;
 
+import com.restteam.ong.controllers.dto.NewsPageDTO;
 import org.springframework.stereotype.Service;
 
 import com.restteam.ong.controllers.dto.NewsDTO;
@@ -23,5 +24,7 @@ public interface NewsService {
 	public News findByNameOrElseCreateNewNews(NewsDTO newsDTO);
 
 	public NewsDTO getNewsDTO(Long id);
+
+	public NewsPageDTO getAll(Integer page);
 
 }
