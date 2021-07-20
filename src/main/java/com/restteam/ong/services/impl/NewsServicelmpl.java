@@ -2,8 +2,11 @@ package com.restteam.ong.services.impl;
 
 import javax.transaction.Transactional;
 
+import com.restteam.ong.controllers.dto.NewsPageDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.restteam.ong.controllers.dto.NewsDTO;
@@ -12,13 +15,19 @@ import com.restteam.ong.models.News;
 import com.restteam.ong.repositories.NewsRepository;
 import com.restteam.ong.services.CategoriesService;
 import com.restteam.ong.services.NewsService;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Date;
+import java.util.stream.Collectors;
 
 @Service
 
 public class NewsServicelmpl implements NewsService {
-	@Autowired
+
+    private static final int PAGE_SIZE = 10 ;
+    private static final String URL_NEWS_PAGINATION_SERVICE = "/news?page=";
+
+    @Autowired
 	NewsRepository newsRepository;
 
 	@Autowired
@@ -113,4 +122,24 @@ public class NewsServicelmpl implements NewsService {
 		news.setCategories( categoriesService.getCategoriesByNameOrCreateNew(newsDTO.getCategoryRequest()));
 		return news;
 	}
+    @Override
+    public NewsPageDTO getAll(Integer page) {
+        var modelMapper = new ModelMapper();
+        Page<News> news = newsRepository.findAll(PageRequest.of(page, PAGE_SIZE));
+        if(CollectionUtils.isEmpty(news.getContent())){
+            throw new IllegalStateException("no hay datos para mostrar");
+        }
+        NewsPageDTO newPage = new NewsPageDTO();
+        newPage.setElements(news.get().map(n -> modelMapper.map(n, NewsDTO.class)).collect(Collectors.toList()));
+        newPage.setCurrentPage(page);
+        if (news.hasNext()) {
+            newPage.setNextUrl(URL_NEWS_PAGINATION_SERVICE + (page + 1));
+        }
+        if (news.hasPrevious()) {
+            newPage.setPreviousUrl(URL_NEWS_PAGINATION_SERVICE +(page-1));
+        }
+        newPage.setTotalElements(news.getTotalElements());
+
+        return newPage;
+    }
 }

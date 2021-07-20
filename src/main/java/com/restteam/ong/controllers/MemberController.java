@@ -25,17 +25,6 @@ public class MemberController {
         }
     }
 
-    /*Once we have our repository extending from PagingAndSortingRepository, we just need to:
-
-    Create or obtain a PageRequest object, which is an implementation of the Pageable interface
-    Pass the PageRequest object as an argument to the repository method we intend to use
-
-    We can create a PageRequest object by passing in the requested page number and the page size.
-
-    Here the page count starts at zero:
-
-    Pageable firstPageWithTwoElements = PageRequest.of(0, 2);*/
-
     @GetMapping(path = "/{pageId}")
     public MemberPageableDTO getMembers(@PathVariable int pageId) {
         return memberService.getMembers(pageId);

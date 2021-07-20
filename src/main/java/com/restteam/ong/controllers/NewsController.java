@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.validation.Valid;
 
+import com.restteam.ong.controllers.dto.CommentBodyResponse;
 import com.restteam.ong.controllers.dto.NewsDTO;
 import com.restteam.ong.models.News;
 import com.restteam.ong.services.CategoriesService;
@@ -15,16 +16,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import io.swagger.v3.oas.annotations.Parameter;
+
+import static com.restteam.ong.controllers.OrganizationController.UNEXPECTED_ERROR;
 
 @RestController
 @RequestMapping("/news")
@@ -84,6 +80,21 @@ public class NewsController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("news " + id + " no encontrada!");
         }
     }
+    @GetMapping()
+    public  ResponseEntity<?> getNews(@RequestParam Integer page){
+        try {
+            return ResponseEntity.ok(newsService.getAll(page));
+        }catch (IllegalStateException i){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(i.getMessage());
+        }catch ( Exception e){
+            return new ResponseEntity<>(UNEXPECTED_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * @param id = El id del news que quieras saber los comentarios.
+     * @return ResponseEntity con la lista de Comentarios.
+     */
 
     @GetMapping("/{id}/comments")
     public ResponseEntity<?> getCommentsOfNewsWithId(@PathVariable("id") Long id){
@@ -91,7 +102,11 @@ public class NewsController {
         try{
             var news = newsService.getNewsById(id);
             var commentsOfNews = news.getComments();
-            responseEntity = ResponseEntity.ok(commentsOfNews);
+            //Mapeamos los comentarios a un DTO para ser devueltos.
+            var commentsBodyDTO = commentsOfNews.stream().map(
+                    comment -> modelMapper.map(comment, CommentBodyResponse.class)
+            );
+            responseEntity = ResponseEntity.ok(commentsBodyDTO);
         }catch (IllegalStateException e){
             responseEntity = ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }catch (Exception e){

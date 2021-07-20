@@ -40,14 +40,14 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
             // Para agregar otras rutas al whitelist, agregarlas aca.
             "/auth/register",
             "/auth/login"
-
             //"/**"   //<--- descomentar esta linea para testear endpoints.
     };
 
     private static final String[] USER_PATHLIST = {
             "/users/*",
             "/auth/me",
-            "/members/**"
+            "/members/**",
+            "/comments/*"
     };
     
     private static final String[] ADMIN_PATHLIST = {
@@ -59,8 +59,12 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                 //Acá, RUTAS PUBLICAS. (Cualquier usuario puede acceder a ellas.)
                 .antMatchers(AUTH_PATHLIST).permitAll()
                 //Acá, RUTAS PRIVADAS. (Solo acceden usuarios registrados y admins.)
+                //Agrego autorizacion a usuarios, solo con metodo GET en /news/{id}/comments
                 .antMatchers(HttpMethod.GET,"/organization/public/{\\d+}").access("hasAnyAuthority('ROLE_USER','ROLE_ADMIN')")
                 .antMatchers(HttpMethod.GET, "/testimonials").hasAnyAuthority("ROLE_USER","ROLE_ADMIN")
+                .antMatchers(HttpMethod.GET, "/news").hasAnyAuthority("ROLE_USER","ROLE_ADMIN")
+                //Agrego permiso para que cualquiera pueda hacer GET para obtener los comentarios de un News.
+                .antMatchers(HttpMethod.GET,"/news/{\\d+}/comments").permitAll()
                 .antMatchers(USER_PATHLIST).hasAnyAuthority("ROLE_USER","ROLE_ADMIN")
                 .antMatchers(HttpMethod.GET, "/categories").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
                 //Agrego autorizacion a usuarios, solo con metodo POST en /contacts y /comments
