@@ -7,6 +7,7 @@ import com.restteam.ong.models.impl.UserDetailsImpl;
 import com.restteam.ong.services.CommentService;
 import com.restteam.ong.services.NewsService;
 import com.restteam.ong.services.RoleService;
+import com.restteam.ong.services.UserService;
 import com.restteam.ong.util.BindingResultsErrors;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.AllArgsConstructor;
@@ -14,8 +15,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,13 +37,15 @@ public class CommentController {
     @Autowired
     RoleService roleService;
 
+    @Autowired
+    UserService userService;
+
     private final ModelMapper modelMapper = new ModelMapper();
 
     @DeleteMapping(path = "/{commentId}")
-    public ResponseEntity<String> deleteComment(@PathVariable Long commentId,
-                                                @Parameter(hidden = true)@AuthenticationPrincipal UserDetailsImpl userDetails){
+    public ResponseEntity<String> deleteComment(@PathVariable Long commentId, @Parameter(hidden = true)@AuthenticationPrincipal UserDetailsImpl userDetails){
         try{
-            commentService.deleteComment(commentId,userDetails.getUser());
+            commentService.deleteComment(commentId,userDetails);
             return new ResponseEntity<>("Comment deleted successfully.", HttpStatus.OK);
         }
         catch(IllegalStateException ise){
@@ -104,7 +107,7 @@ public class CommentController {
            return response = ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("no existe el comentario");
         }
-        if(! this.userCanModifyUserWithId(userDetailsImpl,id)){
+        if(! userService.userCanModifyUserWithId(userDetailsImpl,commentService.getById(id).getUser().getId())){
             return  response = ResponseEntity.status(HttpStatus.FORBIDDEN)
                         .body("usted no puede modificar este comentario");
         }
@@ -121,12 +124,5 @@ public class CommentController {
 
     }
 
-    public boolean userCanModifyUserWithId( UserDetailsImpl userDetailsImpl, Long id) {
-        var adminRole = roleService.findByName("ROLE_ADMIN");
-        var bool = userDetailsImpl.getUser().getRole().getName().contentEquals(adminRole.getName());
-        if (!bool) {
-            bool = userDetailsImpl.getUser().getId() == id;
-        }
-        return bool;
-    }
+
 }
