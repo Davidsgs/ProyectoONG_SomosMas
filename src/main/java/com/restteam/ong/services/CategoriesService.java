@@ -89,9 +89,7 @@ public class CategoriesService {
 
         }
         if (categoriesPage.hasPrevious()){
-
             categoryPageResponse.setPreviousPageUrl(String.format("/categories?page=%s", page - 1));
-
         }
         return categoryPageResponse;
     }
@@ -122,6 +120,7 @@ public class CategoriesService {
         return categories;
     }
     private CategoryDTO mapToDto(Categories categories) {
+
         return modelMapper.map(categories, CategoryDTO.class);
     }
 }
