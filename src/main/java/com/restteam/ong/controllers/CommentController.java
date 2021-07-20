@@ -7,6 +7,7 @@ import com.restteam.ong.models.impl.UserDetailsImpl;
 import com.restteam.ong.services.CommentService;
 import com.restteam.ong.services.NewsService;
 import com.restteam.ong.services.RoleService;
+import com.restteam.ong.services.UserService;
 import com.restteam.ong.util.BindingResultsErrors;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.AllArgsConstructor;
@@ -35,6 +36,9 @@ public class CommentController {
 
     @Autowired
     RoleService roleService;
+
+    @Autowired
+    UserService userService;
 
     private final ModelMapper modelMapper = new ModelMapper();
 
@@ -104,7 +108,7 @@ public class CommentController {
            return response = ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("no existe el comentario");
         }
-        if(! this.userCanModifyUserWithId(userDetailsImpl,id)){
+        if(! userService.userCanModifyUserWithId(userDetailsImpl,commentService.getById(id).getUser().getId())){
             return  response = ResponseEntity.status(HttpStatus.FORBIDDEN)
                         .body("usted no puede modificar este comentario");
         }
@@ -121,12 +125,5 @@ public class CommentController {
 
     }
 
-    public boolean userCanModifyUserWithId( UserDetailsImpl userDetailsImpl, Long id) {
-        var adminRole = roleService.findByName("ROLE_ADMIN");
-        var bool = userDetailsImpl.getUser().getRole().getName().contentEquals(adminRole.getName());
-        if (!bool) {
-            bool = userDetailsImpl.getUser().getId() == id;
-        }
-        return bool;
-    }
+
 }

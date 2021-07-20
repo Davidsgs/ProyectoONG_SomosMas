@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.validation.Valid;
 
+import com.restteam.ong.controllers.dto.CommentBodyResponse;
 import com.restteam.ong.controllers.dto.NewsDTO;
 import com.restteam.ong.models.News;
 import com.restteam.ong.services.CategoriesService;
@@ -85,13 +86,22 @@ public class NewsController {
         }
     }
 
+    /**
+     * @param id = El id del news que quieras saber los comentarios.
+     * @return ResponseEntity con la lista de Comentarios.
+     */
+
     @GetMapping("/{id}/comments")
     public ResponseEntity<?> getCommentsOfNewsWithId(@PathVariable("id") Long id){
         ResponseEntity responseEntity;
         try{
             var news = newsService.getNewsById(id);
             var commentsOfNews = news.getComments();
-            responseEntity = ResponseEntity.ok(commentsOfNews);
+            //Mapeamos los comentarios a un DTO para ser devueltos.
+            var commentsBodyDTO = commentsOfNews.stream().map(
+                    comment -> modelMapper.map(comment, CommentBodyResponse.class)
+            );
+            responseEntity = ResponseEntity.ok(commentsBodyDTO);
         }catch (IllegalStateException e){
             responseEntity = ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }catch (Exception e){
