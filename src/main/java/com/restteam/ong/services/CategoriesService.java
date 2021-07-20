@@ -4,15 +4,23 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Optional;
 
+import com.restteam.ong.controllers.dto.CategoryDTO;
+import com.restteam.ong.controllers.dto.CategoryPageResponse;
 import com.restteam.ong.controllers.dto.CategoryRequest;
+import com.restteam.ong.controllers.dto.TestimonialDto;
 import com.restteam.ong.models.Categories;
 import com.restteam.ong.models.News;
+import com.restteam.ong.models.Testimonial;
 import com.restteam.ong.repositories.CategoriesRepository;
 
 import com.restteam.ong.repositories.NewsRepository;
+import com.restteam.ong.services.util.EmptyRepositoryException;
+import com.restteam.ong.services.util.PageEmptyException;
 import org.hibernate.mapping.Set;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -22,14 +30,13 @@ public class CategoriesService {
     @Autowired
     CategoriesRepository categoriesRepository;
     NewsService newsService;
-
+    ModelMapper modelMapper = new ModelMapper();
     private final String CATEGORY_NOT_FOUND_NAME = "Category with name: %s not found";
 
     private final String CATEGORY_NOT_FOUND_ID = "Category with id: %d not found";
 //crea una categoria.
     public Categories postCategory(CategoryRequest categories) {
         var newCategory = new Categories(); // crea una variable de clase categoria
-        News news;
         newCategory.setDescription(categories.getDescription()); //hace un map de name,image,descripton
         newCategory.setName(categories.getName());
         newCategory.setImage(categories.getImage());
@@ -63,8 +70,29 @@ public class CategoriesService {
         );
     }
 // devuelve una lista de todas las categorias
-    public ArrayList<Categories> getCategories() {
-        return (ArrayList<Categories>) this.categoriesRepository.findAll();
+    public CategoryPageResponse getCategories(Integer page) throws EmptyRepositoryException, PageEmptyException {
+       if (categoriesRepository.findAll().isEmpty()){
+           throw  new EmptyRepositoryException("there are 0 registers of Categories");
+
+       }
+        PageRequest pageRequest = PageRequest.of(page, 10);
+        Page<Categories> categoriesPage= categoriesRepository.findAll(pageRequest);
+        if (categoriesPage.getContent().isEmpty()){
+            throw  new PageEmptyException(String.format("Page not found, there only %s page",categoriesPage.getTotalPages()));
+        }
+        ArrayList<CategoryDTO> categoryDTOArrayList= new ArrayList<>();
+        categoriesPage.forEach((Categories cata)-> categoryDTOArrayList.add(mapToDto(cata)));
+        CategoryPageResponse categoryPageResponse = new CategoryPageResponse();
+        categoryPageResponse.setCategoryResponse(categoryDTOArrayList);
+        if (categoriesPage.hasNext()){
+            categoryPageResponse.setNextPageUrl(String.format("/category=%s", page + 1));
+
+        }
+        if (categoriesPage.hasPrevious()){
+            categoryPageResponse.setPreviousPageUrl(String.format("/category?page=%s", page-1));
+
+        }
+        return categoryPageResponse;
     }
 //devuelve un booleano dependiendo si existe o no la categoria con id que se envia por parametro
     public boolean existCategory(Long id) {
@@ -79,7 +107,6 @@ public class CategoriesService {
     public Boolean existCategoryByName(String name){
         return categoriesRepository.existsByName(name);
     }
-
     public Categories getCategoriesByNameOrCreateNew(CategoryRequest categoryRequest){
         Categories categories;
         ModelMapper modelMapper = new ModelMapper();
@@ -93,5 +120,7 @@ public class CategoriesService {
         }
         return categories;
     }
-
+    private CategoryDTO mapToDto(Categories categories) {
+        return modelMapper.map(categories, CategoryDTO.class);
+    }
 }
