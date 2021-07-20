@@ -89,6 +89,7 @@ public class CategoriesService {
 
         }
         if (categoriesPage.hasPrevious()){
+
             categoryPageResponse.setPreviousPageUrl(String.format("/categories?page=%s", page - 1));
 
         }

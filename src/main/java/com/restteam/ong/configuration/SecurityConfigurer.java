@@ -65,6 +65,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/news").hasAnyAuthority("ROLE_USER","ROLE_ADMIN")
                 //Agrego permiso para que cualquiera pueda hacer GET para obtener los comentarios de un News.
                 .antMatchers(HttpMethod.GET,"/news/{\\d+}/comments").permitAll()
+
                 .antMatchers(USER_PATHLIST).hasAnyAuthority("ROLE_USER","ROLE_ADMIN")
                 .antMatchers(HttpMethod.GET, "/categories").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
                 //Agrego autorizacion a usuarios, solo con metodo POST en /contacts y /comments
