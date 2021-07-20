@@ -15,8 +15,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,10 +43,9 @@ public class CommentController {
     private final ModelMapper modelMapper = new ModelMapper();
 
     @DeleteMapping(path = "/{commentId}")
-    public ResponseEntity<String> deleteComment(@PathVariable Long commentId,
-                                                @Parameter(hidden = true)@AuthenticationPrincipal UserDetailsImpl userDetails){
+    public ResponseEntity<String> deleteComment(@PathVariable Long commentId, @Parameter(hidden = true)@AuthenticationPrincipal UserDetailsImpl userDetails){
         try{
-            commentService.deleteComment(commentId,userDetails.getUser());
+            commentService.deleteComment(commentId,userDetails);
             return new ResponseEntity<>("Comment deleted successfully.", HttpStatus.OK);
         }
         catch(IllegalStateException ise){
