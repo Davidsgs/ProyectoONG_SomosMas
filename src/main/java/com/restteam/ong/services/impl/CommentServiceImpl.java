@@ -4,8 +4,10 @@ package com.restteam.ong.services.impl;
 import com.restteam.ong.controllers.dto.CommentBodyResponse;
 import com.restteam.ong.models.Comment;
 import com.restteam.ong.models.User;
+import com.restteam.ong.models.impl.UserDetailsImpl;
 import com.restteam.ong.repositories.CommentRepository;
 import com.restteam.ong.services.CommentService;
+import com.restteam.ong.services.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -22,6 +24,9 @@ public class CommentServiceImpl implements CommentService {
     @Autowired
     CommentRepository commentRepository;
 
+    @Autowired
+    UserService userService;
+
     private final String COMMENT_NOT_FOUND = "Comment with id: %d. Not found.";
 
     @Override
@@ -35,10 +40,10 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public void deleteComment(Long commentId, User user){
+    public void deleteComment(Long commentId, UserDetailsImpl userDetails){
         Comment comment = commentRepository.findById(commentId).orElseThrow(() ->
                 new IllegalStateException(String.format(COMMENT_NOT_FOUND,commentId)));
-        if(userIsAdmin(user) || userIdEqualsCommentId(user,comment)){
+        if(userService.userCanModifyUserWithId(userDetails,commentUserId(comment))){
             commentRepository.deleteById(commentId);
         } else{
             throw new BadCredentialsException("Current user isn't comment owner nor admin of this site.");
@@ -46,8 +51,8 @@ public class CommentServiceImpl implements CommentService {
     }
 
     //aux
-    private boolean userIdEqualsCommentId(User user,Comment comment){ return(user.getId().equals(comment.getUser().getId())); }
     private boolean userIsAdmin(User user){ return(user.getRole().getName().equals("ROLE_ADMIN")); }
+    private Long commentUserId(Comment comment){ return comment.getUser().getId(); }
 
     @Override
     public List<Comment> getAllComments() {
