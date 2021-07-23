@@ -1,9 +1,12 @@
 package com.restteam.ong.services;
 
+import com.restteam.ong.controllers.dto.EmailRequest;
 import com.restteam.ong.controllers.dto.UserDTO;
 import com.restteam.ong.models.User;
 import com.restteam.ong.models.impl.UserDetailsImpl;
 import com.restteam.ong.repositories.UserRepository;
+import com.sendgrid.Response;
+import org.springframework.beans.factory.UnsatisfiedDependencyException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,6 +21,9 @@ public class UserService {
     UserRepository userRepository;
 
     @Autowired
+    EmailService emailService;
+
+    @Autowired
     RoleService roleService;
 
     @Autowired
@@ -26,16 +32,38 @@ public class UserService {
     /// --- Método de Creación (Create) ---
 
     public User createUser(User user) {
+        // no manda mail por la api
         //Verificamos de que no exista algún usuario ya registrado.
-
+        if(!isValid(user)){
+            throw new IllegalStateException("The email or the user is not valid. Try again.");
+        }
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
             throw new IllegalStateException(String.format("Already exist an user with email %s", user.getEmail()));
         }
-        //Encriptamos la contraseña.
-        user.setPassword(bcryptEncoder.encode(user.getPassword()));
-        //Establecemos el TimeStamp de creación.
-        user.setCreatedAt(System.currentTimeMillis() / 1000);
-        return userRepository.save(user);
+        if(!sendWelcomeMail(user)) {
+            throw new UnsatisfiedDependencyException("The user was created, but the mail delivery failed.", "", "", "");
+        }
+            //Encriptamos la contraseña.
+            user.setPassword(bcryptEncoder.encode(user.getPassword()));
+            //Establecemos el TimeStamp de creación.
+            user.setCreatedAt(System.currentTimeMillis() / 1000);
+            return userRepository.save(user);
+
+
+    }
+    public boolean isValid(User user){
+        return user.getFirstName() != null && user.getEmail() != null;
+    }
+
+    public boolean sendWelcomeMail(User user) {
+        EmailRequest emailRequest = new EmailRequest();
+        emailRequest.setTo(user.getEmail());
+        emailRequest.setSubject("Contacto completado con exito.");
+        emailRequest.setBody(String.format("Hola %s! Te informamos que el formulario de contacto se completo con " +
+                "exito. Desde fundacion SOMOS MÁS te agradecemos por contactarte. Saludos!", user.getFirstName()));
+        Response emailResponse = emailService.sendTextEmail(emailRequest);
+
+        return emailResponse.getStatusCode() == 200 || emailResponse.getStatusCode() == 202;
     }
 
     // --- Métodos de Lectura (Read) ---
