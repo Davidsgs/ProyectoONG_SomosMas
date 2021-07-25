@@ -69,21 +69,6 @@ public class UserController {
         return response;
     }
 
-    @PostMapping
-    public  ResponseEntity<?> registerUser(@RequestBody UserMailDTO userMailDTO){
-        var user= modelMapper.map(userMailDTO, User.class);
-        try {
-            userService.createUser(user);
-            return new ResponseEntity<>("La solicitud se ejecuto correctamente!",HttpStatus.OK);
 
-        }
-        catch(IllegalStateException ise){
-            return new ResponseEntity<>(ise.getMessage(),HttpStatus.BAD_REQUEST);
-        }
-        catch(UnsatisfiedDependencyException ude){
-            return new ResponseEntity<>(ude.getMessage(),HttpStatus.FAILED_DEPENDENCY);
-        }
-
-    }
 
 }

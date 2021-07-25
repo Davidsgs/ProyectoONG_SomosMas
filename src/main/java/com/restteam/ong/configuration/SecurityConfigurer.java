@@ -67,7 +67,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET,"/news/{\\d+}/comments").permitAll()
                 .antMatchers(USER_PATHLIST).hasAnyAuthority("ROLE_USER","ROLE_ADMIN")
                 //Agrego autorizacion a usuarios, solo con metodo POST en /contacts y /comments y User
-                .antMatchers(HttpMethod.POST, "/contacts","/comments","users").hasAnyAuthority("ROLE_USER","ROLE_ADMIN")
+                .antMatchers(HttpMethod.POST, "/contacts","/comments").hasAnyAuthority("ROLE_USER","ROLE_ADMIN")
                 //Acá, RUTAS SOLO DE ADMINS.
                 .antMatchers(ADMIN_PATHLIST).hasAuthority("ROLE_ADMIN")
                 .anyRequest().authenticated()
