@@ -1,5 +1,6 @@
 package com.restteam.ong.services;
 
+import com.restteam.ong.controllers.HtmlController;
 import com.restteam.ong.controllers.dto.EmailRequest;
 import com.restteam.ong.controllers.dto.UserDTO;
 import com.restteam.ong.models.User;
@@ -28,6 +29,9 @@ public class UserService {
 
     @Autowired
     private PasswordEncoder bcryptEncoder;
+
+    @Autowired
+    HtmlController htmlController;
 
     /// --- Método de Creación (Create) ---
 
@@ -59,8 +63,7 @@ public class UserService {
         EmailRequest emailRequest = new EmailRequest();
         emailRequest.setTo(user.getEmail());
         emailRequest.setSubject("Contacto completado con exito.");
-        emailRequest.setBody(String.format("Hola %s! Te informamos que el formulario de contacto se completo con " +
-                "exito. Desde fundacion SOMOS MÁS te agradecemos por contactarte. Saludos!", user.getFirstName()));
+        emailRequest.setBody(htmlController.greeting(user.getFirstName(), htmlController.getModel()));
         Response emailResponse = emailService.sendTextEmail(emailRequest);
 
         return emailResponse.getStatusCode() == 200 || emailResponse.getStatusCode() == 202;
