@@ -32,7 +32,7 @@ public class UserService {
     /// --- Método de Creación (Create) ---
 
     public User createUser(User user) {
-
+        // no manda mail por la api
         //Verificamos de que no exista algún usuario ya registrado.
         if(!isValid(user)){
             throw new IllegalStateException("The email or the user is not valid. Try again.");
@@ -58,9 +58,9 @@ public class UserService {
     public boolean sendWelcomeMail(User user) {
         EmailRequest emailRequest = new EmailRequest();
         emailRequest.setTo(user.getEmail());
-        emailRequest.setSubject("Contact completed successfully.");
-        emailRequest.setBody(String.format("Hello %s! We inform you that the contact form was completed with " +
-                "success. Since foundation SOMOS MÁS We thank you for contacting you. Greetings!", user.getFirstName()));
+        emailRequest.setSubject("Contacto completado con exito.");
+        emailRequest.setBody(String.format("Hola %s! Te informamos que el formulario de contacto se completo con " +
+                "exito. Desde fundacion SOMOS MÁS te agradecemos por contactarte. Saludos!", user.getFirstName()));
         Response emailResponse = emailService.sendTextEmail(emailRequest);
 
         return emailResponse.getStatusCode() == 200 || emailResponse.getStatusCode() == 202;
