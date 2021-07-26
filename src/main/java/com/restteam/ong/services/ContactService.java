@@ -1,10 +1,10 @@
 package com.restteam.ong.services;
 
-import com.restteam.ong.controllers.HtmlController;
 import com.restteam.ong.controllers.dto.ContactDTO;
 import com.restteam.ong.controllers.dto.EmailRequest;
 import com.restteam.ong.models.Contact;
 import com.restteam.ong.repositories.ContactRepository;
+import com.restteam.ong.util.HtmlSaver;
 import com.sendgrid.Response;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -28,7 +28,7 @@ public class ContactService {
     EmailService emailService;
 
     @Autowired
-    HtmlController htmlController;
+    HtmlSaver htmlSaver;
 
     ModelMapper modelMapper = new ModelMapper();
 
@@ -39,24 +39,24 @@ public class ContactService {
     }
 
     public void createContact(Contact contact) {
-        if(!isValid(contact)){
+        if (!isValid(contact)) {
             throw new IllegalStateException("El email o el usuario no son validos. Intente de nuevo.");
         }
         contactRepository.save(contact);
-        if(!sendWelcomeMail(contact)){
-            throw new UnsatisfiedDependencyException("Se creo el usuario, pero fallo el envio de correo.","","","");
+        if (!sendWelcomeMail(contact)) {
+            throw new UnsatisfiedDependencyException("Se creo el usuario, pero fallo el envio de correo.", "", "", "");
         }
     }
 
-    public boolean isValid(Contact contact){
+    public boolean isValid(Contact contact) {
         return contact.getName() != null && contact.getEmail() != null;
     }
 
     public boolean sendWelcomeMail(Contact contact) {
         EmailRequest emailRequest = new EmailRequest();
         emailRequest.setTo(contact.getEmail());
-        emailRequest.setSubject("Contacto completado con exito.");
-        emailRequest.setBody(htmlController.greeting(contact.getName(), htmlController.getModel()));
+        emailRequest.setSubject("Bienvenido a somos mas!.");
+        emailRequest.setBody(htmlSaver.welcomeMail(contact.getName()));
         Response emailResponse = emailService.sendTextEmail(emailRequest);
 
         return emailResponse.getStatusCode() == 200 || emailResponse.getStatusCode() == 202;
@@ -65,14 +65,14 @@ public class ContactService {
     public List<ContactDTO> getContacts() {
         List<Contact> contacts = contactRepository.findAll();
         List<ContactDTO> contactsDTO = new ArrayList<>();
-        for (Contact c:
-             contacts) {
+        for (Contact c :
+                contacts) {
             contactsDTO.add(mapToDTO(c));
         }
         return contactsDTO;
     }
 
-    public ContactDTO mapToDTO(Contact contact){
+    public ContactDTO mapToDTO(Contact contact) {
         return modelMapper.map(contact, ContactDTO.class);
     }
 }
