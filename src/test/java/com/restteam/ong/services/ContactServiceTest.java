@@ -26,7 +26,7 @@ class ContactServiceTest {
 
     Environment env = Mockito.mock(Environment.class);
 
-    EmailService emailService = new EmailService(env);
+    EmailService emailService = new EmailService();
 
     ContactRepository contactRepository = Mockito.mock(ContactRepository.class);
 

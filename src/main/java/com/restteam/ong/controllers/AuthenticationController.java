@@ -1,17 +1,20 @@
 package com.restteam.ong.controllers;
 
-import javax.validation.Valid;
-
 import com.restteam.ong.controllers.dto.AuthenticationRequest;
 import com.restteam.ong.controllers.dto.AuthenticationResponse;
+import com.restteam.ong.controllers.dto.EmailRequest;
 import com.restteam.ong.controllers.dto.UserRegisterRequest;
 import com.restteam.ong.models.User;
 import com.restteam.ong.models.impl.UserDetailsImpl;
+import com.restteam.ong.services.EmailService;
 import com.restteam.ong.services.RoleService;
 import com.restteam.ong.services.impl.UserDetailsServiceImpl;
+import com.restteam.ong.services.util.EmailSenderException;
 import com.restteam.ong.util.BindingResultsErrors;
+import com.restteam.ong.util.HtmlSaver;
 import com.restteam.ong.util.JwtUtil;
-
+import com.sendgrid.Response;
+import io.swagger.v3.oas.annotations.Parameter;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,13 +24,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import io.swagger.v3.oas.annotations.Parameter;
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/auth")
@@ -46,6 +45,12 @@ public class AuthenticationController {
     private RoleService roleService;
 
     private ModelMapper modelMapper = new ModelMapper();
+
+    @Autowired
+    EmailService emailService;
+
+    @Autowired
+    HtmlSaver htmlSaver;
 
     @PostMapping(path = "/login")
     public ResponseEntity<?> createAthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) {
@@ -97,9 +102,15 @@ public class AuthenticationController {
                 authRequest.setPassword(password);
                 //Iniciamos sesion para recibir el JWT y devolverlo.
                 response = createAthenticationToken(authRequest);
-            } catch (Exception e) {
+                sendWelcomeMail(user);
+            }
+            catch (EmailSenderException ese){
+                response = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ese.getMessage());
+            }
+            catch (Exception e) {
                 response = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
             }
+
         }
         return response;
     }
@@ -109,5 +120,17 @@ public class AuthenticationController {
             @Parameter(hidden = true)
             @AuthenticationPrincipal UserDetailsImpl user){
         return ResponseEntity.ok(user.getUser());
+    }
+
+
+    void sendWelcomeMail(User user) throws EmailSenderException {
+        EmailRequest emailRequest = new EmailRequest();
+        emailRequest.setTo(user.getEmail());
+        emailRequest.setSubject("Bienvenido a somos mas!");
+        emailRequest.setBody(htmlSaver.welcomeMail(user.getFirstName()));
+        Response emailResponse = emailService.sendTextEmail(emailRequest);
+        if(emailResponse.getStatusCode() < 199 && emailResponse.getStatusCode() > 300){
+            throw new EmailSenderException(emailResponse.getBody()+emailResponse.getStatusCode());
+        };
     }
 }
