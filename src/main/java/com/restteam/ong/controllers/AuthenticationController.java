@@ -104,7 +104,7 @@ public class AuthenticationController {
                 //Iniciamos sesion para recibir el JWT y devolverlo.
                 response = createAthenticationToken(authRequest);
             } catch (UnsatisfiedDependencyException e){
-                response = ResponseEntity.status(HttpStatus.MULTI_STATUS).body("The User was Registered but the Welcome Mail can't be send.");
+                response = ResponseEntity.status(HttpStatus.MULTI_STATUS).body(e.getMessage());
             } catch (Exception e) {
                 response = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
             }
