@@ -85,12 +85,11 @@ public class CategoriesService {
         CategoryPageResponse categoryPageResponse = new CategoryPageResponse();
         categoryPageResponse.setCategoryResponse(categoryDTOArrayList);
         if (categoriesPage.hasNext()){
-            categoryPageResponse.setNextPageUrl(String.format("/category=%s", page + 1));
+            categoryPageResponse.setNextPageUrl(String.format("/categories?page=%s", page + 1));
 
         }
         if (categoriesPage.hasPrevious()){
-            categoryPageResponse.setPreviousPageUrl(String.format("/category?page=%s", page-1));
-
+            categoryPageResponse.setPreviousPageUrl(String.format("/categories?page=%s", page - 1));
         }
         return categoryPageResponse;
     }
@@ -121,6 +120,7 @@ public class CategoriesService {
         return categories;
     }
     private CategoryDTO mapToDto(Categories categories) {
+
         return modelMapper.map(categories, CategoryDTO.class);
     }
 }

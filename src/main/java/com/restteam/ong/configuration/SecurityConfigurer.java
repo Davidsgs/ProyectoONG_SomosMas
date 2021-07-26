@@ -58,15 +58,13 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
         httpSecurity.csrf().disable().authorizeRequests()
                 //Acá, RUTAS PUBLICAS. (Cualquier usuario puede acceder a ellas.)
                 .antMatchers(AUTH_PATHLIST).permitAll()
+                .antMatchers(HttpMethod.GET,"/news/{\\d+}/comments").permitAll()
                 //Acá, RUTAS PRIVADAS. (Solo acceden usuarios registrados y admins.)
-                //Agrego autorizacion a usuarios, solo con metodo GET en /news/{id}/comments
                 .antMatchers(HttpMethod.GET,"/organization/public/{\\d+}").access("hasAnyAuthority('ROLE_USER','ROLE_ADMIN')")
                 .antMatchers(HttpMethod.GET, "/testimonials").hasAnyAuthority("ROLE_USER","ROLE_ADMIN")
                 .antMatchers(HttpMethod.GET, "/news").hasAnyAuthority("ROLE_USER","ROLE_ADMIN")
-                //Agrego permiso para que cualquiera pueda hacer GET para obtener los comentarios de un News.
-                .antMatchers(HttpMethod.GET,"/news/{\\d+}/comments").permitAll()
                 .antMatchers(USER_PATHLIST).hasAnyAuthority("ROLE_USER","ROLE_ADMIN")
-                //Agrego autorizacion a usuarios, solo con metodo POST en /contacts y /comments y User
+                .antMatchers(HttpMethod.GET, "/categories").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
                 .antMatchers(HttpMethod.POST, "/contacts","/comments").hasAnyAuthority("ROLE_USER","ROLE_ADMIN")
                 //Acá, RUTAS SOLO DE ADMINS.
                 .antMatchers(ADMIN_PATHLIST).hasAuthority("ROLE_ADMIN")
