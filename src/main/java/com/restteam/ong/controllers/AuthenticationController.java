@@ -14,6 +14,7 @@ import com.restteam.ong.util.BindingResultsErrors;
 import com.restteam.ong.util.JwtUtil;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.UnsatisfiedDependencyException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -102,6 +103,8 @@ public class AuthenticationController {
                 authRequest.setPassword(password);
                 //Iniciamos sesion para recibir el JWT y devolverlo.
                 response = createAthenticationToken(authRequest);
+            } catch (UnsatisfiedDependencyException e){
+                response = ResponseEntity.status(HttpStatus.MULTI_STATUS).body("The User was Registered but the Welcome Mail can't be send.");
             } catch (Exception e) {
                 response = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
             }
