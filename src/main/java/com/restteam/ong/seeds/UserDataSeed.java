@@ -119,7 +119,7 @@ public class UserDataSeed implements CommandLineRunner {
      */
     public void checkIfUserExistElseCreateNew(User user){
         if(!userService.userExistsByEmail(user.getEmail())){
-            userService.createUser(user);
+            userService.createUserWithoutSendMail(user);
         }
     }
 }
