@@ -35,6 +35,8 @@ public class UserService {
         user.setPassword(bcryptEncoder.encode(user.getPassword()));
         //Establecemos el TimeStamp de creación.
         user.setCreatedAt(System.currentTimeMillis() / 1000);
+        //Establecemos el TimeStamp de modificación a la misma de creación.
+        user.setUpdatedAt(user.getCreatedAt());
         return userRepository.save(user);
     }
 
@@ -105,6 +107,10 @@ public class UserService {
             bool = userDetailsImpl.getUser().getId().equals(id);
         }
         return bool;
+    }
+
+    public boolean userExistsByEmail(String email){
+        return userRepository.existsByEmail(email);
     }
 
 }
