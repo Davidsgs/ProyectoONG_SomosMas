@@ -1,5 +1,6 @@
 package com.restteam.ong.services;
 
+import com.restteam.ong.controllers.HtmlController;
 import com.restteam.ong.controllers.dto.ContactDTO;
 import com.restteam.ong.controllers.dto.EmailRequest;
 import com.restteam.ong.models.Contact;
@@ -26,6 +27,9 @@ public class ContactService {
     @Autowired
     EmailService emailService;
 
+    @Autowired
+    HtmlController htmlController;
+
     ModelMapper modelMapper = new ModelMapper();
 
     public void createContact(Contact contact) {
@@ -46,8 +50,7 @@ public class ContactService {
         EmailRequest emailRequest = new EmailRequest();
         emailRequest.setTo(contact.getEmail());
         emailRequest.setSubject("Contacto completado con exito.");
-        emailRequest.setBody(String.format("Hola %s! Te informamos que el formulario de contacto se completo con " +
-                "exito. Desde fundacion SOMOS MÁS te agradecemos por contactarte. Saludos!", contact.getName()));
+        emailRequest.setBody(htmlController.greeting(contact.getName(), htmlController.getModel()));
         Response emailResponse = emailService.sendTextEmail(emailRequest);
 
         return emailResponse.getStatusCode() == 200 || emailResponse.getStatusCode() == 202;
