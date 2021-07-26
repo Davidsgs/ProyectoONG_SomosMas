@@ -54,6 +54,24 @@ public class UserService {
 		return result;
 	}
 
+	public User createUserWithoutSendMail(User user) {
+		// Verificamos de que no exista algún usuario ya registrado.
+		if (!isValid(user)) {
+			throw new IllegalStateException("The email or the user is not valid. Try again.");
+		}
+		if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+			throw new IllegalStateException(String.format("Already exist an user with email %s", user.getEmail()));
+		}
+		// Encriptamos la contraseña.
+		user.setPassword(bcryptEncoder.encode(user.getPassword()));
+		// Establecemos el TimeStamp de creación.
+		user.setCreatedAt(System.currentTimeMillis() / 1000);
+		// Establecemos el TimeStamp de modificación a la misma de creación.
+		user.setUpdatedAt(user.getCreatedAt());
+		User result = userRepository.save(user);
+		return result;
+	}
+
 	public boolean isValid(User user) {
 		return user.getFirstName() != null && user.getEmail() != null;
 	}
