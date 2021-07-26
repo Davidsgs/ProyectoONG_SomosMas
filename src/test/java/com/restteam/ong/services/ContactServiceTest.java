@@ -1,21 +1,34 @@
 package com.restteam.ong.services;
 
-/*
+
+import com.restteam.ong.controllers.dto.ContactDTO;
+import com.restteam.ong.models.Contact;
+import com.restteam.ong.repositories.ContactRepository;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.modelmapper.ModelMapper;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 //@SpringBootTest esta anotacion no hace falta, al ser en su mayoria unit test no es necesario encender el server.
 class ContactServiceTest {
 
     ModelMapper modelMapper = new ModelMapper();
 
-    Environment env = Mockito.mock(Environment.class);
-
-    EmailService emailService = new EmailService(env);
+    EmailService emailService = new EmailService();
 
     ContactRepository contactRepository = Mockito.mock(ContactRepository.class);
 
-    /ContactService contactService = new ContactService(contactRepository,emailService,modelMapper);
+    ContactService contactService = new ContactService(contactRepository,emailService,modelMapper);
 
 
-    @BeforeEach //El codigo dentro del setup se corre antes de cada test.
+    @BeforeEach
+        //El codigo dentro del setup se corre antes de cada test.
     void setUp() {
         //contacto mock 1
         Contact contactMock1 = new Contact();
@@ -45,11 +58,10 @@ class ContactServiceTest {
 
         //Comandos a mockear:
         Mockito.when(contactRepository.findAll()).thenReturn(contactList);
-        Mockito.when(contactRepository.save(any(Contact.class))).thenReturn(new Contact());
+        Mockito.when(contactRepository.save(Mockito.any())).thenReturn(new Contact());
         Mockito.when(contactRepository.findByName("test1")).thenReturn(Optional.of(contactMock1));
         Mockito.when(contactRepository.findByName("test2")).thenReturn(Optional.of(contactMock2));
         Mockito.when(contactRepository.findByName("test3")).thenReturn(Optional.of(contactMock3));
-        Mockito.when(env.getProperty(anyString())).thenReturn("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");
     }
 
     @Test
@@ -58,15 +70,14 @@ class ContactServiceTest {
         Assertions.assertNotNull(contact.getName());
         Assertions.assertNotNull(contact.getEmail());
         Assertions.assertTrue(contactService.isValid(contact));
-    }*/
+    }
 
-   /* @Test
+    @Test
     void sendWelcomeMail(){
-        Contact contact = contactRepository.findByName("test1").orElse(new Contact());*/
+        Contact contact = contactRepository.findByName("test1").orElse(new Contact());
         /* El test de abajo funciona, pero solo si se utiliza el email "verificado".
          * AVISO: La linea de abajo es de integracion, no unit testing.*/
-
-/*        //Assertions.assertTrue(contactService.sendWelcomeMail(contact));
+        //Assertions.assertTrue(contactService.sendWelcomeMail(contact));
     }
 
     @Test
@@ -104,6 +115,7 @@ class ContactServiceTest {
         Assertions.assertEquals(contactDTO.getMessage(),contact0.getMessage());
     }
 
-    @AfterEach  //El codigo de tearDown se corre al finalizar cada test.
+    @AfterEach
+    //El codigo de tearDown se corre al finalizar cada test.
     void tearDown() { }
-}*/
+}

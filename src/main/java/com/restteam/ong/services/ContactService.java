@@ -32,6 +32,12 @@ public class ContactService {
 
     ModelMapper modelMapper = new ModelMapper();
 
+    public ContactService(ContactRepository contactRepository, EmailService emailService, ModelMapper modelMapper) {
+        this.contactRepository = contactRepository;
+        this.emailService = emailService;
+        this.modelMapper = modelMapper;
+    }
+
     public void createContact(Contact contact) {
         if(!isValid(contact)){
             throw new IllegalStateException("El email o el usuario no son validos. Intente de nuevo.");

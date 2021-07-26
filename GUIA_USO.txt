@@ -1,1 +1,2 @@
-por hacer.
+Para iniciar la app, El unico requisito va a ser que ya tengas instalado Java.
+
