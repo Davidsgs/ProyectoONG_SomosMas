@@ -1,20 +1,9 @@
 package com.restteam.ong.controllers;
 
-import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.util.Optional;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.restteam.ong.models.Member;
 import com.restteam.ong.repositories.MemberRepository;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,6 +18,13 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+
+import java.util.Optional;
+
+import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @ExtendWith(SpringExtension.class)
@@ -52,7 +48,7 @@ public class MemberControllerTest {
     @BeforeEach
     public void setUp() {
         memberMock1 = new Member();
-        memberMock1.setId(1l);
+        memberMock1.setId(1L);
         memberMock1.setName("member1");
         memberMock1.setFacebookUrl("htt´://facebook.member1");
         memberMock1.setInstagramUrl("htt´://instagram.member1");
@@ -114,20 +110,6 @@ public class MemberControllerTest {
                 .andExpect(status().isBadRequest())
                 .andReturn();
     }
-
-    @Test
-    @WithMockUser(username = "userDeveloper@email.com", authorities = {"ROLE_ADMIN"})
-    public void get_member_ok() throws Exception {
-
-        String url = "/members";
-
-        mockMvc.perform(get(url)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andReturn();
-    }
-
 
     @Test
     @WithMockUser(username = "userDeveloper@email.com", authorities = {"ROLE_ADMIN"})

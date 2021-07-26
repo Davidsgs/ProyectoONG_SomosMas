@@ -9,14 +9,15 @@ import com.restteam.ong.util.PageableCreator;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static java.lang.System.currentTimeMillis;
 
@@ -50,9 +51,9 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public MemberPageableDTO getMembers(int pageId) {
         MemberPageableDTO memberPageableDTO = new MemberPageableDTO();
-        Pageable page = pageableCreator.goToPage(pageId);
+        Pageable page = PageRequest.of(pageId,10);
         Slice<Member> pagedList = memberRepository.findAll(page);
-        List<MemberDTO> pagedMembersDTO = pagedList.getContent().stream().map(it -> modelMapper.map(it,MemberDTO.class)).collect(Collectors.toList());
+        List<MemberDTO> pagedMembersDTO = sliceToDTOList(pagedList);
         memberPageableDTO.setMemberList(pagedMembersDTO);
         if(pagedList.hasPrevious()){
             memberPageableDTO.setPreviousURL("http://localhost:8080/members/"+(pageId-1));
@@ -104,4 +105,15 @@ public class MemberServiceImpl implements MemberService {
         return Optional.empty();
     }
 
+
+    //del slice<member> saca todos los miembros y usa el modelmapper para cambiarlos a memberDTO y pasalo a lista.
+    private List<MemberDTO> sliceToDTOList(Slice<Member> memberSlice){
+        List<Member> memberList = memberSlice.getContent();
+        List<MemberDTO> memberDTOList = new ArrayList<>();
+        for(Member m: memberList){
+            MemberDTO member = mapToDTO(m);
+            memberDTOList.add(member);
+        }
+        return memberDTOList;
+    }
 }
