@@ -8,6 +8,7 @@ import com.restteam.ong.models.User;
 import com.restteam.ong.models.impl.UserDetailsImpl;
 import com.restteam.ong.services.EmailService;
 import com.restteam.ong.services.RoleService;
+import com.restteam.ong.services.UserService;
 import com.restteam.ong.services.impl.UserDetailsServiceImpl;
 import com.restteam.ong.services.util.EmailSenderException;
 import com.restteam.ong.util.BindingResultsErrors;
@@ -43,6 +44,9 @@ public class AuthenticationController {
 
     @Autowired
     private RoleService roleService;
+
+    @Autowired
+    UserService userService;
 
     private ModelMapper modelMapper = new ModelMapper();
 
@@ -96,6 +100,7 @@ public class AuthenticationController {
                 var password = user.getPassword();
                 //Lo registramos
                 userDetailsService.registerUser(user);
+
                 //Creamos la authentication request para poder logearnos en el sistema.
                 var authRequest = new AuthenticationRequest();
                 authRequest.setUsername(user.getEmail());
