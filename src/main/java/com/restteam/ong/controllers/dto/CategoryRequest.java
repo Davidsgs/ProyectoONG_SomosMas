@@ -21,4 +21,6 @@ public class CategoryRequest {
 
     private String image;
 
+    public CategoryRequest() {
+    }
 }
