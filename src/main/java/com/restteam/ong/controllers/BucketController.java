@@ -4,6 +4,7 @@ import com.restteam.ong.controllers.dto.FileUploadResponse;
 import com.restteam.ong.services.AmazonS3ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,7 +23,7 @@ public class BucketController {
         this.amazonClient = amazonClient;
     }
 
-    @PostMapping("/uploadFile")
+    @PostMapping(name = "/uploadFile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> uploadFile(@RequestPart(value = "file") MultipartFile file) {
         try{
             String fileUrl = this.amazonClient.uploadFile(file);
@@ -35,8 +36,8 @@ public class BucketController {
 
     }
 
-    @DeleteMapping("/deleteFile")
-    public ResponseEntity<?> deleteFile(@RequestPart(value = "url") String fileUrl) {
+    @DeleteMapping(name = "/deleteFile")
+    public ResponseEntity<?> deleteFile(@RequestParam(value = "url") String fileUrl) {
         try {
             return ResponseEntity.ok(this.amazonClient.deleteFileFromS3Bucket(fileUrl));
         } catch (FileNotFoundException e){
