@@ -1,11 +1,14 @@
 package com.restteam.ong.services;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Optional;
 
+import com.restteam.ong.controllers.dto.ActivityRequest;
 import com.restteam.ong.models.Activity;
 import com.restteam.ong.repositories.ActivityRepository;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -54,5 +57,15 @@ public class ActivityService {
     }
     public Boolean existId(Long id) {
         return activityRepository.existsById(id);
+    }
+
+    public Activity complete(ActivityRequest activityDTO){
+        Activity activity = new Activity();
+        ModelMapper modelMapper= new ModelMapper();
+        modelMapper.map(activityDTO, activity);
+        activity.setDeleted(false);
+        activity.setCreatedAt(new Date().getTime());
+        activity.setUpdatedAt(activity.getCreatedAt());
+        return activity;
     }
 }

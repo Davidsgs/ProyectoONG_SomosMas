@@ -21,6 +21,7 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     @Autowired
     OrganizationRepository repository;
+
     ModelMapper modelMapper = new ModelMapper();
 
     public OrganizationServiceImpl(OrganizationRepository orgRepo) {
@@ -41,6 +42,15 @@ public class OrganizationServiceImpl implements OrganizationService {
         }
     }
 
+    public Organization complete(OrganizationCreateDTO dto){
+                    
+                long timestamp = System.currentTimeMillis() / 1000;
+                Organization organization = modelMapper.map(dto, Organization.class);
+                organization.setCreatedAt(timestamp);
+                organization.setUpdatedAt(timestamp);
+            return organization;
+    }
+    
     @Override
     public List<Organization> getAll() {
         try {
