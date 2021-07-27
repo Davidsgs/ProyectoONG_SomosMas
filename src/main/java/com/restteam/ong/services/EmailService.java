@@ -33,7 +33,7 @@ public class EmailService {
         Email from = new Email("somosfundacionmas@gmail.com");
         String subject = emailRequest.getSubject();
         Email to = new Email(emailRequest.getTo());
-        Content content = new Content("text/plain", emailRequest.getBody());
+        Content content = new Content("text/html", emailRequest.getBody());
         Mail mail = new Mail(from, subject, to, content);
         SendGrid sg = new SendGrid(env.getProperty("spring.sendgrid.api-key"));
         Request request = new Request();

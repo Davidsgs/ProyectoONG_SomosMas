@@ -2,12 +2,14 @@ package com.restteam.ong.controllers.dto;
 
 import javax.validation.constraints.NotBlank;
 
-import lombok.*;
-
-import java.util.ArrayList;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter
+@AllArgsConstructor
 @Data
 public class CategoryRequest {
 

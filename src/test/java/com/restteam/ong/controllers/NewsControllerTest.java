@@ -346,25 +346,9 @@ public class NewsControllerTest {
     @WithMockUser(username = "user@email.com", authorities = {"ROLE_USER"}) //Cuenta de usuario registrado.
     public void tryDeleteNewsWithNonAdminUser() throws Exception {
         //Definimos la ruta a la cual vamos a estar haciendo el test.
-        String url = "/news/{id}";
-        //Creo Categories
-        var cata= new CategoryRequest();
-        cata.setName("Holaaa");
-        cata.setImage("ur1");
-        cata.setDescription("texto");
-        //Creamos un News.
-        NewsDTO newsDTO = new NewsDTO();
-        //Le agregamos sus campos correspondientes.
-        newsDTO.setName("Test News");
-        newsDTO.setContent("This is the content for example");
-        newsDTO.setImage("image.png");
-        newsDTO.setCategoryRequest(cata);
-        //Guardamos en el service el News.
-        News news = service.postNews(newsDTO);
-        //Le indicamos al repository mock que debe retornar cuando le pidan el news.
-        given(service.deleteNewsById(news.getId())).willReturn(news.toString());
-        //Hacemos las validaciones.
-        mockMvc.perform(delete(url,news.getId()) //Apuntamos a la ruta de la variable url y le pasamos el parametro ID.
+        String url = "/news/0";
+         //Hacemos las validaciones.
+        mockMvc.perform(delete(url) //Apuntamos a la ruta de la variable url y le pasamos el parametro ID.
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())

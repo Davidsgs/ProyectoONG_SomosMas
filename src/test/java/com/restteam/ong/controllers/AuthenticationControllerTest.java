@@ -5,12 +5,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.restteam.ong.controllers.dto.AuthenticationRequest;
 import com.restteam.ong.controllers.dto.AuthenticationResponse;
 import com.restteam.ong.controllers.dto.UserRegisterRequest;
+import com.restteam.ong.models.User;
+import com.restteam.ong.services.UserService;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -29,6 +35,9 @@ class AuthenticationControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private UserService userService;
+
     private String mapToJSON(Object object) throws JsonProcessingException {
         return objectMapper.writeValueAsString(object);
     }
@@ -40,7 +49,7 @@ class AuthenticationControllerTest {
         //Genero un token valido para poder usarlo despues
         AuthenticationRequest authRequest = new AuthenticationRequest();
         authRequest.setPassword("qwerty");
-        authRequest.setUsername("userDeveloper@email.com");
+        authRequest.setUsername("adminUser1@email.com");
 
         MvcResult result = mockMvc.perform(post("/auth/login")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -52,11 +61,18 @@ class AuthenticationControllerTest {
         jwt = authenticationResponse.getJwt();
     }
 
+    @AfterEach
+    void afterEach() throws Exception {
+        try {
+            userService.deleteUser(userService.findByEmail("test@email.com").getId());
+        }catch (Exception e){}
+    }
+
     @Test
     void createAthenticationTokenOkReturns200() throws Exception {
         String url = "http://localhost:9800/auth/login";
         AuthenticationRequest request = new AuthenticationRequest();
-        request.setUsername("userDeveloper@email.com");
+        request.setUsername("adminUser1@email.com");
         request.setPassword("qwerty");
 
         Assertions.assertDoesNotThrow(
@@ -102,7 +118,7 @@ class AuthenticationControllerTest {
     void createAthenticationTokenWithInvalidPasswordReturns403() throws Exception {
         String url = "http://localhost:9800/auth/login";
         AuthenticationRequest request = new AuthenticationRequest();
-        request.setUsername("userDeveloper@email.com");
+        request.setUsername("adminUser1@email.com");
         //Aca seteo password no valida, la correcta es : "qwerty"
         request.setPassword("notValid");
 
@@ -122,7 +138,7 @@ class AuthenticationControllerTest {
     }
 
     @Test
-    void registerOkReturns200() throws Exception {
+    void registerOkReturns207() throws Exception {
         String url = "http://localhost:9800/auth/register";
         UserRegisterRequest request = new UserRegisterRequest();
         request.setFirstName("test");
@@ -141,7 +157,7 @@ class AuthenticationControllerTest {
                 .content(JSONRequest)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isMultiStatus()) //Esperamos 207 ya que el Mail de bienvenida no se va a enviar correctamente la dirección del usuario de pruebas.
                 .andReturn();
     }
 
