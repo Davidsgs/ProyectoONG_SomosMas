@@ -3,6 +3,7 @@ package com.restteam.ong.services.impl;
 import com.restteam.ong.models.User;
 import com.restteam.ong.models.impl.UserDetailsImpl;
 import com.restteam.ong.services.UserService;
+import com.restteam.ong.services.util.EmailSenderException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -22,7 +23,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return new UserDetailsImpl(userService.findByEmail(email));
     }
 
-    public User registerUser(User user){
+    public User registerUser(User user) throws EmailSenderException {
         return userService.createUser(user);
     }
 
