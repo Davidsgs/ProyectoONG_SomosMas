@@ -2,28 +2,22 @@ package com.restteam.ong.services;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Optional;
+
+import javax.transaction.Transactional;
 
 import com.restteam.ong.controllers.dto.CategoryDTO;
 import com.restteam.ong.controllers.dto.CategoryPageResponse;
 import com.restteam.ong.controllers.dto.CategoryRequest;
-import com.restteam.ong.controllers.dto.TestimonialDto;
 import com.restteam.ong.models.Categories;
-import com.restteam.ong.models.News;
-import com.restteam.ong.models.Testimonial;
 import com.restteam.ong.repositories.CategoriesRepository;
-
-import com.restteam.ong.repositories.NewsRepository;
 import com.restteam.ong.services.util.EmptyRepositoryException;
 import com.restteam.ong.services.util.PageEmptyException;
-import org.hibernate.mapping.Set;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
 
 @Service
 public class CategoriesService {
@@ -43,6 +37,16 @@ public class CategoriesService {
         newCategory.setRegDate(new Date().getTime()); //le agrega los getTime en regDate y upDateDate
         newCategory.setUpDateDate(newCategory.getRegDate());
         return categoriesRepository.save(newCategory); //guarda la categoria creada
+    }
+
+    public Categories complete(CategoryRequest categories){
+        var newCategory = new Categories(); // crea una variable de clase categoria
+        newCategory.setDescription(categories.getDescription()); //hace un map de name,image,descripton
+        newCategory.setName(categories.getName());
+        newCategory.setImage(categories.getImage());
+        newCategory.setRegDate(new Date().getTime()); //le agrega los getTime en regDate y upDateDate
+        newCategory.setUpDateDate(newCategory.getRegDate());
+        return newCategory;
     }
 //elimina una categoria que recibe por parametro un id
     public String deleteCategoriesById(Long id) {
