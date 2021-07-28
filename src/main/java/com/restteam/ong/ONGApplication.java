@@ -8,8 +8,7 @@ public class ONGApplication{
 
     public static void main(String[] args) {
 
-        String firma = "" +
-                " ------------------------------ Created By: ----------------------------\n" +
+        String firma = "------------------------------ Created By: -----------------------------\n" +
                 "8888888b.                   888    888                                   \n" +
                 "888   Y88b                  888    888                                   \n" +
                 "888    888                  888    888                                   \n" +
