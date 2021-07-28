@@ -1,7 +1,5 @@
 package com.restteam.ong.controllers;
 
-import java.util.Date;
-
 import javax.validation.Valid;
 
 import com.restteam.ong.controllers.dto.CommentBodyResponse;
@@ -36,7 +34,7 @@ public class NewsController {
                                          @Parameter(hidden = true) BindingResult bindingResult) {
         ResponseEntity response;
 
-        if(bindingResult.hasErrors()){ //Se revisa si no hay errores del @Valid.
+        if (bindingResult.hasErrors()) { //Se revisa si no hay errores del @Valid.
             response = BindingResultsErrors.getResponseEntityWithErrors(bindingResult); //Se mandan a traer un ResponseEntity que contenga los errores.
         }
         //Si no hay errores entonces:
@@ -80,13 +78,14 @@ public class NewsController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("news " + id + " no encontrada!");
         }
     }
+
     @GetMapping()
-    public  ResponseEntity<?> getNews(@RequestParam Integer page){
+    public ResponseEntity<?> getNews(@RequestParam Integer page) {
         try {
             return ResponseEntity.ok(newsService.getAll(page));
-        }catch (IllegalStateException i){
+        } catch (IllegalStateException i) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(i.getMessage());
-        }catch ( Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(UNEXPECTED_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -97,9 +96,9 @@ public class NewsController {
      */
 
     @GetMapping("/{id}/comments")
-    public ResponseEntity<?> getCommentsOfNewsWithId(@PathVariable("id") Long id){
+    public ResponseEntity<?> getCommentsOfNewsWithId(@PathVariable("id") Long id) {
         ResponseEntity responseEntity;
-        try{
+        try {
             var news = newsService.getNewsById(id);
             var commentsOfNews = news.getComments();
             //Mapeamos los comentarios a un DTO para ser devueltos.
@@ -107,9 +106,9 @@ public class NewsController {
                     comment -> modelMapper.map(comment, CommentBodyResponse.class)
             );
             responseEntity = ResponseEntity.ok(commentsBodyDTO);
-        }catch (IllegalStateException e){
+        } catch (IllegalStateException e) {
             responseEntity = ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }catch (Exception e){
+        } catch (Exception e) {
             responseEntity = ResponseEntity.badRequest().body(e.getMessage());
         }
         return responseEntity;

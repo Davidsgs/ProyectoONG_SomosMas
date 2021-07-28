@@ -2,12 +2,13 @@ package com.restteam.ong.controllers.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class MemberDTO {
-    public MemberDTO() {
-    }
+
     private String name;
     private String facebookUrl;
     private String instagramUrl;

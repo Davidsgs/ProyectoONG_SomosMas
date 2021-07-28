@@ -11,7 +11,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.transaction.Transactional;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
