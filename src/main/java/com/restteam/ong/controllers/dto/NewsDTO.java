@@ -1,6 +1,5 @@
 package com.restteam.ong.controllers.dto;
 
-import com.restteam.ong.models.Categories;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -2,7 +2,6 @@ package com.restteam.ong.seeds;
 
 import java.util.List;
 
-import com.amazonaws.services.simpleworkflow.flow.annotations.Activities;
 import com.restteam.ong.controllers.dto.ActivityRequest;
 import com.restteam.ong.controllers.dto.CategoryRequest;
 import com.restteam.ong.controllers.dto.OrganizationCreateDTO;

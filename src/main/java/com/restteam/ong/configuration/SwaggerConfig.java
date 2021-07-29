@@ -38,7 +38,7 @@ public class SwaggerConfig {
                                 )
                 )
                 .info(new Info().title("ALKEMY - SOMOS MÁS").description(swaggerDescription)
-                .contact(new Contact().email("somosfundacionmas@gmail.com").name("Somos más - ONG.")));
+                        .contact(new Contact().email("somosfundacionmas@gmail.com").name("Somos más - ONG.")));
     }
 
 

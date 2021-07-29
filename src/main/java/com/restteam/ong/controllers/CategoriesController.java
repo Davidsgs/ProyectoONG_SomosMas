@@ -1,28 +1,20 @@
 package com.restteam.ong.controllers;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 import javax.validation.Valid;
 
-import com.restteam.ong.controllers.dto.CategoryNameDetailResponse;
 import com.restteam.ong.controllers.dto.CategoryRequest;
 import com.restteam.ong.models.Categories;
 import com.restteam.ong.services.CategoriesService;
 
-import com.restteam.ong.services.util.CategoriesNotFoundException;
 import com.restteam.ong.services.util.EmptyRepositoryException;
 import com.restteam.ong.services.util.PageEmptyException;
 import com.restteam.ong.util.BindingResultsErrors;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;

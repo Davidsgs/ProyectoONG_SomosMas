@@ -32,9 +32,9 @@ public class MemberController {
 
     @PutMapping(path = "{memberId}")
     public ResponseEntity<String> updateMember(@PathVariable Long memberId, @RequestParam(required = false) String name,
-            @RequestParam(required = false) String facebook, @RequestParam(required = false) String instagram,
-            @RequestParam(required = false) String linkedin, @RequestParam(required = false) String image,
-            @RequestParam(required = false) String description) {
+                                               @RequestParam(required = false) String facebook, @RequestParam(required = false) String instagram,
+                                               @RequestParam(required = false) String linkedin, @RequestParam(required = false) String image,
+                                               @RequestParam(required = false) String description) {
         try {
             memberService.updateMember(memberId, name, facebook, instagram, linkedin, image, description)
                     .orElseThrow(() -> new IllegalStateException(""));

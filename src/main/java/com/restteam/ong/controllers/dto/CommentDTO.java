@@ -1,7 +1,5 @@
 package com.restteam.ong.controllers.dto;
 
-import com.restteam.ong.models.News;
-import com.restteam.ong.models.User;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
