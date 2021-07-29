@@ -5,20 +5,28 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.restteam.ong.controllers.dto.AuthenticationRequest;
 import com.restteam.ong.controllers.dto.AuthenticationResponse;
 import com.restteam.ong.controllers.dto.UserRegisterRequest;
+import com.restteam.ong.models.User;
 import com.restteam.ong.services.UserService;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.Date;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -56,13 +64,7 @@ class AuthenticationControllerTest {
 
         AuthenticationResponse authenticationResponse = objectMapper.readValue(result.getResponse().getContentAsByteArray(), AuthenticationResponse.class);
         jwt = authenticationResponse.getJwt();
-    }
-
-    @AfterEach
-    void afterEach() throws Exception {
-        try {
-            userService.deleteUser(userService.findByEmail("test@email.com").getId());
-        }catch (Exception e){}
+        //Elimino el usuario con el que hago pruebas
     }
 
     @Test
@@ -134,14 +136,15 @@ class AuthenticationControllerTest {
                 .andReturn();
     }
 
-    //Comentado pq no anda.
-    /*@Test
-    void registerOkReturns207() throws Exception {
+    @Test
+    void registerReturns207() throws Exception {
+        //Genero un user con un string random para asegurarme de que no esta en la base ede datos
         String url = "http://localhost:9800/auth/register";
         UserRegisterRequest request = new UserRegisterRequest();
-        request.setFirstName("test");
-        request.setLastName("test");
-        request.setEmail("test@email.com");
+        String generatedString = RandomStringUtils.randomAlphabetic(5) + new Date().getTime();
+        request.setFirstName(generatedString);
+        request.setLastName(generatedString);
+        request.setEmail(String.format("%s@email.com",generatedString));
         request.setPassword("test");
 
         Assertions.assertDoesNotThrow(
@@ -157,7 +160,7 @@ class AuthenticationControllerTest {
                 .andDo(print())
                 .andExpect(status().isMultiStatus()) //Esperamos 207 ya que el Mail de bienvenida no se va a enviar correctamente la dirección del usuario de pruebas.
                 .andReturn();
-    }*/
+    }
 
     @Test
     void registerWithBlankEmailReturnsStatus400() throws Exception {

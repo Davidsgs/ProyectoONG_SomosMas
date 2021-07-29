@@ -50,7 +50,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
             "/members/**",
             "/comments/*"
     };
-    
+
     private static final String[] ADMIN_PATHLIST = {
             "/**"
     };
@@ -59,14 +59,14 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
         httpSecurity.csrf().disable().authorizeRequests()
                 //Acá, RUTAS PUBLICAS. (Cualquier usuario puede acceder a ellas.)
                 .antMatchers(AUTH_PATHLIST).permitAll()
-                .antMatchers(HttpMethod.GET,"/news/{\\d+}/comments").permitAll()
+                .antMatchers(HttpMethod.GET, "/news/{\\d+}/comments").permitAll()
                 //Acá, RUTAS PRIVADAS. (Solo acceden usuarios registrados y admins.)
-                .antMatchers(HttpMethod.GET,"/organization/public/{\\d+}").access("hasAnyAuthority('ROLE_USER','ROLE_ADMIN')")
-                .antMatchers(HttpMethod.GET, "/testimonials").hasAnyAuthority("ROLE_USER","ROLE_ADMIN")
-                .antMatchers(HttpMethod.GET, "/news").hasAnyAuthority("ROLE_USER","ROLE_ADMIN")
-                .antMatchers(USER_PATHLIST).hasAnyAuthority("ROLE_USER","ROLE_ADMIN")
+                .antMatchers(HttpMethod.GET, "/organization/public/{\\d+}").access("hasAnyAuthority('ROLE_USER','ROLE_ADMIN')")
+                .antMatchers(HttpMethod.GET, "/testimonials").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+                .antMatchers(HttpMethod.GET, "/news").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+                .antMatchers(USER_PATHLIST).hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
                 .antMatchers(HttpMethod.GET, "/categories").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
-                .antMatchers(HttpMethod.POST, "/contacts","/comments").hasAnyAuthority("ROLE_USER","ROLE_ADMIN")
+                .antMatchers(HttpMethod.POST, "/contacts", "/comments").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
                 //Acá, RUTAS SOLO DE ADMINS.
                 .antMatchers(ADMIN_PATHLIST).hasAuthority("ROLE_ADMIN")
                 .anyRequest().authenticated()
@@ -77,7 +77,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 

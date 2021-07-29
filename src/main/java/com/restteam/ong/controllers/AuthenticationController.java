@@ -109,9 +109,8 @@ public class AuthenticationController {
 				authRequest.setPassword(password);
 				// Iniciamos sesion para recibir el JWT y devolverlo.
 				response = createAthenticationToken(authRequest);
-				sendWelcomeMail(user);
 			} catch (EmailSenderException ese) {
-				response = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ese.getMessage());
+				response = ResponseEntity.status(HttpStatus.MULTI_STATUS).body(ese.getMessage());
 			} catch (Exception e) {
 				response = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 			}
