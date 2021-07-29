@@ -3,7 +3,6 @@ package com.restteam.ong.services;
 import com.restteam.ong.models.Member;
 import com.restteam.ong.repositories.MemberRepository;
 import com.restteam.ong.services.impl.MemberServiceImpl;
-import com.restteam.ong.util.PageableCreator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,9 +18,7 @@ public class MemberServiceTest {
 
     MemberRepository memberRepositoryMock = Mockito.mock(MemberRepository.class);
 
-    PageableCreator pageableCreator;
-
-    MemberService service = new MemberServiceImpl(memberRepositoryMock,pageableCreator);
+    MemberService service = new MemberServiceImpl(memberRepositoryMock);
 
     Member memberMock3WithOutId;
 

@@ -1,25 +1,16 @@
 package com.restteam.ong.seeds;
 
-import java.util.List;
-
-import com.restteam.ong.controllers.dto.ActivityRequest;
-import com.restteam.ong.controllers.dto.CategoryRequest;
-import com.restteam.ong.controllers.dto.OrganizationCreateDTO;
-import com.restteam.ong.models.Activity;
-import com.restteam.ong.models.Categories;
-import com.restteam.ong.models.Organization;
-import com.restteam.ong.repositories.ActivityRepository;
-import com.restteam.ong.repositories.CategoriesRepository;
-import com.restteam.ong.repositories.OrganizationRepository;
+import com.restteam.ong.controllers.dto.*;
+import com.restteam.ong.models.*;
+import com.restteam.ong.repositories.*;
 import com.restteam.ong.services.ActivityService;
 import com.restteam.ong.services.CategoriesService;
 import com.restteam.ong.services.impl.OrganizationServiceImpl;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import ch.qos.logback.core.net.SyslogOutputStream;
+import java.util.List;
 
 @Component
 public class ActivOrgCategSeeds implements CommandLineRunner {
@@ -33,11 +24,18 @@ public class ActivOrgCategSeeds implements CommandLineRunner {
     @Autowired
     ActivityRepository activityRepository;
 
+    @Autowired
+    NewsRepository newsRepository;
+
+    @Autowired
+    CommentRepository commentRepository;
+
     @Override
     public void run(String... args) {
         this.seedOrganization();
         this.seedCategory();
         this.seedActivity();
+        this.seedNews();
     }
 
     private void seedOrganization() {
@@ -46,7 +44,7 @@ public class ActivOrgCategSeeds implements CommandLineRunner {
 
         if (organizations.isEmpty()) {
             // crear organizacion
-            System.out.println("**********CREATING ORGANIZATIONS********");
+            System.out.println("-~-~-~-~-~-~-~-~-~-~-~-~-~-~|CREATING ORGANIZATIONS|~-~-~-~-~-~-~-~-~-~-~-~-~-~-");
             OrganizationCreateDTO org1 = new OrganizationCreateDTO("Patitas", "Patitas.png", "perrito 123", 118263537,
                     "patitas@gmail.com", "Bienvenido a Patitas",
                     "Nos ocupamos principalmente de satisfacer las necesidades basicas de los barrios de zona sur que no son alcanzados por los servicios estatales humanitarios",
@@ -82,7 +80,7 @@ public class ActivOrgCategSeeds implements CommandLineRunner {
             this.organizationRepository.save(service.complete(org4));
             this.organizationRepository.save(service.complete(org5));
         } else {
-            System.out.println("*******ORGANIZATIONS EXIST*********");
+            System.out.println("-~-~-~-~-~-~-~-~-~-~-~-~-~-~|ORGANIZATIONS EXIST|~-~-~-~-~-~-~-~-~-~-~-~-~-~-");
         }
 
     }
@@ -93,26 +91,34 @@ public class ActivOrgCategSeeds implements CommandLineRunner {
 
         if (categories.isEmpty()) {
             // create categories¨
-            System.out.println("***********CREATING CATEGORIES********");
-
+            System.out.println("-~-~-~-~-~-~-~-~-~-~-~-~-~-~|CREATING CATEGORIES|~-~-~-~-~-~-~-~-~-~-~-~-~-~-");
+            CategoryRequest cat1  = new CategoryRequest("musica","la musica es linda",
+                    "https://s3.sa-east-1.amazonaws.com/alkemy-ong/1627569235723-MicrosoftTeams-image.png");
+            CategoryRequest cat2 = new CategoryRequest("arte","el arte abstracto",
+                    "https://s3.sa-east-1.amazonaws.com/alkemy-ong/1627569235723-MicrosoftTeams-image.png");
+            CategoryRequest cat3 = new CategoryRequest("deporte","El deporte ayuda a la destreza",
+                    "https://s3.sa-east-1.amazonaws.com/alkemy-ong/1627569235723-MicrosoftTeams-image.png");
             CategoryRequest categ1 = new CategoryRequest("Arte",
-                    "El arte se trata de organizaciones cuyo fin es alentar el desarrollo", "obra_de_arte.png");
+                    "El arte se trata de organizaciones cuyo fin es alentar el desarrollo", "https://s3.sa-east-1.amazonaws.com/alkemy-ong/1627569235723-MicrosoftTeams-image.png");
             CategoryRequest categ2 = new CategoryRequest("Deporte",
                     "El deporte cubre todas las organizaciones cuyo fin es alentar a los niños a desarrollar actividad fisica.",
-                    "futbol.png");
+                    "https://s3.sa-east-1.amazonaws.com/alkemy-ong/1627569235723-MicrosoftTeams-image.png");
             CategoryRequest categ3 = new CategoryRequest("Caridad",
                     "descripcion: La caridad trata de organizaciones cuyo fin es la recaudacion de bienes para ayudar a la poblacion.",
-                    "ayuda.png");
+                    "https://s3.sa-east-1.amazonaws.com/alkemy-ong/1627569235723-MicrosoftTeams-image.png");
+
 
             CategoriesService service= new CategoriesService();
             this.categoriesRepository.save(service.complete(categ1));
             this.categoriesRepository.save(service.complete(categ2));
             this.categoriesRepository.save(service.complete(categ3));
+            this.categoriesRepository.save(service.complete(cat1));
+            this.categoriesRepository.save(service.complete(cat2));
+            this.categoriesRepository.save(service.complete(cat3));
 
         } else {
-            System.out.println("**********CATEGORIES EXISTS********");
+            System.out.println("-~-~-~-~-~-~-~-~-~-~-~-~-~-~|CATEGORIES EXISTS|~-~-~-~-~-~-~-~-~-~-~-~-~-~-");
         }
- 
     }
 
     private void seedActivity() {
@@ -120,7 +126,7 @@ public class ActivOrgCategSeeds implements CommandLineRunner {
 
         if(activities.isEmpty()){
             //create activities
-            System.out.println("************CREATING ACTIVITIES***********");
+            System.out.println("-~-~-~-~-~-~-~-~-~-~-~-~-~-~|CREATING ACTIVITIES|~-~-~-~-~-~-~-~-~-~-~-~-~-~-");
             ActivityRequest act1= new ActivityRequest("Construccion de casas", "Construccion de viviendas para familias en situación de calle", "casas.png");
             ActivityRequest act2= new ActivityRequest("Limpieza de calles", "Limpieza de calles en zonas con poca ayuda estatal", "calles.png");
             ActivityRequest act3= new ActivityRequest("Junta de alimentos", "Recoleccion de alimentos para los ms necesitados de los barrios humildes", "alimentos.png");
@@ -141,9 +147,38 @@ public class ActivOrgCategSeeds implements CommandLineRunner {
             this.activityRepository.save(service.complete(act8));
 
         }else{
-            System.out.println("**********ACTIVITIES EXIST*************");
+            System.out.println("-~-~-~-~-~-~-~-~-~-~-~-~-~-~|ACTIVITIES EXIST|~-~-~-~-~-~-~-~-~-~-~-~-~-~-");
         }
 
     }
 
+
+    public void seedNews(){
+        List<News> newsList = newsRepository.findAll();
+
+        if (newsList.isEmpty()){
+            System.out.println("-~-~-~-~-~-~-~-~-~-~-~-~-~-~|CREATING NEWS|~-~-~-~-~-~-~-~-~-~-~-~-~-~-");
+            CategoryRequest cat = new CategoryRequest("DEPORTES");
+            NewsDTO news1 = new NewsDTO("Juan gano la copa oeste!","Juancito perez gano la copa con el equipo 7","https://s3.sa-east-1.amazonaws.com/alkemy-ong/1627585365457-1.png",cat);
+            NewsDTO news2 = new NewsDTO("Pepe nos viene a visitar!","Pepe argento vino de visita a somos mas!","https://s3.sa-east-1.amazonaws.com/alkemy-ong/1627585365457-1.png",cat);
+            NewsDTO news3 = new NewsDTO("Rifas para pepito!","Participa por un guiso bien rico","https://s3.sa-east-1.amazonaws.com/alkemy-ong/1627585365457-1.png",cat);
+            NewsDTO news4 = new NewsDTO("Maraton somos mas 2021","Veni a correr con nosotros!","https://s3.sa-east-1.amazonaws.com/alkemy-ong/1627585365457-1.png",cat);
+            this.newsRepository.save(news1);
+        }
+    }
+
+    public void seedComment() {
+        List<Comment> commentList = (List<Comment>) this.commentRepository.findAll();
+
+        if (commentList.isEmpty()) {
+            System.out.println("-~-~-~-~-~-~-~-~-~-~-~-~-~-~|CREATING COMMENTS|~-~-~-~-~-~-~-~-~-~-~-~-~-~-");
+            NewsDTO news = new NewsDTO();
+            CommentDTO comm1 = new CommentDTO("Muy bueno juan! Felicitaciones",news);
+            CommentDTO comm2 = new CommentDTO("Me gusta la energia del equipo!",news);
+            CommentDTO comm3 = new CommentDTO("Linda foto! :)",news);
+            CommentDTO comm4 = new CommentDTO("Que buena api!!",news);
+            CommentDTO comm5 = new CommentDTO("Gran trabajo de los desarrolladores",news);
+            CommentDTO comm6 = new CommentDTO("Like",news);
+        }
+    }
 }

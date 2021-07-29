@@ -1,11 +1,11 @@
 package com.restteam.ong.controllers.dto;
 
-import javax.validation.constraints.NotBlank;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+
+import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
@@ -22,5 +22,9 @@ public class CategoryRequest {
     private String image;
 
     public CategoryRequest() {
+    }
+
+    public CategoryRequest(String name) {
+        this.name = name;
     }
 }
