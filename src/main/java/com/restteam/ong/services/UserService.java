@@ -5,8 +5,8 @@ import com.restteam.ong.controllers.dto.UserDTO;
 import com.restteam.ong.models.User;
 import com.restteam.ong.models.impl.UserDetailsImpl;
 import com.restteam.ong.repositories.UserRepository;
+import com.restteam.ong.services.util.EmailSenderException;
 import com.sendgrid.Response;
-import org.springframework.beans.factory.UnsatisfiedDependencyException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -31,7 +31,7 @@ public class UserService {
 
 	/// --- Método de Creación (Create) ---
 
-	public User createUser(User user) {
+	public User createUser(User user) throws EmailSenderException {
 		// no manda mail por la api
 		// Verificamos de que no exista algún usuario ya registrado.
 		if (!isValid(user)) {
@@ -49,7 +49,7 @@ public class UserService {
 		User result = userRepository.save(user);
 
 		if (!sendWelcomeMail(user)) {
-			throw new UnsatisfiedDependencyException("The user was created, but the mail delivery failed.", "", "", "");
+			throw new EmailSenderException("The user was created, but the mail delivery failed.");
 		}
 		return result;
 	}
