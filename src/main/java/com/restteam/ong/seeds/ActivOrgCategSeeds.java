@@ -1,7 +1,11 @@
 package com.restteam.ong.seeds;
 
-import com.restteam.ong.controllers.dto.*;
-import com.restteam.ong.models.*;
+import com.restteam.ong.controllers.dto.ActivityRequest;
+import com.restteam.ong.controllers.dto.CategoryRequest;
+import com.restteam.ong.controllers.dto.OrganizationCreateDTO;
+import com.restteam.ong.models.Activity;
+import com.restteam.ong.models.Categories;
+import com.restteam.ong.models.Organization;
 import com.restteam.ong.repositories.*;
 import com.restteam.ong.services.ActivityService;
 import com.restteam.ong.services.CategoriesService;
@@ -35,7 +39,6 @@ public class ActivOrgCategSeeds implements CommandLineRunner {
         this.seedOrganization();
         this.seedCategory();
         this.seedActivity();
-        this.seedNews();
     }
 
     private void seedOrganization() {
@@ -148,37 +151,6 @@ public class ActivOrgCategSeeds implements CommandLineRunner {
 
         }else{
             System.out.println("-~-~-~-~-~-~-~-~-~-~-~-~-~-~|ACTIVITIES EXIST|~-~-~-~-~-~-~-~-~-~-~-~-~-~-");
-        }
-
-    }
-
-
-    public void seedNews(){
-        List<News> newsList = newsRepository.findAll();
-
-        if (newsList.isEmpty()){
-            System.out.println("-~-~-~-~-~-~-~-~-~-~-~-~-~-~|CREATING NEWS|~-~-~-~-~-~-~-~-~-~-~-~-~-~-");
-            CategoryRequest cat = new CategoryRequest("DEPORTES");
-            NewsDTO news1 = new NewsDTO("Juan gano la copa oeste!","Juancito perez gano la copa con el equipo 7","https://s3.sa-east-1.amazonaws.com/alkemy-ong/1627585365457-1.png",cat);
-            NewsDTO news2 = new NewsDTO("Pepe nos viene a visitar!","Pepe argento vino de visita a somos mas!","https://s3.sa-east-1.amazonaws.com/alkemy-ong/1627585365457-1.png",cat);
-            NewsDTO news3 = new NewsDTO("Rifas para pepito!","Participa por un guiso bien rico","https://s3.sa-east-1.amazonaws.com/alkemy-ong/1627585365457-1.png",cat);
-            NewsDTO news4 = new NewsDTO("Maraton somos mas 2021","Veni a correr con nosotros!","https://s3.sa-east-1.amazonaws.com/alkemy-ong/1627585365457-1.png",cat);
-            this.newsRepository.save(news1);
-        }
-    }
-
-    public void seedComment() {
-        List<Comment> commentList = (List<Comment>) this.commentRepository.findAll();
-
-        if (commentList.isEmpty()) {
-            System.out.println("-~-~-~-~-~-~-~-~-~-~-~-~-~-~|CREATING COMMENTS|~-~-~-~-~-~-~-~-~-~-~-~-~-~-");
-            NewsDTO news = new NewsDTO();
-            CommentDTO comm1 = new CommentDTO("Muy bueno juan! Felicitaciones",news);
-            CommentDTO comm2 = new CommentDTO("Me gusta la energia del equipo!",news);
-            CommentDTO comm3 = new CommentDTO("Linda foto! :)",news);
-            CommentDTO comm4 = new CommentDTO("Que buena api!!",news);
-            CommentDTO comm5 = new CommentDTO("Gran trabajo de los desarrolladores",news);
-            CommentDTO comm6 = new CommentDTO("Like",news);
         }
     }
 }
