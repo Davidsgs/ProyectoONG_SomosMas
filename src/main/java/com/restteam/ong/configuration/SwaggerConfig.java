@@ -16,7 +16,7 @@ public class SwaggerConfig {
             "para probar los endpoints, va a ser necesario que te autentices, pasos detallados a continuacion:\n\n" +
             "1 - Dirigirse al endpoint authentication-controller\n\n" +
             "2 - en auth/login, realizar el post con los siguientes datos:\n\n" +
-            "user: userDeveloper@email.com\n\n" +
+            "user: adminUser1@email.com\n\n" +
             "password: qwerty\n\n" +
             "3 - El response body deberia devolvernos un JWT, debemos copiarlo.\n\n" +
             "4 - Ir a la parte superior de la pagina y darle al boton 'authorize'\n\n" +
