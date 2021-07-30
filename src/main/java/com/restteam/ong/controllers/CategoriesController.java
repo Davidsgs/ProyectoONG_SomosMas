@@ -1,14 +1,8 @@
 package com.restteam.ong.controllers;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.validation.Valid;
-
 import com.restteam.ong.controllers.dto.CategoryRequest;
 import com.restteam.ong.models.Categories;
 import com.restteam.ong.services.CategoriesService;
-
 import com.restteam.ong.services.util.EmptyRepositoryException;
 import com.restteam.ong.services.util.PageEmptyException;
 import com.restteam.ong.util.BindingResultsErrors;
@@ -22,6 +16,10 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/categories")
 public class CategoriesController {
@@ -31,28 +29,7 @@ public class CategoriesController {
 
     ModelMapper modelMapper = new ModelMapper();
 
-    ////// GetMapping
-   /* @GetMapping
-    public ResponseEntity<?> getCategories(){
-
-        try{
-        ArrayList<Categories> categories = (ArrayList<Categories>) this.categoriesService.getCategories();
-        if(categories.size()==0){
-            return ResponseEntity.status(HttpStatus.OK).body("Category table is empty");
-        }
-        ArrayList<CategoryNameDetailResponse> categoriesNames= new ArrayList<>();
-
-        for(int i=0; i<categories.size(); i++){
-            CategoryNameDetailResponse aux= new CategoryNameDetailResponse();
-            modelMapper.map(categories.get(i), aux);
-            categoriesNames.add(aux);
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(categoriesNames);
-    }catch(Exception e){
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error. Contact support");
-    }
-    }*/
-////GetMappingByID
+    ////GetMappingByID
     @GetMapping("/{id}")
     public ResponseEntity<?> getCategoryById(@PathVariable("id") Long id) {
         if (this.categoriesService.existCategory(id)) {
@@ -63,7 +40,7 @@ public class CategoriesController {
         }
     }
 
-    ////// PostMapping
+    //////PostMapping
     @PostMapping
     public ResponseEntity<?> createCategory(
             @Valid @RequestBody CategoryRequest category,

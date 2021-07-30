@@ -5,7 +5,6 @@ import com.restteam.ong.controllers.dto.MemberPageableDTO;
 import com.restteam.ong.models.Member;
 import com.restteam.ong.repositories.MemberRepository;
 import com.restteam.ong.services.MemberService;
-import com.restteam.ong.util.PageableCreator;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +26,6 @@ public class MemberServiceImpl implements MemberService {
 
     @Autowired
     private final MemberRepository memberRepository;
-    private final PageableCreator pageableCreator;
     private final ModelMapper modelMapper = new ModelMapper();
 
     private MemberDTO mapToDTO(Member member) {
