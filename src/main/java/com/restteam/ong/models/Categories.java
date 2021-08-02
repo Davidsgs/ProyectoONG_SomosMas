@@ -37,6 +37,7 @@ public class Categories {
     @Column(unique = true, nullable = false)
     private Long id;
     @NonNull
+    @Column(unique = true, nullable = false)
     private String name;
 
     private String description;

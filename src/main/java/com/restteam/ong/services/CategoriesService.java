@@ -2,6 +2,7 @@ package com.restteam.ong.services;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -126,5 +127,9 @@ public class CategoriesService {
     private CategoryDTO mapToDto(Categories categories) {
 
         return modelMapper.map(categories, CategoryDTO.class);
+    }
+
+    public Optional<Categories> getCategoryByName(String name){
+        return this.categoriesRepository.findByName(name);
     }
 }

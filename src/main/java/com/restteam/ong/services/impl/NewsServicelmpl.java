@@ -37,17 +37,12 @@ public class NewsServicelmpl implements NewsService {
 	@Override
 	public News postNews(NewsDTO newsDTO) {
 		News news = new News();
-		Categories categories;
-		if(!categoriesService.existCategoryByName(newsDTO.getCategoryRequest().getName())){
-			categories = categoriesService.postCategory(newsDTO.getCategoryRequest());
-		}else{
-			categories = categoriesService.getCategoriesByName(newsDTO.getCategoryRequest().getName());
-		}
-
+	
 		modelMapper.map(newsDTO, news);
+		news.setId(null);
 		news.setRegDate(new Date().getTime() / 1000);
 		news.setUpDateDate(news.getRegDate());
-		news.setCategories(categories);
+		news.setCategories(categoriesService.getCategoryByName(newsDTO.getCategoryName()).get());
 		return newsRepository.save(news);
 
 	}
@@ -65,13 +60,9 @@ public class NewsServicelmpl implements NewsService {
 	@Transactional
 	public News updateNews(NewsDTO newsDTO, Long id) {
 		var newsToUpdate = getNewsById(id);
-		Categories categories;
-		if(!categoriesService.existCategoryByName(newsDTO.getCategoryRequest().getName())){
-			categories = categoriesService.postCategory(newsDTO.getCategoryRequest());
-		}else{
-			categories = categoriesService.getCategoriesByName(newsDTO.getCategoryRequest().getName());
-		}
+		Categories categories= this.categoriesService.getCategoryByName(newsDTO.getCategoryName()).get();
 		newsToUpdate.setCategories(categories);
+
 		if (newsDTO.getContent() != null && !newsDTO.getContent().isBlank()) {
 			newsToUpdate.setContent(newsDTO.getContent());
 		}
@@ -119,7 +110,7 @@ public class NewsServicelmpl implements NewsService {
 	public News findByNameOrElseCreateNewNews(NewsDTO newsDTO) {
 		var modelMapper = new ModelMapper();
 		var news = newsRepository.findByName(newsDTO.getName()).orElse(modelMapper.map(newsDTO, News.class));
-		news.setCategories( categoriesService.getCategoriesByNameOrCreateNew(newsDTO.getCategoryRequest()));
+//		news.setCategories( categoriesService.getCategoriesByNameOrCreateNew(newsDTO.getCategoryRequest()));
 		return news;
 	}
     @Override

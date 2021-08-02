@@ -22,27 +22,24 @@ public class SlideServiceImpl implements SlideService {
 
     @Override
     public void addSlide(Slide slide) {
-        //TODO: pasar imagen de string a Byte[].
-  
+        // TODO: pasar imagen de string a Byte[].
+
         slideRepository.save(slide);
     }
 
-
     @Override
-    public void deleteSlide(Long slideID){
+    public void deleteSlide(Long slideID) {
         boolean exists = slideRepository.existsById(slideID);
-        if(!exists){
+        if (!exists) {
             throw new IllegalStateException("");
         }
         slideRepository.deleteById(slideID);
     }
 
-
     @Override
     public Slide getSlideById(Long id) {
-        return slideRepository.findById(id).orElseThrow(
-                () -> new IllegalStateException(String.format(SLIDE_NOT_FOUND,id))
-        );
+        return slideRepository.findById(id)
+                .orElseThrow(() -> new IllegalStateException(String.format(SLIDE_NOT_FOUND, id)));
     }
 
     @Override
@@ -52,7 +49,7 @@ public class SlideServiceImpl implements SlideService {
 
     @Override
     @Transactional
-    public Object updateSlide(Long id, SlideDTO slide){
+    public Object updateSlide(Long id, SlideDTO slide) {
         var slideToUpdate = this.getSlideById(id);
         var organization = this.getSlideById(id).getOrganizationId();
         slideToUpdate.setOrganizationId(organization);
@@ -63,30 +60,26 @@ public class SlideServiceImpl implements SlideService {
             slideToUpdate.setText(slide.getText());
         }
 
-            slideToUpdate.setNumberOrder(slide.getNumberOrder());
+        slideToUpdate.setNumberOrder(this.slideRepository.findById(id).get().getNumberOrder());
 
-
-        return  slideToUpdate;
+        return slideToUpdate;
     }
 
     @Override
-    public ArrayList<Slide> getAllSlidesByOrganizationId(Long id){        
+    public ArrayList<Slide> getAllSlidesByOrganizationId(Long id) {
         return this.slideRepository.findByOrganizationId_IdOrderByNumberOrderAsc(id);
     }
 
     @Override
-    public void orderSlides(Long orgId){
-        ArrayList<Slide> slides= this.getAllSlidesByOrganizationId(orgId);
-    //    ArrayList<Slide> newSlides= new ArrayList<>();
+    public void orderSlides(Long orgId) {
+        ArrayList<Slide> slides = this.getAllSlidesByOrganizationId(orgId);
+        // ArrayList<Slide> newSlides= new ArrayList<>();
 
-        for(int i=0; i<slides.size(); i++){
-            if(slides.get(i).getNumberOrder()>i+1){
-                slides.get(i).setNumberOrder(i+1);
+        for (int i = 0; i < slides.size(); i++) {
+            if (slides.get(i).getNumberOrder() > i + 1) {
+                slides.get(i).setNumberOrder(i + 1);
                 this.slideRepository.save(slides.get(i));
             }
-        } 
+        }
     }
-
-
-
 }

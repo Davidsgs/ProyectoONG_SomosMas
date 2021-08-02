@@ -3,14 +3,22 @@ package com.restteam.ong.controllers;
 import com.restteam.ong.controllers.dto.TestimonialDto;
 import com.restteam.ong.models.Testimonial;
 import com.restteam.ong.services.TestimonialService;
-
 import com.restteam.ong.services.util.EmptyRepositoryException;
 import com.restteam.ong.services.util.PageEmptyException;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/testimonials")
@@ -23,10 +31,11 @@ public class TestimonialController {
     @PostMapping()
     public ResponseEntity<?> saveTestimonial(@RequestBody TestimonialDto testimonialDto) {
 
-        if (testimonialDto.getName() == null || testimonialDto.getImage() == null || testimonialDto.getContent() == null) {
+        if (testimonialDto.getName() == null || testimonialDto.getImage() == null
+                || testimonialDto.getContent() == null) {
             return new ResponseEntity<>("Request must contain name,image and Content values.", HttpStatus.BAD_REQUEST);
         }
-        ResponseEntity responseEntity;
+        ResponseEntity<?> responseEntity;
         try {
             var testimonial = modelMapper.map(testimonialDto, Testimonial.class);
             responseEntity = ResponseEntity.ok(testimonialService.createTestimonial(testimonial));
@@ -40,8 +49,8 @@ public class TestimonialController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity removeTestimonial(@PathVariable("id") Long id) {
-        ResponseEntity respo;
+    public ResponseEntity<?> removeTestimonial(@PathVariable("id") Long id) {
+        ResponseEntity<?> respo;
         try {
             respo = ResponseEntity.ok(testimonialService.deleteSoft(id));
         } catch (Exception e) {
@@ -51,7 +60,8 @@ public class TestimonialController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TestimonialDto> updateTestimonial(@RequestBody TestimonialDto testimonialDto, @PathVariable("id") Long id) {
+    public ResponseEntity<TestimonialDto> updateTestimonial(@RequestBody TestimonialDto testimonialDto,
+            @PathVariable("id") Long id) {
         ResponseEntity respoUp;
 
         try {
@@ -68,7 +78,8 @@ public class TestimonialController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getTestimonials(@RequestParam(name = "page", required = true) Integer page) throws Exception {
+    public ResponseEntity<?> getTestimonials(@RequestParam(name = "page", required = true) Integer page)
+            throws Exception {
         try {
             return ResponseEntity.ok(testimonialService.getTestimonial(page));
         } catch (EmptyRepositoryException e) {

@@ -65,6 +65,7 @@ public class TestimonialService {
 
         // si no son iguales crea el testimonio
         testimonialCreate.setCreatedAt(System.currentTimeMillis() / 1000);
+        testimonialCreate.setUpdatedAt(testimonialCreate.getCreatedAt());
         return testimonialRepository.save(testimonialCreate);
     }
 

@@ -14,7 +14,7 @@ public class SlideDTO {
     private String imageUrl;
     @NotBlank
     private String text;
-
+    @Schema(hidden = true)
     private Integer numberOrder;
 
 

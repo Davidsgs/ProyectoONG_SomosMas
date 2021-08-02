@@ -22,6 +22,7 @@ public class NewsDTO {
     @NotBlank
     private String image;
     @NotNull
-    private CategoryRequest categoryRequest;
+    String categoryName;
+    //    private CategoryRequest categoryRequest;
 
 }

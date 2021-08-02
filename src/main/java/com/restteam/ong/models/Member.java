@@ -1,13 +1,23 @@
 package com.restteam.ong.models;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 import com.sun.istack.NotNull;
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
+
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
-import javax.persistence.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "member")
 @SQLDelete(sql = "UPDATE member SET deleted=true WHERE id = ?")
@@ -17,7 +27,7 @@ public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Schema(hidden = true)
-    private  Long id;
+    private Long id;
     @NotNull
     private String name;
     private String facebookUrl;
@@ -33,9 +43,8 @@ public class Member {
     @Schema(hidden = true)
     private Long updatedAt;
 
-    public Member() { }
-
-    public Member(String name, String facebookUrl, String instagramUrl, String linkedinUrl, String image, String description) {
+    public Member(String name, String facebookUrl, String instagramUrl, String linkedinUrl, String image,
+            String description) {
         this.name = name;
         this.facebookUrl = facebookUrl;
         this.instagramUrl = instagramUrl;
