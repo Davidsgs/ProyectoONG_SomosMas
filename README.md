@@ -51,7 +51,7 @@ Está API utiliza los siguientes frameworks, librerias y herramientas de desarro
 
 ## Versionado 📌
 
-Para el versionado del proyecto decidimos utilizar la herramienta BitBucket. Esto debido a que se complementa muy bien con JIRA, lo cual permite realizar metodologías agile scrum.
+Para el versionado del proyecto decidimos utilizar la herramienta BitBucket. Esto debido a que se complementa muy bien con JIRA, lo cual permite realizar metodologías agile scrum. Pero hemos traido ese repo a Github para poder presentarlo publicamente.
 
 ## Autores ✒️
 
